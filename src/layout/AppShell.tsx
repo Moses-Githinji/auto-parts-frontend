@@ -83,11 +83,7 @@ export function AppShell({ children }: AppShellProps) {
   const isAdminContext = pathname.startsWith("/admin");
 
   if (isVendorContext || isAdminContext) {
-    return (
-      <BackofficeShell isAdmin={isAdminContext} isVendor={isVendorContext}>
-        {children}
-      </BackofficeShell>
-    );
+    return <BackofficeShell>{children}</BackofficeShell>;
   }
 
   return <StorefrontShell>{children}</StorefrontShell>;
@@ -439,15 +435,7 @@ function TabBarButton({
   );
 }
 
-function BackofficeShell({
-  children,
-  isAdmin,
-  isVendor,
-}: {
-  children: ReactNode;
-  isAdmin: boolean;
-  isVendor: boolean;
-}) {
+function BackofficeShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   const location = useLocation();
