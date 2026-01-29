@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ShoppingCart,
@@ -12,17 +12,14 @@ import {
   Settings,
   User,
   Search,
-  Heart,
   Clock,
   Wrench,
   Zap,
-  Shield,
   Car,
   Filter,
   Battery,
   Disc,
   Truck,
-  Grid,
 } from "lucide-react";
 import { useCartStore } from "../stores/cartStore";
 import { Button } from "../components/ui/button";
@@ -382,31 +379,26 @@ function StorefrontShell({ children }: { children: ReactNode }) {
           <TabBarButton
             icon={Home}
             label="Home"
-            active={false}
             onClick={() => navigate("/")}
           />
           <TabBarButton
             icon={Search}
             label="Search"
-            active={false}
             onClick={() => navigate("/search")}
           />
           <TabBarButton
             icon={Clock}
             label="Orders"
-            active={false}
             onClick={() => navigate("/account/orders")}
           />
           <TabBarButton
             icon={Truck}
             label="Garage"
-            active={false}
             onClick={() => navigate("/account/garage")}
           />
           <TabBarButton
             icon={User}
             label="Account"
-            active={false}
             onClick={() => navigate("/account")}
             badge={itemCount > 0 ? itemCount : undefined}
           />
@@ -422,13 +414,11 @@ function StorefrontShell({ children }: { children: ReactNode }) {
 function TabBarButton({
   icon: Icon,
   label,
-  active,
   onClick,
   badge,
 }: {
   icon: React.ElementType;
   label: string;
-  active: boolean;
   onClick: () => void;
   badge?: number;
 }) {
@@ -460,14 +450,8 @@ function BackofficeShell({
 }) {
   const navigate = useNavigate();
 
-  const tabs = [
-    ...(isVendor ? [{ label: "Vendor", to: "/vendor" } as const] : []),
-    ...(isAdmin ? [{ label: "Admin", to: "/admin" } as const] : []),
-  ];
-
   const location = useLocation();
   const isVendorContext = location.pathname.startsWith("/vendor");
-  const isAdminContext = location.pathname.startsWith("/admin");
 
   return (
     <div className="flex min-h-screen flex-col bg-[#EAEDED]">
