@@ -19,7 +19,8 @@ const env = environmentSchema.parse({
   VITE_NODE_ENV: import.meta.env.VITE_NODE_ENV,
 });
 
-export const isDevelopment = env.VITE_NODE_ENV === "development";
+export const isDevelopment =
+  import.meta.env.DEV || env.VITE_NODE_ENV === "development";
 
 export const API_CONFIG = {
   baseURL: isDevelopment
