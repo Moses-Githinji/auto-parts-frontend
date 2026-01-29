@@ -30,7 +30,7 @@ interface ProductCardData {
   name: string;
   brand: string;
   price: string;
-  unitPrice: number;
+  unitPrice?: number; // used in mock/fallback data
   vendors?: number;
   rating: number;
   delivery: string;
@@ -94,11 +94,13 @@ export function HomePage() {
     featuredProducts,
     brands,
     isLoading,
+    error,
     fetchFeaturedProducts,
     fetchCategories,
     fetchBrands,
     clearError,
   } = useProductStore();
+
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
 
@@ -137,15 +139,27 @@ export function HomePage() {
   ];
 
   function handleAddToCart(product: ProductCardData) {
-    // Check if product has the required Product properties
-    const productId = (product as any).id || product.partNumber;
+    // Safely extract numeric price (mock uses unitPrice, real data likely uses price)
+    const numericPrice =
+      product.unitPrice ?? Number(product.price?.replace(/[^0-9]/g, "") || "0");
+
+    if (numericPrice <= 0) {
+      console.warn("Cannot add to cart: missing or invalid price", product);
+      return;
+      // In a real app: show toast/notification here
+    }
+
+    const productId = product.id || product.partNumber;
+
     addItem({
-      productId: productId,
+      productId,
       name: product.name,
-      price: product.unitPrice,
+      price: numericPrice,
       quantity: 1,
       vendorId: DEFAULT_VENDOR.vendorId,
       vendorName: DEFAULT_VENDOR.vendorName,
+      // Optional: partNumber: product.partNumber,
+      // currency: "KES",
     });
   }
 
@@ -155,7 +169,6 @@ export function HomePage() {
     { title: "Verified parts", subtitle: "QR code check", icon: Shield },
   ];
 
-  // Promotional banners data
   const promotionalBanners = [
     {
       title: "Rainy Season Essentials",
@@ -180,14 +193,13 @@ export function HomePage() {
     },
   ];
 
-  // Recently viewed products - from store or fallback
   const recentlyViewed =
     featuredProducts.slice(-4).length > 0
       ? featuredProducts.slice(-4).map((p) => ({
           partNumber: p.partNumber,
           name: p.name,
           brand: p.brand || "Unknown",
-          price: `KES ${p.price.toLocaleString()}`,
+          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
           image: "🔧",
         }))
       : [
@@ -221,15 +233,14 @@ export function HomePage() {
           },
         ];
 
-  // Top picks for user's vehicle
-  const topPicksForHilux: ProductCardData[] =
+  const topPicksForHilux =
     featuredProducts.length > 0
       ? featuredProducts.slice(0, 4).map((p) => ({
           id: p.id,
           partNumber: p.partNumber,
           name: p.name,
           brand: p.brand || "Unknown",
-          price: `KES ${p.price.toLocaleString()}`,
+          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
           unitPrice: p.price,
           rating: p.rating || 4.5,
           delivery: "Tomorrow",
@@ -287,7 +298,6 @@ export function HomePage() {
           },
         ];
 
-  // Trusted brands - from store or fallback
   const trustedBrands =
     brands.length > 0
       ? brands.map((b) => ({ name: b.name, count: `${b.count}+ parts` }))
@@ -300,15 +310,14 @@ export function HomePage() {
           { name: "Isuzu", count: "4,500+ parts" },
         ];
 
-  // Popular parts - from store
-  const popularParts: ProductCardData[] =
+  const popularParts =
     featuredProducts.length > 0
       ? featuredProducts.slice(0, 4).map((p) => ({
           id: p.id,
           partNumber: p.partNumber,
           name: p.name,
           brand: p.brand || "Unknown",
-          price: `KES ${p.price.toLocaleString()}`,
+          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
           unitPrice: p.price,
           vendors: 3,
           rating: p.rating || 4.5,
@@ -366,7 +375,6 @@ export function HomePage() {
           },
         ];
 
-  // Customer reviews data
   const customerReviews = [
     {
       name: "James M.",
@@ -390,14 +398,35 @@ export function HomePage() {
 
   return (
     <div className="space-y-6">
+      {/* Error State */}
+      {error && (
+        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center text-red-800">
+          <p className="font-medium">Failed to load content</p>
+          <p className="mt-1 text-sm">{error}</p>
+          <Button
+            variant="outline"
+            size="sm"
+            className="mt-4"
+            onClick={() => {
+              clearError();
+              fetchFeaturedProducts(10);
+              fetchCategories();
+              fetchBrands();
+            }}
+          >
+            Try Again
+          </Button>
+        </div>
+      )}
+
       {/* Loading State */}
-      {isLoading && (
+      {isLoading && !error && (
         <div className="flex items-center justify-center py-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
         </div>
       )}
 
-      {/* Hero Banner - Amazon Style */}
+      {/* Hero Banner */}
       <section className="relative overflow-hidden rounded-lg bg-gradient-to-r from-[#131921] via-[#232F3E] to-[#131921] p-6 text-white md:p-10">
         <div className="relative z-10 max-w-2xl">
           <Badge className="mb-3 bg-[#FF9900] text-[#131921]">
@@ -642,7 +671,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Grid Cards - 4 column layout */}
+      {/* Grid Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {gridCards.map((card, i) => (
           <div
@@ -938,7 +967,7 @@ export function HomePage() {
         <div className="flex flex-wrap gap-2">
           {[
             "Brake pads Toyota Hilux",
-            "Oil filter Nissan Navarra",
+            "Oil filter Nissan Navara",
             "Shock absorber Mazda Demio",
             "Air filter Honda CR-V",
             "Spark plugs",
