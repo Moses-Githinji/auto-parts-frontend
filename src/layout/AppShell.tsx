@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -22,6 +22,7 @@ import {
   Truck,
 } from "lucide-react";
 import { useCartStore } from "../stores/cartStore";
+import { useAuthStore } from "../stores/authStore";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
@@ -92,10 +93,17 @@ export function AppShell({ children }: AppShellProps) {
 function StorefrontShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const itemCount = useCartStore((s) => s.itemCount());
+  const { isAuthenticated, user, fetchProfile, initializeAuth } =
+    useAuthStore();
   const [showDepartments, setShowDepartments] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    initializeAuth();
+    fetchProfile();
+  }, [initializeAuth, fetchProfile]);
 
   // Mock user location (would come from geolocation in real app)
   const userLocation = "Westlands, Nairobi";
@@ -240,7 +248,11 @@ function StorefrontShell({ children }: { children: ReactNode }) {
               onClick={() => navigate("/account")}
               className="hidden flex-col items-start rounded-sm px-2 py-1.5 leading-tight hover:outline hover:outline-1 hover:outline-slate-400 md:flex"
             >
-              <span className="text-[10px]">Hello, sign in</span>
+              <span className="text-[10px]">
+                {isAuthenticated
+                  ? `Hello, ${user?.name || "User"}`
+                  : "Hello, sign in"}
+              </span>
               <span className="flex items-center gap-0.5 text-[11px] font-semibold">
                 Account <ChevronDown className="h-3 w-3" />
               </span>
@@ -264,9 +276,11 @@ function StorefrontShell({ children }: { children: ReactNode }) {
             >
               <div className="relative">
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -right-1 -top-1 inline-flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#F7CA00] text-[10px] font-bold text-[#131921]">
-                  {itemCount}
-                </span>
+                {itemCount > 0 && (
+                  <span className="absolute -right-1 -top-1 inline-flex h-4 w-4 min-w-[16px] items-center justify-center rounded-full bg-[#F7CA00] text-[10px] font-bold text-[#131921]">
+                    {itemCount}
+                  </span>
+                )}
               </div>
               <span className="hidden text-[11px] font-semibold md:inline">
                 Cart

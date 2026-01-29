@@ -1,73 +1,134 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { CartItem } from "../types/cart";
-import { cartItemKey } from "../types/cart";
+import apiClient from "../lib/apiClient";
+import type {
+  CartItem,
+  CartListResponse,
+  AddToCartRequest,
+} from "../types/cart";
 
 interface CartState {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, "id"> & { id?: string }) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  clearCart: () => void;
+  isLoading: boolean;
+  error: string | null;
+  isInitialized: boolean;
+  fetchCart: () => Promise<void>;
+  addItem: (item: AddToCartRequest) => Promise<void>;
+  updateQuantity: (itemId: string, quantity: number) => Promise<void>;
+  removeItem: (itemId: string) => Promise<void>;
+  clearCart: () => Promise<void>;
   itemCount: () => number;
   totalAmount: () => number;
   itemsByVendor: () => Map<string, CartItem[]>;
-}
-
-function generateId(partNumber: string, vendorId: string): string {
-  return cartItemKey({ partNumber, vendorId });
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
+      isLoading: false,
+      error: null,
+      isInitialized: false,
 
-      addItem: (payload) => {
-        const id =
-          payload.id ?? generateId(payload.partNumber, payload.vendorId);
-        set((state) => {
-          const existing = state.items.find((i) => i.id === id);
-          const newItems = existing
-            ? state.items.map((i) =>
-                i.id === id
-                  ? { ...i, quantity: i.quantity + (payload.quantity ?? 1) }
-                  : i,
-              )
-            : [
-                ...state.items,
-                {
-                  ...payload,
-                  id,
-                  quantity: payload.quantity ?? 1,
-                } as CartItem,
-              ];
-          return { items: newItems };
-        });
-      },
-
-      removeItem: (id) => {
-        set((state) => ({
-          items: state.items.filter((i) => i.id !== id),
-        }));
-      },
-
-      updateQuantity: (id, quantity) => {
-        if (quantity < 1) {
-          get().removeItem(id);
-          return;
+      fetchCart: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await apiClient.get<CartListResponse>("/api/cart");
+          set({
+            items: response.data || [],
+            isLoading: false,
+            isInitialized: true,
+          });
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error ? error.message : "Failed to fetch cart",
+            isLoading: false,
+          });
         }
-        set((state) => ({
-          items: state.items.map((i) => (i.id === id ? { ...i, quantity } : i)),
-        }));
       },
 
-      clearCart: () => set({ items: [] }),
+      addItem: async (item) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await apiClient.post<CartItem>("/api/cart", item);
+          set((state) => ({
+            items: [...state.items, response],
+            isLoading: false,
+          }));
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error ? error.message : "Failed to add item",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
 
-      itemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+      updateQuantity: async (itemId, quantity) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await apiClient.patch<CartItem>(
+            `/api/cart/${itemId}`,
+            { quantity },
+          );
+          set((state) => ({
+            items: state.items.map((item) =>
+              item.id === itemId ? response : item,
+            ),
+            isLoading: false,
+          }));
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error
+                ? error.message
+                : "Failed to update quantity",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      removeItem: async (itemId) => {
+        set({ isLoading: true, error: null });
+        try {
+          await apiClient.delete(`/api/cart/${itemId}`);
+          set((state) => ({
+            items: state.items.filter((item) => item.id !== itemId),
+            isLoading: false,
+          }));
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error ? error.message : "Failed to remove item",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      clearCart: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          await apiClient.delete("/api/cart");
+          set({ items: [], isLoading: false });
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error ? error.message : "Failed to clear cart",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      itemCount: () =>
+        get().items.reduce((sum, item) => sum + item.quantity, 0),
 
       totalAmount: () =>
-        get().items.reduce((sum, i) => sum + i.unitPrice * i.quantity, 0),
+        get().items.reduce((sum, item) => sum + item.price * item.quantity, 0),
 
       itemsByVendor: () => {
         const map = new Map<string, CartItem[]>();
@@ -80,7 +141,7 @@ export const useCartStore = create<CartState>()(
       },
     }),
     {
-      name: "auto-parts-cart",
+      name: "cart-store",
       partialize: (state) => ({ items: state.items }),
       skipHydration: true,
     },

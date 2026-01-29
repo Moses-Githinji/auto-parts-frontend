@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   Star,
@@ -13,14 +13,12 @@ import {
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { useCartStore } from "../stores/cartStore";
+import { useProductStore } from "../stores/productStore";
 
-// Mock data
-const MOCK_PART = {
-  partNumber: "04465-0K390",
-  name: "Front Brake Pad Set – Toyota Hilux Vigo",
-  brand: "Toyota OEM",
-  price: 7800,
-  wasPrice: 9500,
+const productImages = ["🔧", "🚗", "⚙️", "📦"];
+
+// Mock data for enhanced product display
+const MOCK_PRODUCT_DETAILS = {
   rating: 4.8,
   reviewCount: 234,
   inStock: true,
@@ -45,14 +43,6 @@ const MOCK_PART = {
     { part: "Bosch 0986AB2034", type: "Compatible", confidence: "Medium" },
     { part: "Akebono ACT890", type: "Alternative", confidence: "Medium" },
   ],
-  specs: [
-    { label: "Material", value: "Ceramic" },
-    { label: "Position", value: "Front Axle" },
-    { label: "Warranty", value: "12 months" },
-    { label: "OEM Number", value: "04465-0K390" },
-    { label: "Thickness", value: "15.5mm" },
-    { label: "Weight", value: "2.1kg" },
-  ],
   bullets: [
     "Premium ceramic formulation for superior stopping power",
     "Low dust formula keeps wheels cleaner",
@@ -62,25 +52,31 @@ const MOCK_PART = {
   ],
 };
 
-const productImages = ["🔧", "🚗", "⚙️", "📦"];
-
 export function PartDetailPage() {
   const { partNumber } = useParams<{ partNumber: string }>();
   const navigate = useNavigate();
   const addItem = useCartStore((s) => s.addItem);
+  const { currentProduct, isLoading, error, fetchProduct, clearError } =
+    useProductStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
+  useEffect(() => {
+    clearError();
+    if (partNumber) {
+      fetchProduct(partNumber);
+    }
+  }, [partNumber, fetchProduct, clearError]);
+
   function handleAddToCart() {
-    if (!partNumber) return;
+    if (!currentProduct) return;
     addItem({
-      partNumber: partNumber || MOCK_PART.partNumber,
-      partName: MOCK_PART.name,
-      vendorId: "nairobi-genuine",
-      vendorName: MOCK_PART.vendor.name,
-      unitPrice: MOCK_PART.price,
-      currency: "KES",
+      productId: currentProduct.id,
+      name: currentProduct.name,
+      price: currentProduct.price,
       quantity,
+      vendorId: currentProduct.vendorId,
+      vendorName: MOCK_PRODUCT_DETAILS.vendor.name,
     });
   }
 
@@ -88,6 +84,34 @@ export function PartDetailPage() {
     handleAddToCart();
     navigate("/checkout");
   }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4 text-center py-16">
+        <p className="text-red-600">Error: {error}</p>
+        <Button onClick={() => navigate(-1)}>Go Back</Button>
+      </div>
+    );
+  }
+
+  if (!currentProduct) {
+    return (
+      <div className="space-y-4 text-center py-16">
+        <p className="text-slate-600">Product not found</p>
+        <Button onClick={() => navigate("/search")}>Browse Products</Button>
+      </div>
+    );
+  }
+
+  const inStock = currentProduct.stock > 0;
 
   return (
     <div className="space-y-4">
@@ -97,11 +121,9 @@ export function PartDetailPage() {
           Back to search
         </button>
         <span className="mx-2">/</span>
-        <span>Brake System</span>
+        <span>{currentProduct.category || "Brake System"}</span>
         <span className="mx-2">/</span>
-        <span>Brake Pads</span>
-        <span className="mx-2">/</span>
-        <span className="text-slate-900">{MOCK_PART.partNumber}</span>
+        <span>{currentProduct.partNumber}</span>
       </nav>
 
       {/* Amazon-style 3-column layout for desktop */}
@@ -154,10 +176,10 @@ export function PartDetailPage() {
           {/* Title */}
           <div>
             <h1 className="text-xl font-semibold text-slate-900">
-              {MOCK_PART.name}
+              {currentProduct.name}
             </h1>
             <p className="mt-1 text-xs font-mono text-slate-500">
-              Part #: {MOCK_PART.partNumber}
+              Part #: {currentProduct.partNumber}
             </p>
             <div className="mt-2 flex items-center gap-2">
               <div className="flex items-center gap-0.5">
@@ -165,7 +187,7 @@ export function PartDetailPage() {
                   <Star
                     key={i}
                     className={`h-3.5 w-3.5 ${
-                      i < Math.floor(MOCK_PART.rating)
+                      i < Math.floor(MOCK_PRODUCT_DETAILS.rating)
                         ? "fill-amber-400 text-amber-400"
                         : "text-slate-300"
                     }`}
@@ -173,7 +195,7 @@ export function PartDetailPage() {
                 ))}
               </div>
               <button className="text-xs text-sky-600 hover:underline">
-                {MOCK_PART.reviewCount} ratings
+                {MOCK_PRODUCT_DETAILS.reviewCount} ratings
               </button>
             </div>
           </div>
@@ -182,23 +204,14 @@ export function PartDetailPage() {
           <div className="flex flex-wrap gap-1.5">
             <Badge className="bg-[#FF9900] text-[#131921]">Best Seller</Badge>
             <Badge variant="outline">OEM Genuine</Badge>
-            <Badge variant="outline">Toyota</Badge>
+            <Badge variant="outline">{currentProduct.brand || "Unknown"}</Badge>
           </div>
 
           {/* Price */}
           <div className="border-b border-slate-200 pb-3">
             <span className="text-2xl font-bold text-slate-900">
-              KES {MOCK_PART.price.toLocaleString()}
+              KES {currentProduct.price.toLocaleString()}
             </span>
-            {MOCK_PART.wasPrice && (
-              <span className="ml-2 text-sm text-slate-500 line-through">
-                KES {MOCK_PART.wasPrice.toLocaleString()}
-              </span>
-            )}
-            <Badge className="ml-2 bg-red-100 text-red-700">
-              {Math.round((1 - MOCK_PART.price / MOCK_PART.wasPrice) * 100)}%
-              off
-            </Badge>
           </div>
 
           {/* Fitment Check Box */}
@@ -226,7 +239,7 @@ export function PartDetailPage() {
               Vehicle Fitment
             </h3>
             <div className="space-y-2">
-              {MOCK_PART.fitment.map((fit, i) => (
+              {MOCK_PRODUCT_DETAILS.fitment.map((fit, i) => (
                 <div
                   key={i}
                   className="flex items-center justify-between border-b border-slate-100 pb-2 last:border-0 last:pb-0"
@@ -255,7 +268,7 @@ export function PartDetailPage() {
               Interchangeable Parts
             </h3>
             <div className="space-y-2">
-              {MOCK_PART.interchange.map((item, i) => (
+              {MOCK_PRODUCT_DETAILS.interchange.map((item, i) => (
                 <div key={i} className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-2 rounded-full bg-slate-400" />
@@ -284,15 +297,29 @@ export function PartDetailPage() {
               Technical Specifications
             </h3>
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
-              {MOCK_PART.specs.map((spec, i) => (
-                <div
-                  key={i}
-                  className="flex justify-between border-b border-slate-100 py-1"
-                >
-                  <dt className="text-slate-600">{spec.label}</dt>
-                  <dd className="font-medium text-slate-900">{spec.value}</dd>
-                </div>
-              ))}
+              <div className="flex justify-between border-b border-slate-100 py-1">
+                <dt className="text-slate-600">Brand</dt>
+                <dd className="font-medium text-slate-900">
+                  {currentProduct.brand || "Unknown"}
+                </dd>
+              </div>
+              <div className="flex justify-between border-b border-slate-100 py-1">
+                <dt className="text-slate-600">Condition</dt>
+                <dd className="font-medium text-slate-900">
+                  {currentProduct.condition}
+                </dd>
+              </div>
+              {Object.entries(currentProduct.specifications || {})
+                .slice(0, 4)
+                .map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="flex justify-between border-b border-slate-100 py-1"
+                  >
+                    <dt className="text-slate-600">{key}</dt>
+                    <dd className="font-medium text-slate-900">{value}</dd>
+                  </div>
+                ))}
             </dl>
           </div>
 
@@ -302,7 +329,7 @@ export function PartDetailPage() {
               Key Features
             </h3>
             <ul className="space-y-1 text-sm text-slate-700">
-              {MOCK_PART.bullets.map((bullet, i) => (
+              {MOCK_PRODUCT_DETAILS.bullets.map((bullet, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
                   <span>{bullet}</span>
@@ -318,20 +345,15 @@ export function PartDetailPage() {
             {/* Price */}
             <div className="mb-3">
               <span className="text-2xl font-bold text-slate-900">
-                KES {MOCK_PART.price.toLocaleString()}
+                KES {currentProduct.price.toLocaleString()}
               </span>
-              {MOCK_PART.wasPrice && (
-                <span className="ml-2 text-sm text-slate-500 line-through">
-                  KES {MOCK_PART.wasPrice.toLocaleString()}
-                </span>
-              )}
             </div>
 
             {/* Delivery */}
             <div className="mb-4 space-y-1 text-xs">
               <div className="flex items-center gap-1 text-slate-700">
                 <Truck className="h-3.5 w-3.5" />
-                <span>{MOCK_PART.deliveryInfo}</span>
+                <span>{MOCK_PRODUCT_DETAILS.deliveryInfo}</span>
               </div>
               <div className="flex items-center gap-1 text-slate-700">
                 <MapPin className="h-3.5 w-3.5" />
@@ -341,8 +363,10 @@ export function PartDetailPage() {
 
             {/* Stock Status */}
             <div className="mb-4">
-              {MOCK_PART.inStock ? (
-                <Badge className="bg-green-100 text-green-700">In Stock</Badge>
+              {inStock ? (
+                <Badge className="bg-green-100 text-green-700">
+                  In Stock ({currentProduct.stock} available)
+                </Badge>
               ) : (
                 <Badge className="bg-red-100 text-red-700">Out of Stock</Badge>
               )}
@@ -370,6 +394,7 @@ export function PartDetailPage() {
             <Button
               className="mb-2 h-10 w-full rounded-sm bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
               onClick={handleAddToCart}
+              disabled={!inStock}
             >
               Add to Cart
             </Button>
@@ -379,6 +404,7 @@ export function PartDetailPage() {
               variant="outline"
               className="mb-4 h-10 w-full rounded-sm border-[#F7CA00] bg-[#F7CA00]/30 text-[#131921] hover:bg-[#F7CA00]/50"
               onClick={handleBuyNow}
+              disabled={!inStock}
             >
               Buy Now
             </Button>
@@ -405,21 +431,21 @@ export function PartDetailPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium text-slate-900">
-                    {MOCK_PART.vendor.name}
+                    {MOCK_PRODUCT_DETAILS.vendor.name}
                   </p>
                   <p className="text-xs text-slate-500">
-                    {MOCK_PART.vendor.location}
+                    {MOCK_PRODUCT_DETAILS.vendor.location}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-xs text-slate-600">
                 <div className="flex items-center gap-0.5">
                   <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                  <span>{MOCK_PART.vendor.rating}</span>
+                  <span>{MOCK_PRODUCT_DETAILS.vendor.rating}</span>
                 </div>
                 <div className="flex items-center gap-0.5">
                   <Truck className="h-3.5 w-3.5" />
-                  <span>{MOCK_PART.vendor.sla}</span>
+                  <span>{MOCK_PRODUCT_DETAILS.vendor.sla}</span>
                 </div>
               </div>
               <Button

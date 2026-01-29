@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Car,
@@ -16,6 +16,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { useCartStore } from "../stores/cartStore";
+import { useProductStore } from "../stores/productStore";
 
 const DEFAULT_VENDOR = {
   vendorId: "nairobi-genuine",
@@ -25,86 +26,6 @@ const DEFAULT_VENDOR = {
 // Mock user garage - in real app this would come from user data
 const USER_GARAGE = [
   { make: "Toyota", model: "Hilux", year: 2018, nickname: "My Workhorse" },
-];
-
-// Recently viewed products - mock data
-const recentlyViewed = [
-  {
-    partNumber: "04465-0K390",
-    name: "Front Brake Pad Set",
-    brand: "Toyota OEM",
-    price: "KES 7,800",
-    image: "🔧",
-  },
-  {
-    partNumber: "17801-0K010",
-    name: "Oil Filter",
-    brand: "Toyota Genuine",
-    price: "KES 1,200",
-    image: "⚙️",
-  },
-  {
-    partNumber: "15400-PLM-A02",
-    name: "Air Filter",
-    brand: "Honda Genuine",
-    price: "KES 950",
-    image: "💨",
-  },
-  {
-    partNumber: "36531-T6A-A01",
-    name: "Spark Plug (4pc)",
-    brand: "NGK",
-    price: "KES 2,400",
-    image: "⚡",
-  },
-];
-
-// Top picks for user's vehicle
-const topPicksForHilux = [
-  {
-    partNumber: "04465-0K390",
-    name: "Front Brake Pad Set",
-    brand: "Toyota OEM",
-    price: "KES 7,800",
-    unitPrice: 7800,
-    rating: 4.8,
-    delivery: "Tomorrow",
-    image: "🔧",
-    reason: "Best seller for Hilux",
-  },
-  {
-    partNumber: "90915-YZZE1",
-    name: "Air Filter",
-    brand: "Toyota Genuine",
-    price: "KES 850",
-    unitPrice: 850,
-    rating: 4.9,
-    delivery: "Today",
-    image: "💨",
-    reason: "Direct fit for 2018 Hilux",
-  },
-  {
-    partNumber: "43512-0K020",
-    name: "Shock Absorber (Pair)",
-    brand: "KYB",
-    price: "KES 18,500",
-    unitPrice: 18500,
-    rating: 4.7,
-    delivery: "2 days",
-    image: "🚗",
-    reason: "Premium quality",
-  },
-  {
-    partNumber: "12100-0K030",
-    name: "Oil Filter Set (3pc)",
-    brand: "Toyota Genuine",
-    price: "KES 2,800",
-    unitPrice: 2800,
-    rating: 5.0,
-    delivery: "Today",
-    image: "🛢️",
-    reason: "Service essential",
-  },
 ];
 
 // Grid cards data
@@ -154,8 +75,25 @@ const gridCards = [
 export function HomePage() {
   const navigate = useNavigate();
   const addItem = useCartStore((s) => s.addItem);
+  const {
+    featuredProducts,
+    categories,
+    brands,
+    isLoading,
+    fetchFeaturedProducts,
+    fetchCategories,
+    fetchBrands,
+    clearError,
+  } = useProductStore();
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
+
+  useEffect(() => {
+    clearError();
+    fetchFeaturedProducts(10);
+    fetchCategories();
+    fetchBrands();
+  }, [fetchFeaturedProducts, fetchCategories, fetchBrands, clearError]);
 
   const popularCategories = [
     {
@@ -184,62 +122,14 @@ export function HomePage() {
     },
   ];
 
-  const popularParts = [
-    {
-      partNumber: "04465-0K390",
-      name: "Front Brake Pad Set",
-      brand: "Toyota OEM",
-      price: "KES 7,800",
-      unitPrice: 7800,
-      vendors: 3,
-      rating: 4.8,
-      delivery: "Tomorrow",
-      image: "🔧",
-    },
-    {
-      partNumber: "17801-0K010",
-      name: "Oil Filter",
-      brand: "Toyota Genuine",
-      price: "KES 1,200",
-      unitPrice: 1200,
-      vendors: 5,
-      rating: 4.9,
-      delivery: "Today",
-      image: "⚙️",
-    },
-    {
-      partNumber: "43512-0K020",
-      name: "Shock Absorber",
-      brand: "Toyota OEM",
-      price: "KES 12,500",
-      unitPrice: 12500,
-      vendors: 2,
-      rating: 4.7,
-      delivery: "2 days",
-      image: "🚗",
-    },
-    {
-      partNumber: "90915-YZZE1",
-      name: "Air Filter",
-      brand: "Toyota Genuine",
-      price: "KES 850",
-      unitPrice: 850,
-      vendors: 8,
-      rating: 4.9,
-      delivery: "Today",
-      image: "💨",
-    },
-  ];
-
-  function handleAddToCart(part: (typeof popularParts)[0]) {
+  function handleAddToCart(product: (typeof featuredProducts)[0]) {
     addItem({
-      partNumber: part.partNumber,
-      partName: part.name,
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
       vendorId: DEFAULT_VENDOR.vendorId,
       vendorName: DEFAULT_VENDOR.vendorName,
-      unitPrice: part.unitPrice,
-      currency: "KES",
-      quantity: 1,
     });
   }
 
@@ -274,15 +164,181 @@ export function HomePage() {
     },
   ];
 
-  // Trusted brands data
-  const trustedBrands = [
-    { name: "Toyota Genuine", count: "12,400+ parts" },
-    { name: "Denso", count: "3,200+ parts" },
-    { name: "NGK", count: "1,800+ parts" },
-    { name: "KYB", count: "980+ parts" },
-    { name: "Bosch", count: "2,100+ parts" },
-    { name: "Isuzu", count: "4,500+ parts" },
-  ];
+  // Recently viewed products - from store or fallback
+  const recentlyViewed =
+    featuredProducts.slice(-4).length > 0
+      ? featuredProducts.slice(-4).map((p) => ({
+          partNumber: p.partNumber,
+          name: p.name,
+          brand: p.brand || "Unknown",
+          price: `KES ${p.price.toLocaleString()}`,
+          image: "🔧",
+        }))
+      : [
+          {
+            partNumber: "04465-0K390",
+            name: "Front Brake Pad Set",
+            brand: "Toyota OEM",
+            price: "KES 7,800",
+            image: "🔧",
+          },
+          {
+            partNumber: "17801-0K010",
+            name: "Oil Filter",
+            brand: "Toyota Genuine",
+            price: "KES 1,200",
+            image: "⚙️",
+          },
+          {
+            partNumber: "15400-PLM-A02",
+            name: "Air Filter",
+            brand: "Honda Genuine",
+            price: "KES 950",
+            image: "💨",
+          },
+          {
+            partNumber: "36531-T6A-A01",
+            name: "Spark Plug (4pc)",
+            brand: "NGK",
+            price: "KES 2,400",
+            image: "⚡",
+          },
+        ];
+
+  // Top picks for user's vehicle
+  const topPicksForHilux =
+    featuredProducts.length > 0
+      ? featuredProducts.slice(0, 4).map((p) => ({
+          partNumber: p.partNumber,
+          name: p.name,
+          brand: p.brand || "Unknown",
+          price: `KES ${p.price.toLocaleString()}`,
+          unitPrice: p.price,
+          rating: p.rating || 4.5,
+          delivery: "Tomorrow",
+          image: "🔧",
+          reason: "Featured product",
+        }))
+      : [
+          {
+            partNumber: "04465-0K390",
+            name: "Front Brake Pad Set",
+            brand: "Toyota OEM",
+            price: "KES 7,800",
+            unitPrice: 7800,
+            rating: 4.8,
+            delivery: "Tomorrow",
+            image: "🔧",
+            reason: "Best seller for Hilux",
+          },
+          {
+            partNumber: "90915-YZZE1",
+            name: "Air Filter",
+            brand: "Toyota Genuine",
+            price: "KES 850",
+            unitPrice: 850,
+            rating: 4.9,
+            delivery: "Today",
+            image: "💨",
+            reason: "Direct fit for 2018 Hilux",
+          },
+          {
+            partNumber: "43512-0K020",
+            name: "Shock Absorber (Pair)",
+            brand: "KYB",
+            price: "KES 18,500",
+            unitPrice: 18500,
+            rating: 4.7,
+            delivery: "2 days",
+            image: "🚗",
+            reason: "Premium quality",
+          },
+          {
+            partNumber: "12100-0K030",
+            name: "Oil Filter Set (3pc)",
+            brand: "Toyota Genuine",
+            price: "KES 2,800",
+            unitPrice: 2800,
+            rating: 5.0,
+            delivery: "Today",
+            image: "🛢️",
+            reason: "Service essential",
+          },
+        ];
+
+  // Trusted brands - from store or fallback
+  const trustedBrands =
+    brands.length > 0
+      ? brands.map((b) => ({ name: b.name, count: `${b.count}+ parts` }))
+      : [
+          { name: "Toyota Genuine", count: "12,400+ parts" },
+          { name: "Denso", count: "3,200+ parts" },
+          { name: "NGK", count: "1,800+ parts" },
+          { name: "KYB", count: "980+ parts" },
+          { name: "Bosch", count: "2,100+ parts" },
+          { name: "Isuzu", count: "4,500+ parts" },
+        ];
+
+  // Popular parts - from store
+  const popularParts =
+    featuredProducts.length > 0
+      ? featuredProducts.slice(0, 4).map((p) => ({
+          partNumber: p.partNumber,
+          name: p.name,
+          brand: p.brand || "Unknown",
+          price: `KES ${p.price.toLocaleString()}`,
+          unitPrice: p.price,
+          vendors: 3,
+          rating: p.rating || 4.5,
+          delivery: "Tomorrow",
+          image: "🔧",
+        }))
+      : [
+          {
+            partNumber: "04465-0K390",
+            name: "Front Brake Pad Set",
+            brand: "Toyota OEM",
+            price: "KES 7,800",
+            unitPrice: 7800,
+            vendors: 3,
+            rating: 4.8,
+            delivery: "Tomorrow",
+            image: "🔧",
+          },
+          {
+            partNumber: "17801-0K010",
+            name: "Oil Filter",
+            brand: "Toyota Genuine",
+            price: "KES 1,200",
+            unitPrice: 1200,
+            vendors: 5,
+            rating: 4.9,
+            delivery: "Today",
+            image: "⚙️",
+          },
+          {
+            partNumber: "43512-0K020",
+            name: "Shock Absorber",
+            brand: "Toyota OEM",
+            price: "KES 12,500",
+            unitPrice: 12500,
+            vendors: 2,
+            rating: 4.7,
+            delivery: "2 days",
+            image: "🚗",
+          },
+          {
+            partNumber: "90915-YZZE1",
+            name: "Air Filter",
+            brand: "Toyota Genuine",
+            price: "KES 850",
+            unitPrice: 850,
+            vendors: 8,
+            rating: 4.9,
+            delivery: "Today",
+            image: "💨",
+          },
+        ];
 
   // Customer reviews data
   const customerReviews = [
@@ -308,6 +364,13 @@ export function HomePage() {
 
   return (
     <div className="space-y-6">
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-8">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
+        </div>
+      )}
+
       {/* Hero Banner - Amazon Style */}
       <section className="relative overflow-hidden rounded-lg bg-gradient-to-r from-[#131921] via-[#232F3E] to-[#131921] p-6 text-white md:p-10">
         <div className="relative z-10 max-w-2xl">

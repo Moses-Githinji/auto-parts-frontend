@@ -6,7 +6,7 @@ import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { useCartStore } from "../stores/cartStore";
 import { useOrderStore } from "../stores/orderStore";
-import type { Order } from "../types/order";
+import type { OrderAddress } from "../types/order";
 
 const PAYMENT_METHODS = [
   { id: "mpesa-stk", label: "M-Pesa STK" },
@@ -20,7 +20,7 @@ export function CheckoutPage() {
   const items = useCartStore((s) => s.items);
   const totalAmount = useCartStore((s) => s.totalAmount());
   const clearCart = useCartStore((s) => s.clearCart);
-  const addOrder = useOrderStore((s) => s.addOrder);
+  const createOrder = useOrderStore((s) => s.createOrder);
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<string>(
@@ -70,46 +70,56 @@ export function CheckoutPage() {
       return;
     }
 
+    if (items.length === 0) {
+      toast.error("Your cart is empty");
+      return;
+    }
+
     setIsProcessing(true);
 
-    // Mock payment processing delay
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Group items by vendor
+      const itemsByVendor = new Map<string, typeof items>();
+      for (const item of items) {
+        const vendorItems = itemsByVendor.get(item.vendorId) ?? [];
+        vendorItems.push(item);
+        itemsByVendor.set(item.vendorId, vendorItems);
+      }
 
-    // Create order
-    const order: Order = {
-      id: crypto.randomUUID(),
-      items: items.map((item) => ({
-        id: item.id,
-        partName: item.partName,
-        partNumber: item.partNumber,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        currency: item.currency,
-        vendorId: item.vendorId,
-        vendorName: item.vendorName,
-        fitmentVehicle: item.fitmentVehicle,
-      })),
-      totalAmount: totalAmount + SHIPPING_COST,
-      shippingAddress: {
+      // Create order for the first vendor (simplified - in production, create separate orders per vendor)
+      const firstVendor = items[0].vendorId;
+      const vendorItems = itemsByVendor.get(firstVendor) || [];
+
+      const shippingAddress: OrderAddress = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone,
         email: formData.email,
+        street: formData.estate,
         city: formData.city,
-        estate: formData.estate,
-      },
-      paymentMethod:
-        PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.label ??
-        paymentMethod,
-      orderDate: new Date().toISOString(),
-      status: "processing",
-    };
+        state: formData.city,
+        zipCode: "",
+      };
 
-    addOrder(order);
-    clearCart();
-    toast.success("Payment successful! Order placed.");
-    navigate("/orders");
-    setIsProcessing(false);
+      await createOrder({
+        vendorId: firstVendor,
+        items: vendorItems.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+        shippingAddress,
+        paymentMethod,
+      });
+
+      // Clear cart after successful order
+      await clearCart();
+      toast.success("Payment successful! Order placed.");
+      navigate("/orders");
+    } catch (error) {
+      toast.error("Failed to place order. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (items.length === 0) {

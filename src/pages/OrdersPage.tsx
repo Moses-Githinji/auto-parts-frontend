@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Badge } from "../components/ui/badge";
 import { useOrderStore } from "../stores/orderStore";
-import type { OrderItem } from "../types/order";
+import type { OrderItem, OrderStatus } from "../types/order";
 
 function groupItemsByVendor(items: OrderItem[]) {
   const map = new Map<string, OrderItem[]>();
@@ -14,8 +14,55 @@ function groupItemsByVendor(items: OrderItem[]) {
   return map;
 }
 
+function getStatusVariant(
+  status: OrderStatus,
+): "default" | "outline" | "success" | "warning" {
+  switch (status) {
+    case "PENDING":
+      return "warning";
+    case "CONFIRMED":
+    case "PROCESSING":
+      return "default";
+    case "SHIPPED":
+      return "default";
+    case "DELIVERED":
+      return "success";
+    case "CANCELLED":
+      return "outline";
+    default:
+      return "outline";
+  }
+}
+
 export function OrdersPage() {
-  const orders = useOrderStore((s) => s.orders);
+  const { orders, isLoading, error, fetchOrders, clearError } = useOrderStore();
+
+  useEffect(() => {
+    clearError();
+    fetchOrders();
+  }, [fetchOrders, clearError]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4 text-center py-16">
+        <p className="text-red-600">Error: {error}</p>
+        <button
+          onClick={() => fetchOrders()}
+          className="text-blue-600 hover:underline"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   if (orders.length === 0) {
     return (
@@ -49,16 +96,14 @@ export function OrdersPage() {
             <header className="flex items-center justify-between">
               <div>
                 <h2 className="text-sm font-semibold text-slate-900">
-                  Order #{order.id.slice(-8)}
+                  Order #{order.orderNumber}
                 </h2>
                 <p className="text-xs text-slate-600">
-                  {new Date(order.orderDate).toLocaleDateString()} •{" "}
-                  {order.paymentMethod}
+                  {new Date(order.createdAt).toLocaleDateString()} •{" "}
+                  {order.paymentMethod || "N/A"}
                 </p>
               </div>
-              <Badge
-                variant={order.status === "processing" ? "default" : "outline"}
-              >
+              <Badge variant={getStatusVariant(order.status)}>
                 {order.status}
               </Badge>
             </header>
@@ -75,7 +120,7 @@ export function OrdersPage() {
                 <br />
                 {order.shippingAddress.email}
                 <br />
-                {order.shippingAddress.city}, {order.shippingAddress.estate}
+                {order.shippingAddress.city}, {order.shippingAddress.state}
               </p>
             </div>
 
@@ -127,7 +172,7 @@ export function OrdersPage() {
             })}
 
             <div className="flex justify-end pt-2">
-              <Badge>Total: KES {order.totalAmount.toLocaleString()}</Badge>
+              <Badge>Total: KES {order.total.toLocaleString()}</Badge>
             </div>
           </section>
         );
