@@ -93,11 +93,22 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const itemCount = useCartStore((s) => s.itemCount());
   const [showDepartments, setShowDepartments] = useState(false);
+  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Mock user location (would come from geolocation in real app)
   const userLocation = "Westlands, Nairobi";
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category);
+    setShowCategoryDropdown(false);
+    if (searchQuery) {
+      navigate(
+        `/search?q=${encodeURIComponent(searchQuery)}&cat=${encodeURIComponent(category)}`,
+      );
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-[#EAEDED]">
@@ -147,21 +158,53 @@ function StorefrontShell({ children }: { children: ReactNode }) {
           >
             {/* Category Dropdown */}
             <div className="relative">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="h-9 appearance-none rounded-l-sm bg-slate-100 px-3 pr-8 text-[11px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#FF9900]"
+              <button
+                type="button"
+                onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
+                className="flex h-9 items-center gap-1 rounded-l-sm bg-slate-100 px-3 pr-8 text-[11px] text-slate-900 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-[#FF9900]"
               >
-                <option value="All">All</option>
-                {CATEGORIES.filter((c) => c.name !== "All Departments").map(
-                  (cat) => (
-                    <option key={cat.name} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ),
-                )}
-              </select>
-              <ChevronDown className="absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 pointer-events-none text-slate-600" />
+                <span className="truncate max-w-[80px]">
+                  {selectedCategory === "All" ? "All" : selectedCategory}
+                </span>
+                <ChevronDown className="h-3 w-3" />
+              </button>
+              {showCategoryDropdown && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowCategoryDropdown(false)}
+                  />
+                  <div className="absolute left-0 top-full z-20 mt-1 w-48 rounded-sm border border-slate-200 bg-white py-1 shadow-lg">
+                    <button
+                      type="button"
+                      onClick={() => handleCategorySelect("All")}
+                      className={`flex w-full px-3 py-2 text-left text-xs hover:bg-slate-100 ${
+                        selectedCategory === "All"
+                          ? "bg-slate-50 font-medium text-[#FF9900]"
+                          : "text-slate-700"
+                      }`}
+                    >
+                      All
+                    </button>
+                    {CATEGORIES.filter((c) => c.name !== "All Departments").map(
+                      (cat) => (
+                        <button
+                          key={cat.name}
+                          type="button"
+                          onClick={() => handleCategorySelect(cat.name)}
+                          className={`flex w-full px-3 py-2 text-left text-xs hover:bg-slate-100 ${
+                            selectedCategory === cat.name
+                              ? "bg-slate-50 font-medium text-[#FF9900]"
+                              : "text-slate-700"
+                          }`}
+                        >
+                          {cat.name}
+                        </button>
+                      ),
+                    )}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Search Input */}
