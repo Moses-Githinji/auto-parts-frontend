@@ -39,7 +39,7 @@ interface ProductState {
   clearError: () => void;
 }
 
-export const useProductStore = create<ProductState>((set, get) => ({
+export const useProductStore = create<ProductState>((set) => ({
   products: [],
   featuredProducts: [],
   categories: [],
