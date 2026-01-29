@@ -250,7 +250,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
             >
               <span className="text-[10px]">
                 {isAuthenticated
-                  ? `Hello, ${user?.name || "User"}`
+                  ? `Hello, ${user?.firstName || "User"}`
                   : "Hello, sign in"}
               </span>
               <span className="flex items-center gap-0.5 text-[11px] font-semibold">

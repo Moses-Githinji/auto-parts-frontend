@@ -17,6 +17,7 @@ export interface Product {
   status: ProductStatus;
   views: number;
   ordersCount: number;
+  rating?: number;
   createdAt: string;
   updatedAt: string;
 }

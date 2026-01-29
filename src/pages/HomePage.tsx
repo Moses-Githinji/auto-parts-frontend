@@ -23,6 +23,21 @@ const DEFAULT_VENDOR = {
   vendorName: "Nairobi Genuine Parts",
 };
 
+// Type for display-only product cards (simplified from Product type)
+interface ProductCardData {
+  id?: string;
+  partNumber: string;
+  name: string;
+  brand: string;
+  price: string;
+  unitPrice: number;
+  vendors?: number;
+  rating: number;
+  delivery: string;
+  image: string;
+  reason?: string;
+}
+
 // Mock user garage - in real app this would come from user data
 const USER_GARAGE = [
   { make: "Toyota", model: "Hilux", year: 2018, nickname: "My Workhorse" },
@@ -77,7 +92,6 @@ export function HomePage() {
   const addItem = useCartStore((s) => s.addItem);
   const {
     featuredProducts,
-    categories,
     brands,
     isLoading,
     fetchFeaturedProducts,
@@ -122,11 +136,13 @@ export function HomePage() {
     },
   ];
 
-  function handleAddToCart(product: (typeof featuredProducts)[0]) {
+  function handleAddToCart(product: ProductCardData) {
+    // Check if product has the required Product properties
+    const productId = (product as any).id || product.partNumber;
     addItem({
-      productId: product.id,
+      productId: productId,
       name: product.name,
-      price: product.price,
+      price: product.unitPrice,
       quantity: 1,
       vendorId: DEFAULT_VENDOR.vendorId,
       vendorName: DEFAULT_VENDOR.vendorName,
@@ -206,9 +222,10 @@ export function HomePage() {
         ];
 
   // Top picks for user's vehicle
-  const topPicksForHilux =
+  const topPicksForHilux: ProductCardData[] =
     featuredProducts.length > 0
       ? featuredProducts.slice(0, 4).map((p) => ({
+          id: p.id,
           partNumber: p.partNumber,
           name: p.name,
           brand: p.brand || "Unknown",
@@ -221,6 +238,7 @@ export function HomePage() {
         }))
       : [
           {
+            id: "tp-1",
             partNumber: "04465-0K390",
             name: "Front Brake Pad Set",
             brand: "Toyota OEM",
@@ -232,6 +250,7 @@ export function HomePage() {
             reason: "Best seller for Hilux",
           },
           {
+            id: "tp-2",
             partNumber: "90915-YZZE1",
             name: "Air Filter",
             brand: "Toyota Genuine",
@@ -243,6 +262,7 @@ export function HomePage() {
             reason: "Direct fit for 2018 Hilux",
           },
           {
+            id: "tp-3",
             partNumber: "43512-0K020",
             name: "Shock Absorber (Pair)",
             brand: "KYB",
@@ -254,6 +274,7 @@ export function HomePage() {
             reason: "Premium quality",
           },
           {
+            id: "tp-4",
             partNumber: "12100-0K030",
             name: "Oil Filter Set (3pc)",
             brand: "Toyota Genuine",
@@ -280,9 +301,10 @@ export function HomePage() {
         ];
 
   // Popular parts - from store
-  const popularParts =
+  const popularParts: ProductCardData[] =
     featuredProducts.length > 0
       ? featuredProducts.slice(0, 4).map((p) => ({
+          id: p.id,
           partNumber: p.partNumber,
           name: p.name,
           brand: p.brand || "Unknown",
@@ -295,6 +317,7 @@ export function HomePage() {
         }))
       : [
           {
+            id: "pp-1",
             partNumber: "04465-0K390",
             name: "Front Brake Pad Set",
             brand: "Toyota OEM",
@@ -306,6 +329,7 @@ export function HomePage() {
             image: "🔧",
           },
           {
+            id: "pp-2",
             partNumber: "17801-0K010",
             name: "Oil Filter",
             brand: "Toyota Genuine",
@@ -317,6 +341,7 @@ export function HomePage() {
             image: "⚙️",
           },
           {
+            id: "pp-3",
             partNumber: "43512-0K020",
             name: "Shock Absorber",
             brand: "Toyota OEM",
@@ -328,6 +353,7 @@ export function HomePage() {
             image: "🚗",
           },
           {
+            id: "pp-4",
             partNumber: "90915-YZZE1",
             name: "Air Filter",
             brand: "Toyota Genuine",
@@ -517,7 +543,7 @@ export function HomePage() {
                   className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleAddToCart(part as any);
+                    handleAddToCart(part);
                   }}
                 >
                   Add to cart
