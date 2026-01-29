@@ -81,7 +81,7 @@ export function CartPage() {
                 >
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-semibold text-slate-900">
-                      {item.partName} – {item.partNumber}
+                      {item.name} – {item.partNumber}
                     </p>
                     <p className="text-[11px] text-slate-600">
                       Qty {item.quantity}
@@ -117,8 +117,7 @@ export function CartPage() {
                       </button>
                     </div>
                     <p className="text-xs font-semibold text-slate-900">
-                      {currency}{" "}
-                      {(item.unitPrice * item.quantity).toLocaleString()}
+                      {currency} {(item.price * item.quantity).toLocaleString()}
                     </p>
                     <Button
                       variant="ghost"
