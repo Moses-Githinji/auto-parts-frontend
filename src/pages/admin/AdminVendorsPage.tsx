@@ -44,9 +44,17 @@ export function AdminVendorsPage() {
   ]);
 
   const [newVendor, setNewVendor] = useState({
-    name: "",
+    companyName: "",
+    contactName: "",
     email: "",
     phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    description: "",
+    status: "ACTIVE",
+    sendCredentialsEmail: true,
   });
 
   const navItems = [
@@ -62,10 +70,10 @@ export function AdminVendorsPage() {
 
   const handleSubmitVendor = (e: React.FormEvent) => {
     e.preventDefault();
-    // Create new vendor
+    // Create new vendor (for demo purposes - in production, this would call the API)
     const vendor: Vendor = {
       id: `VND-${String(vendors.length + 1).padStart(3, "0")}`,
-      name: newVendor.name,
+      name: newVendor.companyName,
       email: newVendor.email,
       phone: newVendor.phone,
       status: "pending",
@@ -76,10 +84,42 @@ export function AdminVendorsPage() {
         year: "numeric",
       }),
     };
+
+    // Prepare API payload according to backend specification
+    const vendorPayload = {
+      email: newVendor.email,
+      companyName: newVendor.companyName,
+      contactName: newVendor.contactName || undefined,
+      phone: newVendor.phone || undefined,
+      address: newVendor.address || undefined,
+      city: newVendor.city || undefined,
+      state: newVendor.state || undefined,
+      zipCode: newVendor.zipCode || undefined,
+      description: newVendor.description || undefined,
+      status: newVendor.status,
+      sendCredentialsEmail: newVendor.sendCredentialsEmail,
+    };
+
+    console.log("Creating vendor with payload:", vendorPayload);
+
     setVendors([...vendors, vendor]);
-    setNewVendor({ name: "", email: "", phone: "" });
+    setNewVendor({
+      companyName: "",
+      contactName: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      description: "",
+      status: "ACTIVE",
+      sendCredentialsEmail: true,
+    });
     setIsModalOpen(false);
-    alert(`Vendor "${vendor.name}" added successfully!`);
+    alert(
+      `Vendor "${vendor.name}" added successfully!\nCredentials will be sent to ${newVendor.email}`,
+    );
   };
 
   const handleReviewVendor = (vendorId: string) => {
@@ -248,7 +288,7 @@ export function AdminVendorsPage() {
         {/* Add Vendor Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-md rounded-sm bg-white p-6 shadow-lg">
+            <div className="w-full max-w-lg rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-slate-900">
                   Add New Vendor
@@ -263,22 +303,42 @@ export function AdminVendorsPage() {
               <form onSubmit={handleSubmitVendor} className="space-y-4">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700">
-                    Vendor Name
+                    Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
-                    value={newVendor.name}
+                    value={newVendor.companyName}
                     onChange={(e) =>
-                      setNewVendor({ ...newVendor, name: e.target.value })
+                      setNewVendor({
+                        ...newVendor,
+                        companyName: e.target.value,
+                      })
                     }
                     required
                     className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
-                    placeholder="Enter vendor name"
+                    placeholder="Enter company name"
                   />
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700">
-                    Email
+                    Contact Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newVendor.contactName}
+                    onChange={(e) =>
+                      setNewVendor({
+                        ...newVendor,
+                        contactName: e.target.value,
+                      })
+                    }
+                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    placeholder="Enter contact person name"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -301,10 +361,122 @@ export function AdminVendorsPage() {
                     onChange={(e) =>
                       setNewVendor({ ...newVendor, phone: e.target.value })
                     }
-                    required
                     className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
                     placeholder="Enter phone number"
                   />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    value={newVendor.address}
+                    onChange={(e) =>
+                      setNewVendor({ ...newVendor, address: e.target.value })
+                    }
+                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    placeholder="Enter street address"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                      City
+                    </label>
+                    <input
+                      type="text"
+                      value={newVendor.city}
+                      onChange={(e) =>
+                        setNewVendor({ ...newVendor, city: e.target.value })
+                      }
+                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      placeholder="Enter city"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                      State/County
+                    </label>
+                    <input
+                      type="text"
+                      value={newVendor.state}
+                      onChange={(e) =>
+                        setNewVendor({ ...newVendor, state: e.target.value })
+                      }
+                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      placeholder="Enter state"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                      Zip Code
+                    </label>
+                    <input
+                      type="text"
+                      value={newVendor.zipCode}
+                      onChange={(e) =>
+                        setNewVendor({ ...newVendor, zipCode: e.target.value })
+                      }
+                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      placeholder="Enter zip code"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                      Status
+                    </label>
+                    <select
+                      value={newVendor.status}
+                      onChange={(e) =>
+                        setNewVendor({ ...newVendor, status: e.target.value })
+                      }
+                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    >
+                      <option value="ACTIVE">Active</option>
+                      <option value="INACTIVE">Inactive</option>
+                      <option value="SUSPENDED">Suspended</option>
+                    </select>
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                    Description
+                  </label>
+                  <textarea
+                    value={newVendor.description}
+                    onChange={(e) =>
+                      setNewVendor({
+                        ...newVendor,
+                        description: e.target.value,
+                      })
+                    }
+                    rows={2}
+                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    placeholder="Enter vendor description"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="sendCredentials"
+                    checked={newVendor.sendCredentialsEmail}
+                    onChange={(e) =>
+                      setNewVendor({
+                        ...newVendor,
+                        sendCredentialsEmail: e.target.checked,
+                      })
+                    }
+                    className="h-4 w-4 rounded border-[#c8c8c8] text-[#2b579a] focus:ring-[#2b579a]"
+                  />
+                  <label
+                    htmlFor="sendCredentials"
+                    className="text-xs text-slate-700"
+                  >
+                    Send credentials email to vendor
+                  </label>
                 </div>
                 <div className="flex justify-end gap-2 pt-4">
                   <button
