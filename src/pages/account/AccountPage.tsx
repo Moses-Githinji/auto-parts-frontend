@@ -5,7 +5,12 @@ import { useAuthStore } from "../../stores/authStore";
 
 export function AccountPage() {
   const navigate = useNavigate();
-  const { user, isLoading, fetchProfile } = useAuthStore();
+  const { user, isLoading, fetchProfile, logout } = useAuthStore();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   useEffect(() => {
     fetchProfile();
@@ -34,6 +39,7 @@ export function AccountPage() {
             label="Addresses"
             onClick={() => navigate("/account/addresses")}
           />
+          <SideNavButton label="Logout" onClick={handleLogout} />
         </div>
       </nav>
       <section>

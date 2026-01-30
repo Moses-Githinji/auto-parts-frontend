@@ -505,19 +505,19 @@ function BackofficeShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              className="flex items-center gap-2 rounded-md px-2 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-200"
+              className="flex items-center gap-2 rounded-md px-2 py-1 text-xs font-semibold text-white hover:bg-slate-800"
               onClick={() => navigate("/")}
             >
               <span className="inline-flex h-6 w-6 items-center justify-center rounded-sm bg-[#FF9900] text-xs font-bold text-[#131921]">
                 APS
               </span>
-              <span className="text-sm font-semibold">
+              <span className="text-sm font-semibold text-white">
                 The Auto Parts Store
               </span>
             </button>
             <Badge
               variant="outline"
-              className="ml-1 border-slate-500 text-slate-300"
+              className="ml-1 border-slate-500 text-white"
             >
               Backoffice
             </Badge>
@@ -527,7 +527,7 @@ function BackofficeShell({ children }: { children: ReactNode }) {
             <Button
               variant="ghost"
               size="sm"
-              className="text-xs text-slate-300 hover:text-white"
+              className="text-xs bg-white text-slate-800 hover:bg-slate-700 hover:text-white"
               onClick={() => navigate("/account")}
             >
               Switch to buyer view
