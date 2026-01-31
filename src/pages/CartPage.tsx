@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { useCartStore } from "../stores/cartStore";
@@ -17,7 +17,8 @@ function groupItemsByVendor(items: CartItem[]) {
 }
 
 export function CartPage() {
-  const navigate = useNavigate();
+  const [clearError, setClearError] = useState<string | null>(null);
+  const [showClearModal, setShowClearModal] = useState(false);
   const items = useCartStore((s) => s.items);
   const vendorEntries = useMemo(
     () => Array.from(groupItemsByVendor(items).entries()),
@@ -28,13 +29,32 @@ export function CartPage() {
   const totalAmount = useCartStore((s) => s.totalAmount());
   const clearCart = useCartStore((s) => s.clearCart);
 
+  const confirmClearCart = async () => {
+    setShowClearModal(false);
+    try {
+      await clearCart();
+    } catch {
+      setClearError("Failed to clear cart. Please try again.");
+    }
+  };
+
   if (items.length === 0) {
     return (
       <div className="space-y-4">
         <h1 className="text-lg font-semibold text-slate-900">Cart</h1>
         <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">
           <p className="mb-4">Your cart is empty.</p>
-          <Button onClick={() => navigate("/search")}>Browse parts</Button>
+          <a
+            href="/search"
+            className="inline-block rounded-sm bg-[#2b579a] px-4 py-2 text-xs font-medium text-white hover:bg-[#1e3f7a]"
+          >
+            Browse parts
+          </a>
+          <p className="mt-4 text-xs">
+            <a href="/search" className="text-[#2b579a] hover:underline">
+              Continue shopping
+            </a>
+          </p>
         </div>
       </div>
     );
@@ -42,17 +62,30 @@ export function CartPage() {
 
   return (
     <div className="space-y-4">
-      <header className="flex items-center justify-between">
+      <header className="flex flex-wrap items-center justify-between gap-2">
         <h1 className="text-lg font-semibold text-slate-900">Cart</h1>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={clearCart}
-          className="text-xs text-slate-600"
-        >
-          Clear cart
-        </Button>
+        <div className="flex items-center gap-3">
+          <a
+            href="/search"
+            className="text-xs font-medium text-[#2b579a] hover:text-[#1e3f7a] hover:underline"
+          >
+            Continue shopping
+          </a>
+          <button
+            type="button"
+            onClick={() => setShowClearModal(true)}
+            className="text-xs font-medium text-red-600 hover:text-red-700 hover:underline"
+          >
+            Clear cart
+          </button>
+        </div>
       </header>
+
+      {clearError && (
+        <div className="rounded-sm bg-red-50 p-2 text-xs text-red-600">
+          {clearError}
+        </div>
+      )}
 
       {vendorEntries.map(([vendorId, vendorItems]) => {
         const vendorName = vendorItems[0]?.vendorName ?? "Vendor";
@@ -158,11 +191,43 @@ export function CartPage() {
               {totalAmount.toLocaleString()}
             </p>
           </div>
-          <Button size="sm" onClick={() => navigate("/checkout")}>
+          <a
+            href="/checkout"
+            className="rounded-sm bg-[#2b579a] px-4 py-2 text-xs font-medium text-white hover:bg-[#1e3f7a]"
+          >
             Proceed to checkout
-          </Button>
+          </a>
         </div>
       </section>
+
+      {/* Clear Cart Confirmation Modal */}
+      {showClearModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="w-full max-w-sm rounded-sm bg-white p-4 shadow-lg">
+            <h3 className="text-sm font-semibold text-slate-900">Clear Cart</h3>
+            <p className="mt-2 text-xs text-slate-600">
+              Are you sure you want to remove all items from your cart? This
+              action cannot be undone.
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowClearModal(false)}
+                className="rounded-sm border border-[#c8c8c8] bg-white px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmClearCart}
+                className="rounded-sm bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
+              >
+                Clear Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

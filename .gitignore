@@ -23,6 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
+.env.local
+.env.example
+
 API_DOCUMENTATION.txt
 USER_MANAGEMENT_IMPLEMENTATION.md
 email-templates.tx
