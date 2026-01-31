@@ -7,10 +7,10 @@ import {
   Truck,
   Star,
   TrendingUp,
-  Zap,
+  // Zap,
   CheckCircle,
   Clock,
-  ArrowRight,
+  // ArrowRight,
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -23,76 +23,13 @@ const DEFAULT_VENDOR = {
   vendorName: "Nairobi Genuine Parts",
 };
 
-// Type for display-only product cards (simplified from Product type)
-interface ProductCardData {
-  id?: string;
-  partNumber: string;
-  name: string;
-  brand: string;
-  price: string;
-  unitPrice?: number; // used in mock/fallback data
-  vendors?: number;
-  rating: number;
-  delivery: string;
-  image: string;
-  reason?: string;
-}
-
-// Mock user garage - in real app this would come from user data
-const USER_GARAGE = [
-  { make: "Toyota", model: "Hilux", year: 2018, nickname: "My Workhorse" },
-];
-
-// Grid cards data
-const gridCards = [
-  {
-    title: "Best Sellers in Brake System",
-    subtitle: "Top-rated parts for your vehicle",
-    items: [
-      { name: "Brake Pads", price: "From KES 3,500" },
-      { name: "Rotors", price: "From KES 5,200" },
-      { name: "Brake Fluid", price: "KES 800" },
-    ],
-    image: "🛑",
-  },
-  {
-    title: "New Arrivals in Suspension",
-    subtitle: "Latest parts just added",
-    items: [
-      { name: "Shock Absorbers", price: "From KES 8,500" },
-      { name: "Springs", price: "From KES 4,200" },
-      { name: "Bushings", price: "From KES 1,200" },
-    ],
-    image: "🔧",
-  },
-  {
-    title: "Deals of the Day",
-    subtitle: "Limited-time offers",
-    items: [
-      { name: "Oil Change Kit", price: "KES 3,200", wasPrice: "KES 4,500" },
-      { name: "Wiper Blades", price: "KES 1,500", wasPrice: "KES 2,200" },
-      { name: "Battery 12V", price: "KES 12,000", wasPrice: "KES 15,000" },
-    ],
-    image: "🔥",
-  },
-  {
-    title: "Trending in Electrical",
-    subtitle: "Popular this week",
-    items: [
-      { name: "Alternators", price: "From KES 15,000" },
-      { name: "Starters", price: "From KES 12,500" },
-      { name: "Sensors", price: "From KES 800" },
-    ],
-    image: "⚡",
-  },
-];
-
 export function HomePage() {
   const navigate = useNavigate();
   const addItem = useCartStore((s) => s.addItem);
   const {
     featuredProducts,
     brands,
+    categories,
     isLoading,
     error,
     fetchFeaturedProducts,
@@ -110,58 +47,6 @@ export function HomePage() {
     fetchCategories();
     fetchBrands();
   }, [fetchFeaturedProducts, fetchCategories, fetchBrands, clearError]);
-
-  const popularCategories = [
-    {
-      name: "Brake System",
-      icon: Wrench,
-      count: "2,450+ parts",
-      color: "bg-red-100 text-red-800",
-    },
-    {
-      name: "Filters & Service",
-      icon: Zap,
-      count: "1,890+ parts",
-      color: "bg-blue-100 text-blue-800",
-    },
-    {
-      name: "Suspension",
-      icon: Car,
-      count: "1,230+ parts",
-      color: "bg-green-100 text-green-800",
-    },
-    {
-      name: "Electrical",
-      icon: Zap,
-      count: "980+ parts",
-      color: "bg-amber-100 text-amber-800",
-    },
-  ];
-
-  function handleAddToCart(product: ProductCardData) {
-    // Safely extract numeric price (mock uses unitPrice, real data likely uses price)
-    const numericPrice =
-      product.unitPrice ?? Number(product.price?.replace(/[^0-9]/g, "") || "0");
-
-    if (numericPrice <= 0) {
-      console.warn("Cannot add to cart: missing or invalid price", product);
-      return;
-      // In a real app: show toast/notification here
-    }
-
-    const productId = product.id || product.partNumber;
-
-    addItem({
-      productId,
-      name: product.name,
-      price: numericPrice,
-      quantity: 1,
-      vendorId: DEFAULT_VENDOR.vendorId,
-      vendorName: DEFAULT_VENDOR.vendorName,
-      // Optional: partNumber: product.partNumber,
-      // currency: "KES",
-    });
-  }
 
   const deals = [
     { title: "Free delivery", subtitle: "Orders over KES 5,000", icon: Truck },
@@ -193,208 +78,20 @@ export function HomePage() {
     },
   ];
 
-  const recentlyViewed =
-    featuredProducts.slice(-4).length > 0
-      ? featuredProducts.slice(-4).map((p) => ({
-          partNumber: p.partNumber,
-          name: p.name,
-          brand: p.brand || "Unknown",
-          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
-          image: "🔧",
-        }))
-      : [
-          {
-            partNumber: "04465-0K390",
-            name: "Front Brake Pad Set",
-            brand: "Toyota OEM",
-            price: "KES 7,800",
-            image: "🔧",
-          },
-          {
-            partNumber: "17801-0K010",
-            name: "Oil Filter",
-            brand: "Toyota Genuine",
-            price: "KES 1,200",
-            image: "⚙️",
-          },
-          {
-            partNumber: "15400-PLM-A02",
-            name: "Air Filter",
-            brand: "Honda Genuine",
-            price: "KES 950",
-            image: "💨",
-          },
-          {
-            partNumber: "36531-T6A-A01",
-            name: "Spark Plug (4pc)",
-            brand: "NGK",
-            price: "KES 2,400",
-            image: "⚡",
-          },
-        ];
-
-  const topPicksForHilux =
-    featuredProducts.length > 0
-      ? featuredProducts.slice(0, 4).map((p) => ({
-          id: p.id,
-          partNumber: p.partNumber,
-          name: p.name,
-          brand: p.brand || "Unknown",
-          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
-          unitPrice: p.price,
-          rating: p.rating || 4.5,
-          delivery: "Tomorrow",
-          image: "🔧",
-          reason: "Featured product",
-        }))
-      : [
-          {
-            id: "tp-1",
-            partNumber: "04465-0K390",
-            name: "Front Brake Pad Set",
-            brand: "Toyota OEM",
-            price: "KES 7,800",
-            unitPrice: 7800,
-            rating: 4.8,
-            delivery: "Tomorrow",
-            image: "🔧",
-            reason: "Best seller for Hilux",
-          },
-          {
-            id: "tp-2",
-            partNumber: "90915-YZZE1",
-            name: "Air Filter",
-            brand: "Toyota Genuine",
-            price: "KES 850",
-            unitPrice: 850,
-            rating: 4.9,
-            delivery: "Today",
-            image: "💨",
-            reason: "Direct fit for 2018 Hilux",
-          },
-          {
-            id: "tp-3",
-            partNumber: "43512-0K020",
-            name: "Shock Absorber (Pair)",
-            brand: "KYB",
-            price: "KES 18,500",
-            unitPrice: 18500,
-            rating: 4.7,
-            delivery: "2 days",
-            image: "🚗",
-            reason: "Premium quality",
-          },
-          {
-            id: "tp-4",
-            partNumber: "12100-0K030",
-            name: "Oil Filter Set (3pc)",
-            brand: "Toyota Genuine",
-            price: "KES 2,800",
-            unitPrice: 2800,
-            rating: 5.0,
-            delivery: "Today",
-            image: "🛢️",
-            reason: "Service essential",
-          },
-        ];
-
-  const trustedBrands =
-    brands.length > 0
-      ? brands.map((b) => ({ name: b.name, count: `${b.count}+ parts` }))
-      : [
-          { name: "Toyota Genuine", count: "12,400+ parts" },
-          { name: "Denso", count: "3,200+ parts" },
-          { name: "NGK", count: "1,800+ parts" },
-          { name: "KYB", count: "980+ parts" },
-          { name: "Bosch", count: "2,100+ parts" },
-          { name: "Isuzu", count: "4,500+ parts" },
-        ];
-
-  const popularParts =
-    featuredProducts.length > 0
-      ? featuredProducts.slice(0, 4).map((p) => ({
-          id: p.id,
-          partNumber: p.partNumber,
-          name: p.name,
-          brand: p.brand || "Unknown",
-          price: `KES ${p.price?.toLocaleString() ?? "0"}`,
-          unitPrice: p.price,
-          vendors: 3,
-          rating: p.rating || 4.5,
-          delivery: "Tomorrow",
-          image: "🔧",
-        }))
-      : [
-          {
-            id: "pp-1",
-            partNumber: "04465-0K390",
-            name: "Front Brake Pad Set",
-            brand: "Toyota OEM",
-            price: "KES 7,800",
-            unitPrice: 7800,
-            vendors: 3,
-            rating: 4.8,
-            delivery: "Tomorrow",
-            image: "🔧",
-          },
-          {
-            id: "pp-2",
-            partNumber: "17801-0K010",
-            name: "Oil Filter",
-            brand: "Toyota Genuine",
-            price: "KES 1,200",
-            unitPrice: 1200,
-            vendors: 5,
-            rating: 4.9,
-            delivery: "Today",
-            image: "⚙️",
-          },
-          {
-            id: "pp-3",
-            partNumber: "43512-0K020",
-            name: "Shock Absorber",
-            brand: "Toyota OEM",
-            price: "KES 12,500",
-            unitPrice: 12500,
-            vendors: 2,
-            rating: 4.7,
-            delivery: "2 days",
-            image: "🚗",
-          },
-          {
-            id: "pp-4",
-            partNumber: "90915-YZZE1",
-            name: "Air Filter",
-            brand: "Toyota Genuine",
-            price: "KES 850",
-            unitPrice: 850,
-            vendors: 8,
-            rating: 4.9,
-            delivery: "Today",
-            image: "💨",
-          },
-        ];
-
-  const customerReviews = [
-    {
-      name: "James M.",
-      location: "Nairobi",
-      text: "Got my Hilux brake pads in perfect condition and arrived same day. Best price I found!",
-      rating: 5,
-    },
-    {
-      name: "Aisha K.",
-      location: "Mombasa",
-      text: "Finally found genuine Denso parts without going to Industrial Area. Delivery was fast.",
-      rating: 5,
-    },
-    {
-      name: "Peter O.",
-      location: "Nakuru",
-      text: "Compared 4 vendors — saved over KSh 3,000 on shocks. Will buy again.",
-      rating: 4,
-    },
-  ];
+  function handleAddToCart(product: {
+    id: string;
+    name: string;
+    price: number;
+  }) {
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      vendorId: DEFAULT_VENDOR.vendorId,
+      vendorName: DEFAULT_VENDOR.vendorName,
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -461,121 +158,90 @@ export function HomePage() {
         <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-[#232F3E]/50 to-transparent" />
       </section>
 
-      {/* Keep Shopping For (Recently Viewed) */}
-      {recentlyViewed.length > 0 && (
+      {/* Featured Products from Backend */}
+      {featuredProducts.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-900">
-              Keep Shopping For
-            </h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-sky-600"
-              onClick={() => navigate("/account/history")}
-            >
-              View browsing history <ArrowRight className="ml-1 h-4 w-4" />
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {recentlyViewed.map((item) => (
-              <button
-                key={item.partNumber}
-                onClick={() => navigate(`/parts/${item.partNumber}`)}
-                className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-left transition hover:border-sky-300 hover:shadow-md"
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-md bg-slate-100 text-2xl">
-                  {item.image}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium text-slate-900 line-clamp-2">
-                    {item.name}
-                  </p>
-                  <p className="text-sm font-bold text-slate-900">
-                    {item.price}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Top Picks for Your Vehicle */}
-      {USER_GARAGE.length > 0 && (
-        <section>
-          <div className="mb-4 flex items-center justify-between">
-            <div>
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-[#FF9900]" />
               <h2 className="text-lg font-semibold text-slate-900">
-                Top Picks for Your {USER_GARAGE[0].make} {USER_GARAGE[0].model}
+                Featured Products
               </h2>
-              <p className="text-xs text-slate-600">
-                Parts that fit your {USER_GARAGE[0].year} {USER_GARAGE[0].model}
-              </p>
             </div>
             <Button
               variant="ghost"
               size="sm"
-              className="text-sky-600"
-              onClick={() =>
-                navigate(
-                  `/search?make=${USER_GARAGE[0].make}&model=${USER_GARAGE[0].model}`,
-                )
-              }
+              onClick={() => navigate("/search")}
             >
-              See all for {USER_GARAGE[0].model}{" "}
-              <ArrowRight className="ml-1 h-4 w-4" />
+              See more
             </Button>
           </div>
           <div className="grid gap-4 md:grid-cols-4">
-            {topPicksForHilux.map((part) => (
+            {featuredProducts.slice(0, 8).map((product) => (
               <div
-                key={part.partNumber}
-                className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-[#FF9900] hover:shadow-md"
-                onClick={() => navigate(`/parts/${part.partNumber}`)}
+                key={product.id}
+                className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
+                onClick={() => navigate(`/parts/${product.id}`)}
               >
                 <div className="mb-2 flex h-16 items-center justify-center rounded-md bg-slate-100 text-3xl">
-                  {part.image}
+                  {product.images && product.images.length > 0 ? (
+                    <img
+                      src={product.images[0]}
+                      alt={product.name}
+                      className="h-full w-full object-cover rounded-md"
+                    />
+                  ) : (
+                    <span>🔧</span>
+                  )}
                 </div>
-                <Badge className="mb-1 bg-green-100 text-green-800 text-[10px]">
-                  {part.reason}
-                </Badge>
                 <p className="mb-1 text-[10px] font-mono text-slate-500">
-                  {part.partNumber}
+                  {product.partNumber}
                 </p>
                 <h3 className="mb-1 text-sm font-semibold text-slate-900 line-clamp-2">
-                  {part.name}
+                  {product.name}
                 </h3>
-                <p className="mb-2 text-xs text-slate-600">{part.brand}</p>
+                <p className="mb-2 text-xs text-slate-600">
+                  {product.brand || "Unknown brand"}
+                </p>
                 <div className="mb-2 flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
                       className={`h-3 w-3 ${
-                        i < Math.floor(part.rating)
+                        i < Math.floor(product.rating || 0)
                           ? "fill-amber-400 text-amber-400"
                           : "text-slate-300"
                       }`}
                     />
                   ))}
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-base font-bold text-slate-900">
-                    {part.price}
+                  <span className="ml-1 text-[10px] text-slate-600">
+                    ({product.rating?.toFixed(1) || "No rating"})
                   </span>
                 </div>
-                <p className="mb-2 text-[10px] text-slate-600">
-                  Delivery: {part.delivery}
-                </p>
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-base font-bold text-slate-900">
+                    KES {product.price.toLocaleString()}
+                  </span>
+                  {product.stock > 0 ? (
+                    <Badge className="bg-green-100 text-green-700 text-[10px]">
+                      In Stock
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-red-100 text-red-700 text-[10px]">
+                      Out of Stock
+                    </Badge>
+                  )}
+                </div>
                 <Button
                   size="sm"
                   className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleAddToCart(part);
+                    handleAddToCart(product);
                   }}
+                  disabled={product.stock <= 0}
                 >
-                  Add to cart
+                  {product.stock > 0 ? "Add to cart" : "Out of Stock"}
                 </Button>
               </div>
             ))}
@@ -671,181 +337,81 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Grid Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {gridCards.map((card, i) => (
-          <div
-            key={i}
-            className="cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition hover:border-sky-300 hover:shadow-md"
-            onClick={() => navigate("/search")}
-          >
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-2xl">{card.image}</span>
-              <h3 className="text-sm font-semibold text-slate-900">
-                {card.title}
-              </h3>
-            </div>
-            <p className="mb-3 text-xs text-slate-600">{card.subtitle}</p>
-            <ul className="space-y-1">
-              {card.items.map((item, j) => (
-                <li
-                  key={j}
-                  className="flex items-center justify-between text-xs"
-                >
-                  <span className="text-slate-700">{item.name}</span>
-                  <span className="font-medium text-slate-900">
-                    {item.price}
-                    {"wasPrice" in item && item.wasPrice && (
-                      <span className="ml-1 text-xs text-slate-400 line-through">
-                        {item.wasPrice}
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
-            </ul>
+      {/* Categories from Backend */}
+      {categories.length > 0 && (
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Shop by Category
+            </h2>
             <Button
               variant="ghost"
               size="sm"
-              className="mt-3 w-full text-xs text-sky-600"
+              onClick={() => navigate("/search")}
             >
-              See more <ArrowRight className="ml-1 h-3 w-3" />
+              View all
             </Button>
           </div>
-        ))}
-      </div>
-
-      {/* Popular Categories Grid */}
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Shop by Category
-          </h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/search")}>
-            View all
-          </Button>
-        </div>
-        <div className="grid gap-4 md:grid-cols-4">
-          {popularCategories.map((cat) => {
-            const Icon = cat.icon;
-            return (
+          <div className="grid gap-4 md:grid-cols-4">
+            {categories.slice(0, 8).map((category) => (
               <button
-                key={cat.name}
-                onClick={() => navigate("/search")}
+                key={category.name}
+                onClick={() =>
+                  navigate(
+                    `/search?category=${encodeURIComponent(category.name)}`,
+                  )
+                }
                 className="group rounded-lg border border-slate-200 bg-white p-4 text-left transition-all hover:border-[#FF9900] hover:shadow-md"
               >
-                <div
-                  className={`mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg ${cat.color}`}
-                >
-                  <Icon className="h-6 w-6" />
+                <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-800">
+                  <Wrench className="h-6 w-6" />
                 </div>
-                <h3 className="font-semibold text-slate-900">{cat.name}</h3>
-                <p className="mt-1 text-xs text-slate-600">{cat.count}</p>
+                <h3 className="font-semibold text-slate-900">
+                  {category.name}
+                </h3>
+                <p className="mt-1 text-xs text-slate-600">
+                  {category.count} parts
+                </p>
               </button>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Popular Parts / Best Sellers */}
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-[#FF9900]" />
-            <h2 className="text-lg font-semibold text-slate-900">
-              Best Sellers
-            </h2>
+            ))}
           </div>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/search")}>
-            See more
-          </Button>
-        </div>
-        <div className="grid gap-4 md:grid-cols-4">
-          {popularParts.map((part) => (
-            <div
-              key={part.partNumber}
-              className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
-              onClick={() => navigate(`/parts/${part.partNumber}`)}
-            >
-              <div className="mb-2 flex h-16 items-center justify-center rounded-md bg-slate-100 text-3xl">
-                {part.image}
-              </div>
-              <p className="mb-1 text-[10px] font-mono text-slate-500">
-                {part.partNumber}
-              </p>
-              <h3 className="mb-1 text-sm font-semibold text-slate-900 line-clamp-2">
-                {part.name}
-              </h3>
-              <p className="mb-2 text-xs text-slate-600">{part.brand}</p>
-              <div className="mb-2 flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-3 w-3 ${
-                      i < Math.floor(part.rating)
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-slate-300"
-                    }`}
-                  />
-                ))}
-                <span className="ml-1 text-[10px] text-slate-600">
-                  ({part.rating})
-                </span>
-              </div>
-              <div className="mb-2 flex items-center justify-between">
-                <span className="text-base font-bold text-slate-900">
-                  {part.price}
-                </span>
-                <Badge variant="outline" className="text-[10px]">
-                  {part.vendors} vendors
-                </Badge>
-              </div>
-              <p className="mb-2 text-[10px] text-slate-600">
-                Delivery: {part.delivery}
-              </p>
-              <Button
-                size="sm"
-                className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleAddToCart(part);
-                }}
-              >
-                Add to cart
-              </Button>
-            </div>
-          ))}
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Trusted Brands */}
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900">
-            Trusted Brands
-          </h2>
-          <Button variant="ghost" size="sm" onClick={() => navigate("/brands")}>
-            View all brands
-          </Button>
-        </div>
-        <div className="grid grid-cols-3 gap-4 md:grid-cols-6">
-          {trustedBrands.map((brand) => (
-            <button
-              key={brand.name}
-              onClick={() =>
-                navigate(`/search?brand=${encodeURIComponent(brand.name)}`)
-              }
-              className="group flex flex-col items-center rounded-lg border border-slate-200 bg-white p-4 text-center transition hover:border-[#FF9900] hover:shadow-md"
+      {/* Brands from Backend */}
+      {brands.length > 0 && (
+        <section>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-lg font-semibold text-slate-900">
+              Trusted Brands
+            </h2>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/search")}
             >
-              <div className="mb-2 h-16 w-16 rounded-full bg-slate-100 text-3xl flex items-center justify-center">
-                {brand.name.charAt(0)}
-              </div>
-              <h3 className="text-sm font-semibold">{brand.name}</h3>
-              <p className="text-xs text-slate-500">{brand.count}</p>
-            </button>
-          ))}
-        </div>
-      </section>
+              View all brands
+            </Button>
+          </div>
+          <div className="grid grid-cols-3 gap-4 md:grid-cols-6">
+            {brands.slice(0, 12).map((brand) => (
+              <button
+                key={brand.name}
+                onClick={() =>
+                  navigate(`/search?brand=${encodeURIComponent(brand.name)}`)
+                }
+                className="group flex flex-col items-center rounded-lg border border-slate-200 bg-white p-4 text-center transition hover:border-[#FF9900] hover:shadow-md"
+              >
+                <div className="mb-2 h-16 w-16 rounded-full bg-slate-100 text-3xl flex items-center justify-center">
+                  {brand.name.charAt(0)}
+                </div>
+                <h3 className="text-sm font-semibold">{brand.name}</h3>
+                <p className="text-xs text-slate-500">{brand.count} parts</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Deals & Benefits */}
       <section className="grid gap-4 md:grid-cols-3">
@@ -919,43 +485,6 @@ export function HomePage() {
               <p className="text-xs text-slate-600">Compare multiple vendors</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Customer Reviews */}
-      <section className="py-6">
-        <h2 className="mb-6 text-center text-xl font-bold text-slate-900">
-          What Our Customers Say
-        </h2>
-        <div className="grid gap-6 md:grid-cols-3">
-          {customerReviews.map((review, i) => (
-            <div
-              key={i}
-              className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
-            >
-              <div className="mb-3 flex">
-                {[...Array(5)].map((_, idx) => (
-                  <Star
-                    key={idx}
-                    className={`h-4 w-4 ${
-                      idx < review.rating
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-slate-300"
-                    }`}
-                  />
-                ))}
-              </div>
-              <p className="mb-4 text-sm text-slate-700">"{review.text}"</p>
-              <div className="text-xs text-slate-500">
-                <strong>{review.name}</strong> • {review.location}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 text-center">
-          <Button variant="outline" onClick={() => navigate("/reviews")}>
-            Read more reviews
-          </Button>
         </div>
       </section>
 

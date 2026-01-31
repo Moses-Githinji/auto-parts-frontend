@@ -1,19 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Badge } from "../components/ui/badge";
 import { useCartStore } from "../stores/cartStore";
 import { useProductStore } from "../stores/productStore";
-
-const MOCK_LISTING = {
-  partNumber: "04465-0K390",
-  partName: "Front Brake Pad Set – Hilux Vigo",
-  vendorId: "search-vendor-1",
-  vendorName: "Nairobi Genuine Parts",
-  unitPrice: 7500,
-  currency: "KES",
-};
+import type { Product } from "../types/product";
 
 export function SearchPage() {
   const [params] = useSearchParams();
@@ -31,6 +23,12 @@ export function SearchPage() {
     clearFilters,
     clearError,
   } = useProductStore();
+
+  const [addingProductId, setAddingProductId] = useState<string | null>(null);
+  const [cartMessage, setCartMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   useEffect(() => {
     clearError();
@@ -50,15 +48,31 @@ export function SearchPage() {
     }
   }, [q, category, brand, fetchProducts, setFilters, clearFilters, clearError]);
 
-  function handleAddToCart() {
-    addItem({
-      productId: "mock-product-id",
-      name: MOCK_LISTING.partName,
-      price: MOCK_LISTING.unitPrice,
-      quantity: 1,
-      vendorId: MOCK_LISTING.vendorId,
-      vendorName: MOCK_LISTING.vendorName,
-    });
+  async function handleAddToCart(product: Product) {
+    setAddingProductId(product.id);
+    setCartMessage(null);
+
+    try {
+      await addItem({
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        vendorId: product.vendorId || "unknown-vendor",
+        vendorName: product.brand || "Auto Parts Store",
+      });
+      setCartMessage({
+        type: "success",
+        text: `${product.name} added to cart!`,
+      });
+      setTimeout(() => setCartMessage(null), 3000);
+    } catch (err) {
+      const errorMsg =
+        err instanceof Error ? err.message : "Failed to add to cart";
+      setCartMessage({ type: "error", text: errorMsg });
+    } finally {
+      setAddingProductId(null);
+    }
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -107,6 +121,15 @@ export function SearchPage() {
           >
             Clear all
           </button>
+        </div>
+      )}
+
+      {/* Cart Message */}
+      {cartMessage && (
+        <div
+          className={`rounded-lg p-3 text-sm ${cartMessage.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
+        >
+          {cartMessage.text}
         </div>
       )}
 
@@ -179,12 +202,18 @@ export function SearchPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => navigate(`/parts/${product.partNumber}`)}
+                      onClick={() => navigate(`/parts/${product.id}`)}
                     >
                       View details
                     </Button>
-                    <Button size="sm" onClick={handleAddToCart}>
-                      Add to cart
+                    <Button
+                      size="sm"
+                      onClick={() => handleAddToCart(product)}
+                      disabled={addingProductId === product.id}
+                    >
+                      {addingProductId === product.id
+                        ? "Adding..."
+                        : "Add to cart"}
                     </Button>
                   </div>
                 </div>
@@ -203,64 +232,6 @@ export function SearchPage() {
           <div className="rounded-md border border-slate-200 bg-white p-8 text-center text-sm text-slate-600">
             <p className="mb-2">No products found matching your criteria.</p>
             <p>Try adjusting your search or filters.</p>
-          </div>
-        </section>
-      )}
-
-      {/* Mock Search Results (when no store data) */}
-      {!isLoading && products.length === 0 && (
-        <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-slate-900">
-            Search results (demo)
-          </h2>
-          <p className="text-xs text-slate-600">
-            This screen will call your existing search endpoint and rank by
-            exact part match, fitment confidence, vendor SLA, and price.
-          </p>
-          <div className="divide-y divide-slate-100 rounded-md border border-slate-200">
-            <article className="grid gap-3 bg-white p-3 md:grid-cols-[2fr,1.5fr]">
-              <div className="space-y-1">
-                <p className="text-xs font-mono text-slate-500">
-                  OEM {MOCK_LISTING.partNumber}
-                </p>
-                <h3 className="text-sm font-semibold text-slate-900">
-                  {MOCK_LISTING.partName}
-                </h3>
-                <p className="text-xs text-slate-600">
-                  Fits Toyota Hilux Vigo 2.5/3.0D (KUN25, KUN26) 2005–2015. High
-                  confidence fitment.
-                </p>
-                <div className="flex flex-wrap gap-1 text-[11px] text-slate-600">
-                  <Badge variant="success">Fitment 0.96</Badge>
-                  <Badge variant="outline">Interchange: NIBK PN1234</Badge>
-                </div>
-              </div>
-              <div className="flex flex-col justify-between gap-2 rounded-md bg-slate-50 p-3 text-xs">
-                <div>
-                  <p className="font-semibold text-slate-900">
-                    From KES {MOCK_LISTING.unitPrice.toLocaleString()}
-                  </p>
-                  <p className="text-slate-600">3 vendor offers • Nairobi</p>
-                  <p className="text-[11px] text-slate-500">
-                    Fastest delivery: Tomorrow by 5pm
-                  </p>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() =>
-                      navigate(`/parts/${MOCK_LISTING.partNumber}`)
-                    }
-                  >
-                    View offers
-                  </Button>
-                  <Button size="sm" onClick={handleAddToCart}>
-                    Add to cart
-                  </Button>
-                </div>
-              </div>
-            </article>
           </div>
         </section>
       )}

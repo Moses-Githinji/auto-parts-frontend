@@ -29,10 +29,11 @@ export function CartPage() {
   const totalAmount = useCartStore((s) => s.totalAmount());
   const clearCart = useCartStore((s) => s.clearCart);
 
-  const confirmClearCart = async () => {
+  const handleClearCart = async () => {
     setShowClearModal(false);
     try {
       await clearCart();
+      setClearError(null);
     } catch {
       setClearError("Failed to clear cart. Please try again.");
     }
@@ -150,7 +151,11 @@ export function CartPage() {
                       </button>
                     </div>
                     <p className="text-xs font-semibold text-slate-900">
-                      {currency} {(item.price * item.quantity).toLocaleString()}
+                      {currency}{" "}
+                      {(item.price * item.quantity).toLocaleString(undefined, {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2,
+                      })}
                     </p>
                     <Button
                       variant="ghost"
@@ -169,7 +174,11 @@ export function CartPage() {
                 Delivery ETA: Select at checkout
               </p>
               <Badge variant="outline">
-                Vendor subtotal: {currency} {vendorSubtotal.toLocaleString()}
+                Vendor subtotal: {currency}{" "}
+                {vendorSubtotal.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
               </Badge>
             </div>
           </section>
@@ -188,7 +197,10 @@ export function CartPage() {
           <div className="text-right">
             <p className="text-xs text-slate-600">Total (KES)</p>
             <p className="text-base font-semibold text-slate-900">
-              {totalAmount.toLocaleString()}
+              {totalAmount.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })}
             </p>
           </div>
           <a
@@ -219,7 +231,7 @@ export function CartPage() {
               </button>
               <button
                 type="button"
-                onClick={confirmClearCart}
+                onClick={handleClearCart}
                 className="rounded-sm bg-red-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-red-700"
               >
                 Clear Cart

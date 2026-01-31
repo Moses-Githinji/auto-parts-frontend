@@ -90,18 +90,19 @@ export function CheckoutPage() {
       const firstVendor = items[0].vendorId;
       const vendorItems = itemsByVendor.get(firstVendor) || [];
 
+      // Ensure all shipping address fields are populated
       const shippingAddress: OrderAddress = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        phone: formData.phone,
-        email: formData.email,
-        street: formData.estate,
-        city: formData.city,
-        state: formData.city,
-        zipCode: "",
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        phone: formData.phone.trim(),
+        email: formData.email.trim(),
+        street: formData.estate.trim(),
+        city: formData.city.trim(),
+        state: formData.city.trim(), // Use city as state for Kenya
+        zipCode: "00100", // Default Nairobi zip code
       };
 
-      await createOrder({
+      const orderData = {
         vendorId: firstVendor,
         items: vendorItems.map((item) => ({
           productId: item.productId,
@@ -109,14 +110,26 @@ export function CheckoutPage() {
         })),
         shippingAddress,
         paymentMethod,
-      });
+      };
+
+      console.log(
+        "Creating order with data:",
+        JSON.stringify(orderData, null, 2),
+      );
+
+      await createOrder(orderData);
 
       // Clear cart after successful order
       await clearCart();
       toast.success("Payment successful! Order placed.");
       navigate("/orders");
     } catch (error) {
-      toast.error("Failed to place order. Please try again.");
+      console.error("Order creation error:", error);
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to place order. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsProcessing(false);
     }

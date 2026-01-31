@@ -6,7 +6,7 @@ import { useCartStore } from "./stores/cartStore";
 import { AppShell } from "./layout/AppShell";
 import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
-import { PartDetailPage } from "./pages/PartDetailPage";
+import ProductDetailPage from "./pages/parts/[id]";
 import { CartPage } from "./pages/CartPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import { OrdersPage } from "./pages/OrdersPage";
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
       { path: "email-verification", element: <EmailVerificationPage /> },
       { path: "forgot-password", element: <ResetPasswordPage /> },
       { path: "search", element: <SearchPage /> },
-      { path: "parts/:partNumber", element: <PartDetailPage /> },
+      { path: "parts/:id", element: <ProductDetailPage /> },
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckoutPage /> },
       { path: "orders", element: <OrdersPage /> },

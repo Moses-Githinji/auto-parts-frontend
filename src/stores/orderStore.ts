@@ -111,12 +111,23 @@ export const useOrderStore = create<OrderState>()(
           }));
           return response.order;
         } catch (error) {
+          // Extract error message from backend response if available
+          let errorMessage = "Failed to create order";
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          }
+          // Check if it's an axios error with response data
+          const axiosError = error as {
+            response?: { data?: { error?: string } };
+          };
+          if (axiosError.response?.data?.error) {
+            errorMessage = axiosError.response.data.error;
+          }
           set({
-            error:
-              error instanceof Error ? error.message : "Failed to create order",
+            error: errorMessage,
             isLoading: false,
           });
-          throw error;
+          throw new Error(errorMessage);
         }
       },
 
