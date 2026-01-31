@@ -1,0 +1,940 @@
+================================================================================
+EMAIL TEMPLATES AND STYLES - THE AUTO PARTS STORE KENYA
+================================================================================
+For use in backend email services (Node.js, PHP, Python, etc.)
+================================================================================
+
+================================================================================
+GLOBAL CSS STYLES
+================================================================================
+
+<style>
+    /* Reset and Base Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #f4f7f9;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+    
+    /* Container */
+    .email-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background: #ffffff;
+        border: 1px solid #e1e4e8;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    /* Header */
+    .email-header {
+        background-color: #131921;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .email-header h1 {
+        color: #ffffff;
+        margin: 0;
+        font-size: 20px;
+        font-weight: bold;
+    }
+    
+    /* Content */
+    .email-content {
+        padding: 30px;
+        color: #333333;
+    }
+    
+    /* Footer */
+    .email-footer {
+        background-color: #f9fafb;
+        padding: 20px;
+        font-size: 12px;
+        text-align: center;
+        color: #6b7280;
+        border-top: 1px solid #e1e4e8;
+    }
+    
+    .email-footer a {
+        color: #007185;
+        text-decoration: none;
+    }
+    
+    /* Buttons */
+    .email-button {
+        display: inline-block;
+        padding: 14px 28px;
+        background-color: #FFD814;
+        color: #111111;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 16px;
+        border: 1px solid #F7CA00;
+    }
+    
+    .email-button:hover {
+        background-color: #F7CA00;
+    }
+    
+    .email-button-blue {
+        background-color: #007185;
+        color: #ffffff;
+        border: 1px solid #007185;
+    }
+    
+    .email-button-blue:hover {
+        background-color: #005F8C;
+    }
+    
+    /* Text Utilities */
+    .text-center {
+        text-align: center;
+    }
+    
+    .text-left {
+        text-align: left;
+    }
+    
+    .mt-20 {
+        margin-top: 20px;
+    }
+    
+    .mt-30 {
+        margin-top: 30px;
+    }
+    
+    .mb-20 {
+        margin-bottom: 20px;
+    }
+    
+    .small-text {
+        font-size: 13px;
+        color: #6b7280;
+    }
+    
+    /* Dividers */
+    .email-divider {
+        height: 1px;
+        background-color: #e1e4e8;
+        margin: 20px 0;
+    }
+    
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #d1fae5;
+        color: #059669;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    
+    /* Alert Boxes */
+    .alert-warning {
+        background-color: #fef3c7;
+        border-left: 4px solid #d97706;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .alert-info {
+        background-color: #dbeafe;
+        border-left: 4px solid #007185;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .alert-error {
+        background-color: #fee2e2;
+        border-left: 4px solid #dc2626;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    .alert-success {
+        background-color: #d1fae5;
+        border-left: 4px solid #059669;
+        padding: 15px;
+        margin-top: 20px;
+    }
+    
+    /* Info Box */
+    .info-box {
+        background-color: #f3f4f6;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+    }
+    
+    /* Tables */
+    .email-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    
+    .email-table th {
+        background-color: #e1e4e8;
+        padding: 12px;
+        text-align: left;
+        font-size: 13px;
+    }
+    
+    .email-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e1e4e8;
+    }
+    
+    .email-table td.text-center {
+        text-align: center;
+    }
+    
+    .email-table td.text-right {
+        text-align: right;
+    }
+    
+    /* Form Elements */
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333333;
+    }
+    
+    .form-value {
+        padding: 5px 0;
+    }
+    
+    /* Links */
+    .email-link {
+        color: #007185;
+        text-decoration: none;
+    }
+    
+    .email-link:hover {
+        color: #005F8C;
+    }
+    
+    /* Typography */
+    h2 {
+        margin-top: 0;
+        color: #333333;
+        font-size: 20px;
+    }
+    
+    h3 {
+        color: #333333;
+        font-size: 16px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    
+    p {
+        margin: 10px 0;
+        color: #333333;
+    }
+    
+    ul {
+        padding-left: 20px;
+        line-height: 1.8;
+    }
+    
+    li {
+        margin: 5px 0;
+    }
+    
+    /* Grid */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+    }
+    
+    .col-half {
+        width: 50%;
+        padding: 0 10px;
+    }
+    
+    /* Responsive */
+    @media only screen and (max-width: 640px) {
+        .email-container {
+            max-width: 100%;
+            margin: 0;
+            border-radius: 0;
+        }
+        
+        .email-content {
+            padding: 20px;
+        }
+        
+        .row {
+            flex-direction: column;
+        }
+        
+        .col-half {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+================================================================================
+TEMPLATE 1: EMAIL VERIFICATION
+================================================================================
+
+Subject: Verify your email address - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <h2>Verify your email address</h2>
+            <p>Hi {NAME},</p>
+            <p>Welcome to Kenya's leading auto parts marketplace! Please verify your email to activate your account and start shopping or selling.</p>
+            <div class="text-center mt-30">
+                <a href="{VERIFY_LINK}" class="email-button">Verify Email Address</a>
+            </div>
+            <p class="small-text mt-20">If you didn't create an account, you can safely ignore this email. This link will expire in 24 hours.</p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Variables:
+- {NAME} - User's name
+- {VERIFY_LINK} - Email verification link
+
+================================================================================
+TEMPLATE 2: VENDOR ONBOARDING / CREDENTIALS
+================================================================================
+
+Subject: Welcome to the Vendor Network - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Account Created - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <h2>Welcome to the Vendor Network!</h2>
+            <p>Congratulations, <strong>{VENDOR_NAME}</strong>! Your shop profile has been successfully created.</p>
+            
+            <div class="info-box">
+                <p style="margin-top: 0;"><strong>Your Login Credentials:</strong></p>
+                <p style="margin-bottom: 5px;"><strong>Email:</strong> {EMAIL}</p>
+                <p><strong>Password:</strong> {PASSWORD}</p>
+                <p class="small-text" style="margin-bottom: 0;">Please change your password after first login.</p>
+            </div>
+            
+            <p><strong>Next Steps to Go Live:</strong></p>
+            <ul>
+                <li>Upload your KRA PIN & Business License</li>
+                <li>Add your M-Pesa or Bank details for payouts</li>
+                <li>List your first 5 genuine spare parts</li>
+                <li>Verify your email address</li>
+            </ul>
+            
+            <div class="text-center mt-30">
+                <a href="{DASHBOARD_LINK}" class="email-button email-button-blue">Go to Vendor Dashboard</a>
+            </div>
+            
+            <p class="small-text mt-20">Need help? Contact our vendor support team at <a href="mailto:{SUPPORT_EMAIL}" class="email-link">{SUPPORT_EMAIL}</a></p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Variables:
+- {VENDOR_NAME} - Vendor's company name
+- {EMAIL} - Vendor's email address
+- {PASSWORD} - Generated password (if applicable)
+- {DASHBOARD_LINK} - Link to vendor dashboard
+- {SUPPORT_EMAIL} - Support email address
+
+================================================================================
+TEMPLATE 3: PASSWORD RESET
+================================================================================
+
+Subject: Password Reset Request - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <h2>Password Reset Request</h2>
+            <p>Hi {NAME},</p>
+            <p>We received a request to reset your password. If this was you, click the button below:</p>
+            
+            <div class="text-center mt-30">
+                <a href="{RESET_LINK}" class="email-button">Reset My Password</a>
+            </div>
+            
+            <p class="small-text mt-20"><strong>Note:</strong> This link will expire in {EXPIRY_MINUTES} minutes. If you didn't request this, please ignore this email and consider changing your password if you're concerned about security.</p>
+            
+            <div class="alert-warning">
+                <p style="margin: 0; font-size: 13px; color: #92400e;"><strong>Tip:</strong> For your security, never share your password or OTP with anyone claiming to be from The Auto Parts Store.</p>
+            </div>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Variables:
+- {NAME} - User's name
+- {RESET_LINK} - Password reset link
+- {EXPIRY_MINUTES} - Link expiry time in minutes
+
+================================================================================
+TEMPLATE 4: ORDER CONFIRMATION
+================================================================================
+
+Subject: Order Confirmed #{ORDER_NUMBER} - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+        .order-table img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 4px;
+            border: 1px solid #e1e4e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <div class="text-center mb-20">
+                <span class="status-badge">&#10003; Order Confirmed</span>
+            </div>
+            
+            <h2>Thank you for your order!</h2>
+            <p>Hi {CUSTOMER_NAME},</p>
+            <p>We've received your order and are getting it ready. You'll receive another email when your items ship.</p>
+            
+            <div class="info-box">
+                <p style="margin: 0 0 5px 0;"><strong>Order #{ORDER_NUMBER}</strong></p>
+                <p style="margin: 0; font-size: 13px; color: #6b7280;">Placed on {ORDER_DATE}</p>
+                {MPESA_SECTION}
+            </div>
+            
+            <h3>Order Summary</h3>
+            <table class="email-table order-table">
+                <thead>
+                    <tr style="background-color: #e1e4e8;">
+                        <th style="padding: 12px; text-align: left; font-size: 13px;">Item</th>
+                        <th style="padding: 12px; text-align: center; font-size: 13px;">Qty</th>
+                        <th style="padding: 12px; text-align: right; font-size: 13px;">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {ORDER_ITEMS}
+                </tbody>
+            </table>
+            
+            <div style="border-top: 2px solid #e1e4e8; padding-top: 15px;">
+                <p style="margin: 5px 0; display: flex; justify-content: space-between;"><span>Subtotal:</span> <span>{SUBTOTAL}</span></p>
+                <p style="margin: 5px 0; display: flex; justify-content: space-between;"><span>Shipping:</span> <span>{SHIPPING}</span></p>
+                <p style="margin: 15px 0 5px 0; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;"><span>Total:</span> <span>{TOTAL}</span></p>
+            </div>
+            
+            <div class="email-divider"></div>
+            
+            <h3 style="font-size: 14px;">Delivery Details</h3>
+            <p style="margin: 5px 0;"><strong>Delivery Address:</strong></p>
+            <p style="margin: 0 0 10px 0; padding-left: 15px; color: #6b7280;">{DELIVERY_ADDRESS}</p>
+            <p style="margin: 5px 0;"><span class="status-badge">&#128230; Estimated Delivery: {ESTIMATED_DELIVERY}</span></p>
+            <p style="margin: 5px 0; font-size: 13px;"><strong>Payment:</strong> {PAYMENT_METHOD}</p>
+            
+            <div class="text-center mt-30">
+                <a href="{ORDER_DETAILS_LINK}" class="email-button email-button-blue">View Order Details</a>
+            </div>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Order Item Row Template (repeat for each item):
+------------------------------------------------
+
+<tr>
+    <td style="padding: 15px; border-bottom: 1px solid #e1e4e8;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            {IMAGE_URL}
+            <div>
+                <p style="margin: 0 0 5px 0; font-weight: bold; color: #333333;">{ITEM_NAME}</p>
+                <p style="margin: 0; font-size: 12px; color: #6b7280;">SKU: {SKU}</p>
+                <p style="margin: 0; font-size: 12px; color: #059669;">&#10003; Fits: {FITMENT}</p>
+            </div>
+        </div>
+    </td>
+    <td style="padding: 15px; border-bottom: 1px solid #e1e4e8; text-align: center;">{QUANTITY}</td>
+    <td style="padding: 15px; border-bottom: 1px solid #e1e4e8; text-align: right; font-weight: bold;">{PRICE}</td>
+</tr>
+
+M-Pesa Section (conditional):
+-----------------------------
+
+<p style="margin: 5px 0; font-size: 12px;"><strong>M-Pesa Transaction ID:</strong> {MPESA_TRANSACTION_ID}</p>
+
+Variables:
+- {CUSTOMER_NAME} - Customer's name
+- {ORDER_NUMBER} - Order number
+- {ORDER_DATE} - Date order was placed
+- {MPESA_SECTION} - M-Pesa transaction ID section (conditional)
+- {ORDER_ITEMS} - HTML rows for each order item
+- {SUBTOTAL} - Order subtotal
+- {SHIPPING} - Shipping cost
+- {TOTAL} - Total order amount
+- {DELIVERY_ADDRESS} - Delivery address (with line breaks preserved)
+- {ESTIMATED_DELIVERY} - Estimated delivery date
+- {PAYMENT_METHOD} - Payment method used
+- {ORDER_DETAILS_LINK} - Link to view order details
+
+================================================================================
+TEMPLATE 5: PAYOUT PROCESSED (VENDOR)
+================================================================================
+
+Subject: Payout Sent - {CURRENCY} {AMOUNT} - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payout Processed - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <div class="text-center mb-20">
+                <span class="status-badge">&#128176; Payout Sent</span>
+            </div>
+            
+            <h2>Payout Processed</h2>
+            <p>Hi {VENDOR_NAME},</p>
+            <p>Great news! Your payout has been processed and sent to your account.</p>
+            
+            <div class="info-box" style="text-align: center;">
+                <p style="margin: 0 0 10px 0; font-size: 14px; color: #6b7280;">Amount Sent</p>
+                <p style="margin: 0; font-size: 32px; font-weight: bold; color: #059669;">{CURRENCY} {AMOUNT}</p>
+            </div>
+            
+            <table class="email-table">
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Transaction ID:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8; text-align: right; font-family: monospace;">{TRANSACTION_ID}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Reference:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8; text-align: right; font-family: monospace;">{REFERENCE_NUMBER}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Payout Method:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8; text-align: right;">{PAYOUT_METHOD}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Account:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8; text-align: right;">{PAYOUT_DETAILS}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0;"><strong>Date Processed:</strong></td>
+                    <td style="padding: 10px 0; text-align: right;">{PAYOUT_DATE}</td>
+                </tr>
+            </table>
+            
+            <div class="alert-info">
+                <p style="margin: 0; font-size: 13px; color: #007185;"><strong>M-Pesa Users:</strong> Please allow 1-2 hours for the funds to reflect in your wallet. Check your M-Pesa confirmation SMS for the transaction details.</p>
+            </div>
+            
+            <div class="text-center mt-30">
+                <a href="{DASHBOARD_LINK}" class="email-button">View in Dashboard</a>
+            </div>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Variables:
+- {VENDOR_NAME} - Vendor's name
+- {CURRENCY} - Currency code (e.g., KES)
+- {AMOUNT} - Payout amount
+- {TRANSACTION_ID} - Transaction ID
+- {REFERENCE_NUMBER} - Reference number
+- {PAYOUT_METHOD} - Payout method (M-Pesa, Bank Transfer, etc.)
+- {PAYOUT_DETAILS} - Account details (last 4 digits or phone number)
+- {PAYOUT_DATE} - Date payout was processed
+- {DASHBOARD_LINK} - Link to vendor dashboard
+
+================================================================================
+TEMPLATE 6: DISPUTE OPENED (VENDOR)
+================================================================================
+
+Subject: Dispute Opened - Order #{ORDER_NUMBER} - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispute Opened - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <h2>Dispute Opened: Order #{ORDER_NUMBER}</h2>
+            <p>Hi {VENDOR_NAME},</p>
+            <p>A customer has opened a dispute regarding their order. Please review and respond as soon as possible.</p>
+            
+            <div class="alert-warning">
+                <p style="margin: 0 0 10px 0; color: #d97706; font-weight: bold;">&#9888; Action Required</p>
+                <p style="margin: 0; font-size: 13px;">Please respond by: <strong>{RESPONSE_DEADLINE}</strong></p>
+            </div>
+            
+            <h3>Dispute Details</h3>
+            <table class="email-table">
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8; width: 40%;"><strong>Order #:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;">{ORDER_NUMBER}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Product:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;">{PRODUCT_NAME}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Customer:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;">{CUSTOMER_NAME}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><strong>Reason:</strong></td>
+                    <td style="padding: 10px 0; border-bottom: 1px solid #e1e4e8;"><span style="background-color: #fee2e2; color: #dc2626; padding: 3px 8px; border-radius: 4px; font-size: 12px;">{DISPUTE_REASON}</span></td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px 0;"><strong>Amount in Dispute:</strong></td>
+                    <td style="padding: 10px 0;">{AMOUNT}</td>
+                </tr>
+            </table>
+            
+            <div class="info-box">
+                <p style="margin: 0 0 10px 0; font-weight: bold;">Customer's Statement:</p>
+                <p style="margin: 0; font-style: italic; color: #6b7280;">"{DISPUTE_DETAILS}"</p>
+            </div>
+            
+            <h3>Resolution Options</h3>
+            <ul>
+                <li>Issue a full refund to the customer</li>
+                <li>Offer a partial refund and keep the sale</li>
+                <li>Provide a replacement product</li>
+                <li>Submit evidence to dispute the claim</li>
+            </ul>
+            
+            <div class="text-center mt-30">
+                <a href="{RESPOND_LINK}" class="email-button email-button-blue">Respond to Dispute</a>
+            </div>
+            
+            <p class="small-text mt-20">Need help? Call our vendor support team at <strong>{SUPPORT_PHONE}</strong></p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Variables:
+- {VENDOR_NAME} - Vendor's name
+- {ORDER_NUMBER} - Order number
+- {PRODUCT_NAME} - Product name
+- {CUSTOMER_NAME} - Customer's name
+- {DISPUTE_REASON} - Reason for dispute
+- {DISPUTE_DETAILS} - Customer's statement
+- {AMOUNT} - Amount in dispute
+- {RESPONSE_DEADLINE} - Deadline to respond
+- {RESPOND_LINK} - Link to respond to dispute
+- {SUPPORT_PHONE} - Support phone number
+
+================================================================================
+TEMPLATE 7: LOW STOCK ALERT (VENDOR)
+================================================================================
+
+Subject: Low Stock Alert - {PRODUCT_NAME} - The Auto Parts Store Kenya
+
+HTML Template:
+--------------
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Stock Alert - The Auto Parts Store</title>
+    <style>
+        /* Use Global CSS Styles from above */
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <h1>The Auto Parts Store Kenya</h1>
+        </div>
+        <div class="email-content">
+            <div class="text-center mb-20">
+                {BADGE}
+            </div>
+            
+            <h2>Low Stock Alert</h2>
+            <p>Hi {VENDOR_NAME},</p>
+            <p>One of your products is running low on stock. Consider restocking soon to avoid lost sales.</p>
+            
+            <div style="{ALERT_STYLE} padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 10px 0; width: 50%;"><strong>Product:</strong></td>
+                        <td style="padding: 10px 0;">{PRODUCT_NAME}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0;"><strong>SKU:</strong></td>
+                        <td style="padding: 10px 0;">{SKU}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0;"><strong>Current Stock:</strong></td>
+                        <td style="padding: 10px 0; font-size: 24px; font-weight: bold; color: {STOCK_COLOR};">{CURRENT_STOCK} units</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0;"><strong>Alert Threshold:</strong></td>
+                        <td style="padding: 10px 0;">{THRESHOLD} units</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <p><strong>Recommended Actions:</strong></p>
+            <ul>
+                <li>Update your inventory to reflect accurate stock levels</li>
+                <li>Consider running a promotion on this item to clear remaining stock</li>
+                <li>Contact your supplier for restocking</li>
+                {URGENT_ITEM}
+            </ul>
+            
+            <div class="text-center mt-30" style="display: flex; gap: 10px; justify-content: center;">
+                <a href="{REORDER_LINK}" class="email-button">Update Stock</a>
+                <a href="{DASHBOARD_LINK}" class="email-button email-button-blue">View All Inventory</a>
+            </div>
+            
+            <p class="small-text mt-20">This alert was triggered because your stock fell below {THRESHOLD} units. You can adjust these thresholds in your vendor dashboard settings.</p>
+        </div>
+        <div class="email-footer">
+            <p>&copy; 2026 The Auto Parts Store Kenya. Nairobi, Kenya.</p>
+            <p>
+                <a href="https://autopartsstore.co.ke/support">Support Center</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/privacy">Privacy Policy</a> &nbsp;|&nbsp; 
+                <a href="https://autopartsstore.co.ke/terms">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+
+Conditional Badge (Critical):
+------------------------------
+
+<span style="background-color: #dc2626; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">CRITICAL</span>
+
+Conditional Badge (Low):
+------------------------
+
+<span style="background-color: #d97706; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;">LOW</span>
+
+Conditional Alert Style (Critical):
+-----------------------------------
+
+background-color: #fee2e2; border-left: 4px solid #dc2626;
+
+Conditional Alert Style (Low):
+------------------------------
+
+background-color: #fef3c7; border-left: 4px solid #d97706;
+
+Conditional Urgent Item (Critical):
+-----------------------------------
+
+<li style="color: #dc2626;"><strong>Urgent:</strong> This item may go out of stock soon</li>
+
+Variables:
+- {VENDOR_NAME} - Vendor's name
+- {PRODUCT_NAME} - Product name
+- {SKU} - Product SKU
+- {CURRENT_STOCK} - Current stock level
+- {THRESHOLD} - Alert threshold
+- {REORDER_LINK} - Link to update stock
+- {DASHBOARD_LINK} - Link to vendor dashboard
+- {BADGE} - Badge HTML (CRITICAL or LOW)
+- {ALERT_STYLE} - Alert box CSS style
+- {STOCK_COLOR} - Color for stock level text (#dc2626 for critical, #333333 for low)
+- {URGENT_ITEM} - Urgent list item (for critical stock)
+
+================================================================================
+COLOR PALETTE REFERENCE
+================================================================================
+
+Primary Colors:
+- Primary: #131921 (Dark blue - header background)
+- Secondary: #232f3e (Darker blue)
+- Accent: #FFD814 (Yellow - primary button)
+- Accent Hover: #F7CA00 (Darker yellow)
+- Blue: #007185 (Link color)
+- Blue Hover: #005F8C (Darker blue link)
+
+Backgrounds:
+- Background: #f4f7f9 (Page background)
+- Border: #e1e4e8 (Border color)
+- Light Gray: #f3f4f6 (Info box background)
+- Light Red: #fee2e2 (Error alert background)
+- Light Yellow: #fef3c7 (Warning alert background)
+- Light Blue: #dbeafe (Info alert background)
+- Light Green: #d1fae5 (Success badge background)
+
+Text:
+- Text: #333333 (Primary text)
+- Text Light: #6b7280 (Secondary text)
+
+Status Colors:
+- Success: #059669 (Green)
+- Warning: #d97706 (Amber/Orange)
+- Error: #dc2626 (Red)
+
+================================================================================
+END OF EMAIL TEMPLATES
+================================================================================

@@ -1,4 +1,9 @@
-export type VendorStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED" | "DELETED";
+export type VendorStatus =
+  | "PENDING"
+  | "ACTIVE"
+  | "INACTIVE"
+  | "SUSPENDED"
+  | "DELETED";
 
 export interface Vendor {
   id: string;

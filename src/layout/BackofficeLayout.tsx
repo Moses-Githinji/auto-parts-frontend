@@ -106,7 +106,7 @@ export function BackofficeLayout({
       {/* Main content */}
       <div className="flex flex-1 flex-col">
         {/* Header */}
-        <header className="flex h-12 items-center justify-between border-b border-[#c8c8c8] bg-white px-4 shadow-sm">
+        {/* <header className="flex h-12 items-center justify-between border-b border-[#c8c8c8] bg-white px-4 shadow-sm">
           <div className="flex items-center gap-4">
             <button className="rounded-sm px-3 py-1 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]">
               File
@@ -126,7 +126,7 @@ export function BackofficeLayout({
               {new Date().toLocaleDateString()}
             </span>
           </div>
-        </header>
+        </header> */}
 
         {/* Content */}
         <main className="flex-1 p-4">
