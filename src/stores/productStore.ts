@@ -41,10 +41,14 @@ interface ProductState {
 
 // Helper to normalize API product data to our internal Product interface
 // Handles variations like snake_case vendor_id or nested vendor objects
+// Also handles single image string vs images array
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapProductFromApi = (data: any): Product => {
   return {
     ...data,
+    // Handle images: convert single image string to array
+    images: data.images || (data.image ? [data.image] : []),
+    // Handle vendorId from various possible locations
     vendorId:
       data.vendorId ||
       data.vendor_id ||
@@ -52,6 +56,18 @@ const mapProductFromApi = (data: any): Product => {
       (console.warn(`Missing vendorId for product ${data.id}`, data),
       "unknown-vendor"),
   };
+};
+
+// Deduplicate products by ID - keeps only the first occurrence
+const deduplicateById = (products: Product[]): Product[] => {
+  const seen = new Set<string>();
+  return products.filter((product) => {
+    if (seen.has(product.id)) {
+      return false;
+    }
+    seen.add(product.id);
+    return true;
+  });
 };
 
 export const useProductStore = create<ProductState>((set) => ({
@@ -81,7 +97,7 @@ export const useProductStore = create<ProductState>((set) => ({
       });
 
       const response = await apiClient.get<ProductListResponse>(
-        `/api/products?${params.toString()}`,
+        `/api/products?${params.toString()}`
       );
       set({
         products: response.products.map(mapProductFromApi),
@@ -101,10 +117,16 @@ export const useProductStore = create<ProductState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await apiClient.get<FeaturedProductsResponse>(
-        `/api/products/featured/list?limit=${limit}`,
+        `/api/products/featured/list?limit=${limit}`
+      );
+      // Debug: Log all products returned from backend
+      console.log("Backend returned featured products:", response.products);
+      // Deduplicate products by ID to prevent duplicates from backend
+      const uniqueProducts = deduplicateById(
+        response.products.map(mapProductFromApi)
       );
       set({
-        featuredProducts: response.products.map(mapProductFromApi),
+        featuredProducts: uniqueProducts,
         isLoading: false,
       });
     } catch (error) {
@@ -121,7 +143,7 @@ export const useProductStore = create<ProductState>((set) => ({
   fetchCategories: async () => {
     try {
       const response = await apiClient.get<CategoriesResponse>(
-        "/api/products/categories/list",
+        "/api/products/categories/list"
       );
       set({ categories: response.categories });
     } catch (error) {
@@ -132,7 +154,7 @@ export const useProductStore = create<ProductState>((set) => ({
   fetchBrands: async () => {
     try {
       const response = await apiClient.get<BrandsResponse>(
-        "/api/products/brands/list",
+        "/api/products/brands/list"
       );
       set({ brands: response.brands });
     } catch (error) {
@@ -144,7 +166,7 @@ export const useProductStore = create<ProductState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await apiClient.get<{ product: Product }>(
-        `/api/products/${id}`,
+        `/api/products/${id}`
       );
       set({
         currentProduct: mapProductFromApi(response.product),
@@ -164,7 +186,7 @@ export const useProductStore = create<ProductState>((set) => ({
     try {
       const response = await apiClient.post<{ product: Product }>(
         "/api/products",
-        data,
+        data
       );
       set((state) => ({
         products: [mapProductFromApi(response.product), ...state.products],
@@ -186,13 +208,11 @@ export const useProductStore = create<ProductState>((set) => ({
     try {
       const response = await apiClient.put<{ product: Product }>(
         `/api/products/${id}`,
-        data,
+        data
       );
       const mappedProduct = mapProductFromApi(response.product);
       set((state) => ({
-        products: state.products.map((p) =>
-          p.id === id ? mappedProduct : p,
-        ),
+        products: state.products.map((p) => (p.id === id ? mappedProduct : p)),
         currentProduct:
           state.currentProduct?.id === id
             ? mappedProduct

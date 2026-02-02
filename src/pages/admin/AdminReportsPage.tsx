@@ -4,7 +4,6 @@ export function AdminReportsPage() {
   const navItems = [
     { label: "Dashboard", to: "/admin" },
     { label: "Vendors", to: "/admin/vendors" },
-    { label: "Catalog", to: "/admin/catalog" },
     { label: "Disputes", to: "/admin/disputes" },
     { label: "Reports", to: "/admin/reports" },
   ];

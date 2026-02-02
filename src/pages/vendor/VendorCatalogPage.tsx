@@ -75,6 +75,8 @@ export function VendorCatalogPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   // Fetch products from backend
   const fetchProducts = async () => {
@@ -320,6 +322,32 @@ export function VendorCatalogPage() {
     }
   };
 
+  const handleDeleteProduct = async (productId: string) => {
+    try {
+      setError(null);
+      await apiClient.delete(`/api/products/${productId}`);
+      setProducts((prev) => prev.filter((p) => p.id !== productId));
+      setSuccess("Product deleted successfully!");
+      setShowDeleteModal(false);
+      setProductToDelete(null);
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to delete product";
+      setError(message);
+    }
+  };
+
+  const confirmDelete = (product: Product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setProductToDelete(null);
+  };
+
   const activeProducts = products.filter((p) => p.status === "ACTIVE").length;
   const lowStockProducts = products.filter(
     (p) => p.stock > 0 && p.stock < 10
@@ -522,6 +550,12 @@ export function VendorCatalogPage() {
                           className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
                         >
                           View
+                        </button>
+                        <button
+                          onClick={() => confirmDelete(product)}
+                          className="rounded-sm bg-red-600 px-2 py-0.5 text-[10px] text-white hover:bg-red-700"
+                        >
+                          Delete
                         </button>
                       </div>
                     </td>
@@ -1389,6 +1423,61 @@ export function VendorCatalogPage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteModal && productToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="w-full max-w-sm rounded-sm bg-white p-6 shadow-lg">
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
+                  <svg
+                    className="h-5 w-5 text-red-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    Delete Product
+                  </h3>
+                  <p className="text-xs text-slate-600">
+                    This action cannot be undone.
+                  </p>
+                </div>
+              </div>
+
+              <p className="mb-6 text-sm text-slate-700">
+                Are you sure you want to delete{" "}
+                <strong>{productToDelete.name}</strong>?
+              </p>
+
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={cancelDelete}
+                  className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() =>
+                    productToDelete && handleDeleteProduct(productToDelete.id)
+                  }
+                  className="rounded-sm bg-red-600 px-4 py-2 text-xs font-medium text-white hover:bg-red-700"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         )}

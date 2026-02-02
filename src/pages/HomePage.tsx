@@ -177,74 +177,81 @@ export function HomePage() {
             </Button>
           </div>
           <div className="grid gap-4 md:grid-cols-4">
-            {featuredProducts.slice(0, 8).map((product) => (
-              <div
-                key={product.id}
-                className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
-                onClick={() => navigate(`/parts/${product.id}`)}
-              >
-                <div className="mb-2 flex h-16 items-center justify-center rounded-md bg-slate-100 text-3xl">
-                  {product.images && product.images.length > 0 ? (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="h-full w-full object-cover rounded-md"
-                    />
-                  ) : (
-                    <span>🔧</span>
-                  )}
-                </div>
-                <p className="mb-1 text-[10px] font-mono text-slate-500">
-                  {product.partNumber}
-                </p>
-                <h3 className="mb-1 text-sm font-semibold text-slate-900 line-clamp-2">
-                  {product.name}
-                </h3>
-                <p className="mb-2 text-xs text-slate-600">
-                  {product.brand || "Unknown brand"}
-                </p>
-                <div className="mb-2 flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-3 w-3 ${
-                        i < Math.floor(product.rating || 0)
-                          ? "fill-amber-400 text-amber-400"
-                          : "text-slate-300"
-                      }`}
-                    />
-                  ))}
-                  <span className="ml-1 text-[10px] text-slate-600">
-                    ({product.rating?.toFixed(1) || "No rating"})
-                  </span>
-                </div>
-                <div className="mb-2 flex items-center justify-between">
-                  <span className="text-base font-bold text-slate-900">
-                    KES {product.price.toLocaleString()}
-                  </span>
-                  {product.stock > 0 ? (
-                    <Badge className="bg-green-100 text-green-700 text-[10px]">
-                      In Stock
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-red-100 text-red-700 text-[10px]">
-                      Out of Stock
-                    </Badge>
-                  )}
-                </div>
-                <Button
-                  size="sm"
-                  className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(product);
-                  }}
-                  disabled={product.stock <= 0}
+            {featuredProducts
+              .slice(0, 8)
+              // Deduplicate by product ID to prevent duplicates
+              .filter(
+                (product, index, self) =>
+                  index === self.findIndex((p) => p.id === product.id)
+              )
+              .map((product) => (
+                <div
+                  key={product.id}
+                  className="group cursor-pointer rounded-lg border border-slate-200 bg-white p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
+                  onClick={() => navigate(`/parts/${product.id}`)}
                 >
-                  {product.stock > 0 ? "Add to cart" : "Out of Stock"}
-                </Button>
-              </div>
-            ))}
+                  <div className="mb-2 flex h-48 items-center justify-center rounded-md bg-slate-100 overflow-hidden">
+                    {product.images && product.images.length > 0 ? (
+                      <img
+                        src={product.images[0]}
+                        alt={product.name}
+                        className="h-full w-full object-contain"
+                      />
+                    ) : (
+                      <span className="text-4xl">🔧</span>
+                    )}
+                  </div>
+                  <p className="mb-1 text-[10px] font-mono text-slate-500">
+                    {product.partNumber}
+                  </p>
+                  <h3 className="mb-1 text-sm font-semibold text-slate-900 line-clamp-2">
+                    {product.name}
+                  </h3>
+                  <p className="mb-2 text-xs text-slate-600">
+                    {product.brand || "Unknown brand"}
+                  </p>
+                  <div className="mb-2 flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-3 w-3 ${
+                          i < Math.floor(product.rating || 0)
+                            ? "fill-amber-400 text-amber-400"
+                            : "text-slate-300"
+                        }`}
+                      />
+                    ))}
+                    <span className="ml-1 text-[10px] text-slate-600">
+                      ({product.rating?.toFixed(1) || "No rating"})
+                    </span>
+                  </div>
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="text-base font-bold text-slate-900">
+                      KES {product.price.toLocaleString()}
+                    </span>
+                    {product.stock > 0 ? (
+                      <Badge className="bg-green-100 text-green-700 text-[10px]">
+                        In Stock
+                      </Badge>
+                    ) : (
+                      <Badge className="bg-red-100 text-red-700 text-[10px]">
+                        Out of Stock
+                      </Badge>
+                    )}
+                  </div>
+                  <Button
+                    size="sm"
+                    className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                    disabled={product.stock <= 0}
+                  >
+                    {product.stock > 0 ? "Add to cart" : "Out of Stock"}
+                  </Button>
+                </div>
+              ))}
           </div>
         </section>
       )}
@@ -358,7 +365,7 @@ export function HomePage() {
                 key={category.name}
                 onClick={() =>
                   navigate(
-                    `/search?category=${encodeURIComponent(category.name)}`,
+                    `/search?category=${encodeURIComponent(category.name)}`
                   )
                 }
                 className="group rounded-lg border border-slate-200 bg-white p-4 text-left transition-all hover:border-[#FF9900] hover:shadow-md"
