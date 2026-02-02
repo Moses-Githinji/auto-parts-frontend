@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { Badge } from "../components/ui/badge";
 import { useOrderStore } from "../stores/orderStore";
 import type { OrderItem, OrderStatus } from "../types/order";
@@ -7,15 +7,21 @@ import type { OrderItem, OrderStatus } from "../types/order";
 function groupItemsByVendor(items: OrderItem[]) {
   const map = new Map<string, OrderItem[]>();
   for (const item of items) {
-    const list = map.get(item.vendorId) ?? [];
+    // FIX: Access vendorId from the nested product object if available
+    const vid =
+      (item as any).product?.vendorId ||
+      (item as any).product?.vendor?.id ||
+      item.vendorId ||
+      "unknown";
+    const list = map.get(vid) ?? [];
     list.push(item);
-    map.set(item.vendorId, list);
+    map.set(vid, list);
   }
   return map;
 }
 
 function getStatusVariant(
-  status: OrderStatus,
+  status: OrderStatus
 ): "default" | "outline" | "success" | "warning" {
   switch (status) {
     case "PENDING":
@@ -82,15 +88,20 @@ export function OrdersPage() {
     <div className="space-y-4">
       <h1 className="text-lg font-semibold text-slate-900">My Orders</h1>
 
-      {orders.map((order) => {
-        const vendorEntries = useMemo(
-          () => Array.from(groupItemsByVendor(order.items).entries()),
-          [order.items],
+      {orders.map((order, index) => {
+        if (!order) return null;
+        // Debug logging for troubleshooting data issues
+        if (index === 0) {
+          console.log("Debug Order Data:", JSON.stringify(order, null, 2));
+        }
+
+        const vendorEntries = Array.from(
+          groupItemsByVendor(order.items || []).entries()
         );
 
         return (
           <section
-            key={order.id}
+            key={`${order.id}-${index}`}
             className="space-y-3 rounded-md border border-slate-200 bg-slate-50 p-4"
           >
             <header className="flex items-center justify-between">
@@ -124,55 +135,117 @@ export function OrdersPage() {
               </p>
             </div>
 
-            {vendorEntries.map(([vendorId, vendorItems]) => {
-              const vendorName = vendorItems[0]?.vendorName ?? "Vendor";
-              const vendorSubtotal = vendorItems.reduce(
-                (sum, i) => sum + i.unitPrice * i.quantity,
-                0,
-              );
-              const currency = vendorItems[0]?.currency ?? "KES";
+            {vendorEntries.length > 0 ? (
+              vendorEntries.map(([vendorId, vendorItems]) => {
+                // FIX: Access Vendor Name from the product relation
+                const firstItem = vendorItems[0] as any;
+                const vendorName =
+                  firstItem.product?.vendor?.companyName ??
+                  firstItem.vendorName ??
+                  "Vendor";
 
-              return (
-                <div
-                  key={vendorId}
-                  className="space-y-2 rounded-md border border-slate-200 bg-white p-3 text-xs"
-                >
-                  <h4 className="font-semibold text-slate-900">{vendorName}</h4>
-                  <div className="divide-y divide-slate-100">
-                    {vendorItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between py-2"
-                      >
-                        <div>
+                // FIX: Use 'price' instead of 'unitPrice' if available
+                const vendorSubtotal = vendorItems.reduce(
+                  (sum, i: any) =>
+                    sum +
+                    Number(i.price || i.unitPrice || 0) *
+                      Number(i.quantity || 1),
+                  0
+                );
+                const currency = firstItem.currency ?? "KES";
+
+                return (
+                  <div
+                    key={vendorId}
+                    className="space-y-2 rounded-md border border-slate-200 bg-white p-3 text-xs"
+                  >
+                    <h4 className="font-semibold text-slate-900">
+                      {vendorName}
+                    </h4>
+                    <div className="divide-y divide-slate-100">
+                      {vendorItems.map((item: any) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between py-2"
+                        >
+                          <div>
+                            {/* FIX: Access name and partNumber from 'product' */}
+                            <p className="font-semibold text-slate-900">
+                              {item.product?.name || "Unknown Product"} –{" "}
+                              {item.product?.partNumber || "N/A"}
+                            </p>
+                            <p className="text-[11px] text-slate-600">
+                              Qty {item.quantity}
+                              {item.product?.specifications?.Volume
+                                ? ` • ${item.product.specifications.Volume}`
+                                : ""}
+                            </p>
+                          </div>
                           <p className="font-semibold text-slate-900">
-                            {item.partName} – {item.partNumber}
-                          </p>
-                          <p className="text-[11px] text-slate-600">
-                            Qty {item.quantity}
-                            {item.fitmentVehicle
-                              ? ` • Fits: ${item.fitmentVehicle}`
-                              : ""}
+                            {currency}{" "}
+                            {(
+                              Number(item.price || item.unitPrice || 0) *
+                              Number(item.quantity || 1)
+                            ).toLocaleString()}
                           </p>
                         </div>
-                        <p className="font-semibold text-slate-900">
-                          {currency}{" "}
-                          {(item.unitPrice * item.quantity).toLocaleString()}
-                        </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="flex justify-end pt-2">
+                      <Badge variant="outline">
+                        Subtotal: {currency} {vendorSubtotal.toLocaleString()}
+                      </Badge>
+                    </div>
                   </div>
-                  <div className="flex justify-end pt-2">
-                    <Badge variant="outline">
-                      Subtotal: {currency} {vendorSubtotal.toLocaleString()}
-                    </Badge>
+                );
+              })
+            ) : (
+              <div className="rounded-md border border-slate-200 bg-white p-3 text-xs">
+                <p className="mb-2 text-slate-600 italic">
+                  Order details not available
+                </p>
+                <div className="space-y-1">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>
+                      KES{" "}
+                      {Number(
+                        order.subtotal || (order as any).sub_total || 0
+                      ).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Shipping</span>
+                    <span>
+                      KES{" "}
+                      {Number(
+                        order.shipping || (order as any).shipping_cost || 0
+                      ).toLocaleString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Tax</span>
+                    <span>
+                      KES{" "}
+                      {Number(
+                        order.tax || (order as any).vat || 0
+                      ).toLocaleString()}
+                    </span>
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            )}
 
             <div className="flex justify-end pt-2">
-              <Badge>Total: KES {order.total.toLocaleString()}</Badge>
+              <Badge>
+                Total: KES{" "}
+                {Number(
+                  order.total ||
+                    (order as any).totalAmount ||
+                    (order as any).total_amount ||
+                    0
+                ).toLocaleString()}
+              </Badge>
             </div>
           </section>
         );

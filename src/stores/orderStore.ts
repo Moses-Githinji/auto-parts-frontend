@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import apiClient from "../lib/apiClient";
 import type {
   Order,
+  OrderStatus,
   OrderListResponse,
   CreateOrderRequest,
   UpdatePaymentStatusRequest,
@@ -29,13 +30,18 @@ interface OrderState {
   createOrder: (data: CreateOrderRequest) => Promise<Order>;
   updatePaymentStatus: (
     orderId: string,
-    data: UpdatePaymentStatusRequest,
+    data: UpdatePaymentStatusRequest
   ) => Promise<Order>;
   cancelOrder: (orderId: string) => Promise<Order>;
+  updateOrderStatus: (
+    orderId: string,
+    status: OrderStatus,
+    data?: Record<string, unknown>
+  ) => Promise<Order>;
   fetchOrderAnalytics: (
     vendorId: string,
     startDate?: string,
-    endDate?: string,
+    endDate?: string
   ) => Promise<OrderAnalytics>;
   clearError: () => void;
 }
@@ -65,7 +71,7 @@ export const useOrderStore = create<OrderState>()(
           });
 
           const response = await apiClient.get<OrderListResponse>(
-            `/api/orders?${params.toString()}`,
+            `/api/orders?${params.toString()}`
           );
           set({
             orders: response.orders,
@@ -85,7 +91,7 @@ export const useOrderStore = create<OrderState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await apiClient.get<{ order: Order }>(
-            `/api/orders/${orderId}`,
+            `/api/orders/${orderId}`
           );
           set({ currentOrder: response.order, isLoading: false });
         } catch (error) {
@@ -100,16 +106,20 @@ export const useOrderStore = create<OrderState>()(
       createOrder: async (data) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await apiClient.post<{ order: Order }>(
-            "/api/orders",
-            data,
-          );
+          const response = await apiClient.post<{
+            order?: Order;
+            orders?: Order[];
+          }>("/api/orders", data);
+
+          const newOrders =
+            response.orders || (response.order ? [response.order] : []);
+
           set((state) => ({
-            orders: [response.order, ...state.orders],
-            currentOrder: response.order,
+            orders: [...newOrders, ...state.orders],
+            currentOrder: newOrders[0] || null,
             isLoading: false,
           }));
-          return response.order;
+          return newOrders[0];
         } catch (error) {
           // Extract error message from backend response if available
           let errorMessage = "Failed to create order";
@@ -136,11 +146,11 @@ export const useOrderStore = create<OrderState>()(
         try {
           const response = await apiClient.put<{ order: Order }>(
             `/api/orders/${orderId}/payment`,
-            data,
+            data
           );
           set((state) => ({
             orders: state.orders.map((o) =>
-              o.id === orderId ? response.order : o,
+              o.id === orderId ? response.order : o
             ),
             currentOrder:
               state.currentOrder?.id === orderId
@@ -165,11 +175,11 @@ export const useOrderStore = create<OrderState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await apiClient.put<{ order: Order }>(
-            `/api/orders/${orderId}/cancel`,
+            `/api/orders/${orderId}/cancel`
           );
           set((state) => ({
             orders: state.orders.map((o) =>
-              o.id === orderId ? response.order : o,
+              o.id === orderId ? response.order : o
             ),
             currentOrder:
               state.currentOrder?.id === orderId
@@ -188,6 +198,36 @@ export const useOrderStore = create<OrderState>()(
         }
       },
 
+      updateOrderStatus: async (orderId, status, data) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await apiClient.put<{ order: Order }>(
+            `/api/orders/${orderId}/status`,
+            { status, ...data }
+          );
+          set((state) => ({
+            orders: state.orders.map((o) =>
+              o.id === orderId ? response.order : o
+            ),
+            currentOrder:
+              state.currentOrder?.id === orderId
+                ? response.order
+                : state.currentOrder,
+            isLoading: false,
+          }));
+          return response.order;
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error
+                ? error.message
+                : "Failed to update order status",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
       fetchOrderAnalytics: async (vendorId, startDate, endDate) => {
         set({ isLoading: true, error: null });
         try {
@@ -196,7 +236,7 @@ export const useOrderStore = create<OrderState>()(
           if (endDate) params.append("endDate", endDate);
 
           const response = await apiClient.get<OrderAnalytics>(
-            `/api/orders/analytics/vendor/${vendorId}?${params.toString()}`,
+            `/api/orders/analytics/vendor/${vendorId}?${params.toString()}`
           );
           set({ isLoading: false });
           return response;
@@ -217,6 +257,6 @@ export const useOrderStore = create<OrderState>()(
     {
       name: "order-store",
       partialize: (state) => ({ orders: state.orders }),
-    },
-  ),
+    }
+  )
 );

@@ -86,10 +86,6 @@ export function CheckoutPage() {
         itemsByVendor.set(item.vendorId, vendorItems);
       }
 
-      // Create order for the first vendor (simplified - in production, create separate orders per vendor)
-      const firstVendor = items[0].vendorId;
-      const vendorItems = itemsByVendor.get(firstVendor) || [];
-
       // Ensure all shipping address fields are populated
       const shippingAddress: OrderAddress = {
         firstName: formData.firstName.trim(),
@@ -102,33 +98,40 @@ export function CheckoutPage() {
         zipCode: "00100", // Default Nairobi zip code
       };
 
-      const orderData = {
-        vendorId: firstVendor,
-        items: vendorItems.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-        shippingAddress,
-        paymentMethod,
-      };
+      // Create orders for all vendors
+      const orderPromises = Array.from(itemsByVendor.entries()).map(
+        async ([vendorId, vendorItems]) => {
+          const orderData = {
+            vendorId,
+            items: vendorItems.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+            })),
+            shippingAddress,
+            paymentMethod,
+          };
 
-      console.log(
-        "Creating order with data:",
-        JSON.stringify(orderData, null, 2),
+          console.log(
+            `Creating order for vendor ${vendorId} with data:`,
+            JSON.stringify(orderData, null, 2),
+          );
+
+          return createOrder(orderData);
+        },
       );
 
-      await createOrder(orderData);
+      await Promise.all(orderPromises);
 
       // Clear cart after successful order
       await clearCart();
-      toast.success("Payment successful! Order placed.");
+      toast.success("Payment successful! Orders placed.");
       navigate("/orders");
     } catch (error) {
       console.error("Order creation error:", error);
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to place order. Please try again.";
+          : "Failed to place orders. Please try again.";
       toast.error(errorMessage);
     } finally {
       setIsProcessing(false);

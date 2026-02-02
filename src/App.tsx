@@ -40,6 +40,7 @@ const router = createBrowserRouter([
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "email-verification", element: <EmailVerificationPage /> },
+      { path: "verify-email", element: <EmailVerificationPage /> },
       { path: "forgot-password", element: <ResetPasswordPage /> },
       { path: "search", element: <SearchPage /> },
       { path: "parts/:id", element: <ProductDetailPage /> },

@@ -82,7 +82,7 @@ export function VendorCatalogPage() {
       setLoading(true);
       setError(null);
       const response = await apiClient.get<{ products: Product[] }>(
-        "/api/products/vendor",
+        "/api/vendors/products"
       );
       setProducts(response.products);
     } catch (err) {
@@ -142,7 +142,7 @@ export function VendorCatalogPage() {
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -175,7 +175,7 @@ export function VendorCatalogPage() {
   const handleSpecificationChange = (
     index: number,
     field: "key" | "value",
-    value: string,
+    value: string
   ) => {
     const newSpecs = [...formData.specifications];
     newSpecs[index] = { ...newSpecs[index], [field]: value };
@@ -231,7 +231,7 @@ export function VendorCatalogPage() {
 
       const response = await apiClient.post<{ product: Product }>(
         "/api/products",
-        payload,
+        payload
       );
       const newProduct = response.product;
 
@@ -274,7 +274,7 @@ export function VendorCatalogPage() {
 
       // Combine existing images (from imagePreviews that aren't blobs) with new uploads
       const existingImages = imagePreviews.filter(
-        (url) => !url.startsWith("blob:"),
+        (url) => !url.startsWith("blob:")
       );
       const allImages =
         imageUrls.length > 0
@@ -298,11 +298,11 @@ export function VendorCatalogPage() {
 
       const response = await apiClient.put<{ product: Product }>(
         `/api/products/${selectedProduct.id}`,
-        payload,
+        payload
       );
 
       setProducts((prev) =>
-        prev.map((p) => (p.id === selectedProduct.id ? response.product : p)),
+        prev.map((p) => (p.id === selectedProduct.id ? response.product : p))
       );
       setSuccess("Product updated successfully!");
       setShowEditModal(false);
@@ -322,7 +322,7 @@ export function VendorCatalogPage() {
 
   const activeProducts = products.filter((p) => p.status === "ACTIVE").length;
   const lowStockProducts = products.filter(
-    (p) => p.stock > 0 && p.stock < 10,
+    (p) => p.stock > 0 && p.stock < 10
   ).length;
   const outOfStockProducts = products.filter((p) => p.stock === 0).length;
 
@@ -798,7 +798,7 @@ export function VendorCatalogPage() {
                           handleSpecificationChange(
                             index,
                             "key",
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         placeholder="Key (e.g., Material)"
@@ -811,7 +811,7 @@ export function VendorCatalogPage() {
                           handleSpecificationChange(
                             index,
                             "value",
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         placeholder="Value (e.g., Ceramic)"
@@ -1023,7 +1023,7 @@ export function VendorCatalogPage() {
                                 {value}
                               </span>
                             </div>
-                          ),
+                          )
                         )}
                       </div>
                     </div>
@@ -1039,7 +1039,7 @@ export function VendorCatalogPage() {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
-                        },
+                        }
                       )}
                     </span>
                     <span>
@@ -1050,7 +1050,7 @@ export function VendorCatalogPage() {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
-                        },
+                        }
                       )}
                     </span>
                   </div>
@@ -1338,7 +1338,7 @@ export function VendorCatalogPage() {
                           handleSpecificationChange(
                             index,
                             "key",
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         placeholder="Key (e.g., Material)"
@@ -1351,7 +1351,7 @@ export function VendorCatalogPage() {
                           handleSpecificationChange(
                             index,
                             "value",
-                            e.target.value,
+                            e.target.value
                           )
                         }
                         placeholder="Value (e.g., Ceramic)"

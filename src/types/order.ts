@@ -9,14 +9,38 @@ export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 
 export interface OrderItem {
   id: string;
+  orderId: string;
   productId: string;
-  partName: string;
-  partNumber: string;
   quantity: number;
-  unitPrice: number;
-  currency: string;
-  vendorId: string;
-  vendorName: string;
+  price: string;
+  product?: {
+    id: string;
+    vendorId: string;
+    name: string;
+    partNumber: string;
+    description: string;
+    price: string;
+    stock: number;
+    category: string;
+    brand: string;
+    make: string | null;
+    model: string | null;
+    condition: string;
+    images: string[];
+    specifications: Record<string, string>;
+    status: string;
+    views: number;
+    ordersCount: number;
+    createdAt: string;
+    updatedAt: string;
+    vendor: {
+      id: string;
+      companyName: string;
+      city: string;
+    };
+  };
+  vendorId?: string;
+  vendorName?: string;
   fitmentVehicle?: string;
 }
 

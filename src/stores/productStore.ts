@@ -39,6 +39,21 @@ interface ProductState {
   clearError: () => void;
 }
 
+// Helper to normalize API product data to our internal Product interface
+// Handles variations like snake_case vendor_id or nested vendor objects
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapProductFromApi = (data: any): Product => {
+  return {
+    ...data,
+    vendorId:
+      data.vendorId ||
+      data.vendor_id ||
+      data.vendor?.id ||
+      (console.warn(`Missing vendorId for product ${data.id}`, data),
+      "unknown-vendor"),
+  };
+};
+
 export const useProductStore = create<ProductState>((set) => ({
   products: [],
   featuredProducts: [],
@@ -69,7 +84,7 @@ export const useProductStore = create<ProductState>((set) => ({
         `/api/products?${params.toString()}`,
       );
       set({
-        products: response.products,
+        products: response.products.map(mapProductFromApi),
         pagination: response.pagination,
         isLoading: false,
       });
@@ -88,7 +103,10 @@ export const useProductStore = create<ProductState>((set) => ({
       const response = await apiClient.get<FeaturedProductsResponse>(
         `/api/products/featured/list?limit=${limit}`,
       );
-      set({ featuredProducts: response.products, isLoading: false });
+      set({
+        featuredProducts: response.products.map(mapProductFromApi),
+        isLoading: false,
+      });
     } catch (error) {
       set({
         error:
@@ -128,7 +146,10 @@ export const useProductStore = create<ProductState>((set) => ({
       const response = await apiClient.get<{ product: Product }>(
         `/api/products/${id}`,
       );
-      set({ currentProduct: response.product, isLoading: false });
+      set({
+        currentProduct: mapProductFromApi(response.product),
+        isLoading: false,
+      });
     } catch (error) {
       set({
         error:
@@ -146,10 +167,10 @@ export const useProductStore = create<ProductState>((set) => ({
         data,
       );
       set((state) => ({
-        products: [response.product, ...state.products],
+        products: [mapProductFromApi(response.product), ...state.products],
         isLoading: false,
       }));
-      return response.product;
+      return mapProductFromApi(response.product);
     } catch (error) {
       set({
         error:
@@ -167,17 +188,18 @@ export const useProductStore = create<ProductState>((set) => ({
         `/api/products/${id}`,
         data,
       );
+      const mappedProduct = mapProductFromApi(response.product);
       set((state) => ({
         products: state.products.map((p) =>
-          p.id === id ? response.product : p,
+          p.id === id ? mappedProduct : p,
         ),
         currentProduct:
           state.currentProduct?.id === id
-            ? response.product
+            ? mappedProduct
             : state.currentProduct,
         isLoading: false,
       }));
-      return response.product;
+      return mappedProduct;
     } catch (error) {
       set({
         error:
