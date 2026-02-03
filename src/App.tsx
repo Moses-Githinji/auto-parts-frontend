@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { NotificationProvider } from "./components/providers/NotificationProvider";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -20,6 +21,12 @@ import { AdminDashboardPage } from "./pages/admin/AdminDashboardPage";
 import { AdminVendorsPage } from "./pages/admin/AdminVendorsPage";
 import { AdminDisputesPage } from "./pages/admin/AdminDisputesPage";
 import { AdminReportsPage } from "./pages/admin/AdminReportsPage";
+import { AdminEarningsPage } from "./pages/admin/AdminEarningsPage";
+import { AdminDeliveryReportsPage } from "./pages/admin/AdminDeliveryReportsPage";
+import { AdminIntegrationsPage } from "./pages/admin/AdminIntegrationsPage";
+import { AdminWebhooksPage } from "./pages/admin/AdminWebhooksPage";
+import { AdminBlogsPage } from "./pages/admin/AdminBlogsPage";
+import { AdminCommissionConfigPage } from "./pages/admin/AdminCommissionConfigPage";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { EmailVerificationPage } from "./pages/auth/EmailVerificationPage";
@@ -59,6 +66,23 @@ const router = createBrowserRouter([
       { path: "admin/vendors", element: <AdminVendorsPage /> },
       { path: "admin/disputes", element: <AdminDisputesPage /> },
       { path: "admin/reports", element: <AdminReportsPage /> },
+      { path: "admin/earnings", element: <AdminEarningsPage /> },
+      { path: "admin/delivery-reports", element: <AdminDeliveryReportsPage /> },
+      { path: "admin/blogs", element: <AdminBlogsPage /> },
+      // Commission Settings route
+      {
+        path: "admin/commission-config",
+        element: <AdminCommissionConfigPage />,
+      },
+      // Integrations routes (with dropdown)
+      {
+        path: "admin/integrations",
+        element: <AdminIntegrationsPage />,
+        children: [
+          { index: true, element: <AdminWebhooksPage /> },
+          { path: "webhooks", element: <AdminWebhooksPage /> },
+        ],
+      },
     ],
   },
 ]);
@@ -73,8 +97,10 @@ function CartRehydrate() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CartRehydrate />
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <CartRehydrate />
+        <RouterProvider router={router} />
+      </NotificationProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

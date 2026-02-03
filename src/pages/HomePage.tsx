@@ -264,7 +264,7 @@ export function HomePage() {
             className={`cursor-pointer rounded-lg ${promo.bg} p-6 transition hover:shadow-md`}
             onClick={promo.onClick}
           >
-            <Badge className="mb-2 bg-red-500 text-white">{promo.badge}</Badge>
+            <Badge className="mb-2 bg-red-700 text-white">{promo.badge}</Badge>
             <h3 className="mb-1 text-lg font-semibold">{promo.title}</h3>
             <p className="text-sm text-slate-700">{promo.subtitle}</p>
             <Button variant="ghost" className="mt-3 p-0 text-sky-600">
@@ -519,6 +519,19 @@ export function HomePage() {
               {term}
             </button>
           ))}
+        </div>
+      </section>
+
+      {/* Blog Posts Section */}
+      <section>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-900">Blog Posts</h2>
+          <Button variant="ghost" size="sm" onClick={() => navigate("/blog")}>
+            View all
+          </Button>
+        </div>
+        <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
+          <p className="text-sm text-slate-600">No blog posts currently.</p>
         </div>
       </section>
     </div>

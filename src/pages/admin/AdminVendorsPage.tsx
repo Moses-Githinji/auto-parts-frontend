@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
+import { ADMIN_MENU_ITEMS } from "../../layout/adminMenuConfig";
 import { apiClient } from "../../lib/apiClient";
 import type { Vendor, VendorStatus } from "../../types/vendor";
 
@@ -46,13 +47,6 @@ export function AdminVendorsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("");
 
-  const navItems = [
-    { label: "Dashboard", to: "/admin" },
-    { label: "Vendors", to: "/admin/vendors" },
-    { label: "Disputes", to: "/admin/disputes" },
-    { label: "Reports", to: "/admin/reports" },
-  ];
-
   // Fetch vendors from backend
   useEffect(() => {
     fetchVendors();
@@ -63,7 +57,7 @@ export function AdminVendorsPage() {
       setLoading(true);
       setError(null);
       const response = await apiClient.get<{ vendors: Vendor[] }>(
-        "/api/admin/vendors",
+        "/api/admin/vendors"
       );
       setVendors(response.vendors || []);
     } catch (err: unknown) {
@@ -74,7 +68,7 @@ export function AdminVendorsPage() {
       setError(
         axiosError.response?.data?.error ||
           axiosError.message ||
-          "Failed to fetch vendors",
+          "Failed to fetch vendors"
       );
       console.error("Error fetching vendors:", err);
     } finally {
@@ -106,7 +100,7 @@ export function AdminVendorsPage() {
       await apiClient.post("/api/admin/vendors", payload);
 
       setSuccessMessage(
-        `Vendor "${newVendor.companyName}" created successfully!`,
+        `Vendor "${newVendor.companyName}" created successfully!`
       );
 
       // Reset form
@@ -146,7 +140,7 @@ export function AdminVendorsPage() {
       setError(
         axiosError.response?.data?.error ||
           axiosError.message ||
-          "Failed to approve vendor",
+          "Failed to approve vendor"
       );
     }
   };
@@ -175,7 +169,7 @@ export function AdminVendorsPage() {
       await apiClient.put(`/api/admin/vendors/${selectedVendor.id}`, payload);
 
       setSuccessMessage(
-        `Vendor "${editVendor.companyName}" updated successfully!`,
+        `Vendor "${editVendor.companyName}" updated successfully!`
       );
 
       setEditModalOpen(false);
@@ -269,7 +263,7 @@ export function AdminVendorsPage() {
   });
 
   return (
-    <BackofficeLayout title="Admin Console" navItems={navItems}>
+    <BackofficeLayout title="Admin Console" menuItems={ADMIN_MENU_ITEMS}>
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -403,7 +397,7 @@ export function AdminVendorsPage() {
                       <td className="px-4 py-3">
                         <span
                           className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${getStatusBadgeClass(
-                            vendor.status,
+                            vendor.status
                           )}`}
                         >
                           {getStatusLabel(vendor.status)}
@@ -426,7 +420,7 @@ export function AdminVendorsPage() {
                             month: "short",
                             day: "numeric",
                             year: "numeric",
-                          },
+                          }
                         )}
                       </td>
                       <td className="px-4 py-3">
@@ -728,7 +722,7 @@ export function AdminVendorsPage() {
                     </p>
                     <span
                       className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${getStatusBadgeClass(
-                        selectedVendor.status,
+                        selectedVendor.status
                       )}`}
                     >
                       {getStatusLabel(selectedVendor.status)}
@@ -825,7 +819,7 @@ export function AdminVendorsPage() {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
-                        },
+                        }
                       )}
                     </span>
                     <span>
@@ -836,7 +830,7 @@ export function AdminVendorsPage() {
                           month: "long",
                           day: "numeric",
                           year: "numeric",
-                        },
+                        }
                       )}
                     </span>
                   </div>

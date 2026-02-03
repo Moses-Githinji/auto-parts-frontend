@@ -5,6 +5,8 @@ import {
   uploadMultipleToCloudinary,
   getOptimizedImageUrl,
 } from "../../utils/cloudinaryService";
+import { FeePreview } from "../../components/commission/FeePreview";
+import { notify } from "../../stores/notificationStore";
 import type {
   Product,
   CreateProductRequest,
@@ -73,8 +75,6 @@ export function VendorCatalogPage() {
   const [uploadingImages, setUploadingImages] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
@@ -82,14 +82,13 @@ export function VendorCatalogPage() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      setError(null);
       const response = await apiClient.get<{ products: Product[] }>(
         "/api/vendors/products"
       );
       setProducts(response.products);
     } catch (err) {
       console.error("Failed to fetch products:", err);
-      setError("Failed to load products. Please try again.");
+      notify.error("Failed to load products", "Please try again");
     } finally {
       setLoading(false);
     }
@@ -103,8 +102,6 @@ export function VendorCatalogPage() {
     setFormData(initialFormData);
     setSelectedImages([]);
     setImagePreviews([]);
-    setError(null);
-    setSuccess(null);
     setShowAddModal(true);
   };
 
@@ -136,8 +133,6 @@ export function VendorCatalogPage() {
     });
     setSelectedImages([]);
     setImagePreviews(product.images || []);
-    setError(null);
-    setSuccess(null);
     setShowEditModal(true);
   };
 
@@ -201,7 +196,6 @@ export function VendorCatalogPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setError(null);
 
     try {
       // Upload images first if any selected
@@ -238,15 +232,15 @@ export function VendorCatalogPage() {
       const newProduct = response.product;
 
       setProducts((prev) => [...prev, newProduct]);
-      setSuccess("Product added successfully!");
+      notify.success(
+        "Product added",
+        "Your product has been added to the catalog"
+      );
       setShowAddModal(false);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to add product";
-      setError(message);
+      notify.error("Failed to add product", message);
     } finally {
       setSubmitting(false);
       setUploadingImages(false);
@@ -259,7 +253,6 @@ export function VendorCatalogPage() {
     if (!selectedProduct) return;
 
     setSubmitting(true);
-    setError(null);
 
     try {
       // Upload new images if any selected
@@ -306,15 +299,12 @@ export function VendorCatalogPage() {
       setProducts((prev) =>
         prev.map((p) => (p.id === selectedProduct.id ? response.product : p))
       );
-      setSuccess("Product updated successfully!");
+      notify.success("Product updated", "Your product has been updated");
       setShowEditModal(false);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to update product";
-      setError(message);
+      notify.error("Failed to update product", message);
     } finally {
       setSubmitting(false);
       setUploadingImages(false);
@@ -324,17 +314,15 @@ export function VendorCatalogPage() {
 
   const handleDeleteProduct = async (productId: string) => {
     try {
-      setError(null);
       await apiClient.delete(`/api/products/${productId}`);
       setProducts((prev) => prev.filter((p) => p.id !== productId));
-      setSuccess("Product deleted successfully!");
+      notify.success("Product deleted", "Your product has been removed");
       setShowDeleteModal(false);
       setProductToDelete(null);
-      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Failed to delete product";
-      setError(message);
+      notify.error("Failed to delete product", message);
     }
   };
 
@@ -357,13 +345,6 @@ export function VendorCatalogPage() {
   return (
     <BackofficeLayout title="Vendor Portal" navItems={vendorNavItems}>
       <div className="p-6">
-        {/* Success Message */}
-        {success && (
-          <div className="mb-4 rounded-sm bg-green-50 p-3 text-xs text-green-600">
-            {success}
-          </div>
-        )}
-
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-slate-900">
@@ -593,12 +574,6 @@ export function VendorCatalogPage() {
                   </svg>
                 </button>
               </div>
-
-              {error && (
-                <div className="mb-4 rounded-sm bg-red-50 p-3 text-xs text-red-600">
-                  {error}
-                </div>
-              )}
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
@@ -863,6 +838,14 @@ export function VendorCatalogPage() {
                     </div>
                   ))}
                 </div>
+
+                {/* Fee Preview */}
+                <FeePreview
+                  price={formData.price}
+                  categorySlug={formData.category?.toLowerCase() || ""}
+                  categoryName={formData.category}
+                  showLegend={true}
+                />
 
                 <div className="flex justify-end gap-3 pt-4">
                   <button
@@ -1134,12 +1117,6 @@ export function VendorCatalogPage() {
                 </button>
               </div>
 
-              {error && (
-                <div className="mb-4 rounded-sm bg-red-50 p-3 text-xs text-red-600">
-                  {error}
-                </div>
-              )}
-
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
@@ -1403,6 +1380,14 @@ export function VendorCatalogPage() {
                     </div>
                   ))}
                 </div>
+
+                {/* Fee Preview */}
+                <FeePreview
+                  price={formData.price}
+                  categorySlug={formData.category?.toLowerCase() || ""}
+                  categoryName={formData.category}
+                  showLegend={true}
+                />
 
                 <div className="flex justify-end gap-3 pt-4">
                   <button

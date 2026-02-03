@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Order } from "../../types/order";
+import { VendorEarningsDisplay } from "../../components/commission/VendorEarningsDisplay";
 
 interface OrderDetailsDrawerProps {
   order: Order | null;
@@ -298,6 +299,24 @@ export function OrderDetailsDrawer({
               </table>
             </div>
           </section>
+
+          {/* Vendor Earnings Display */}
+          {(() => {
+            const commissionRate = 0.08;
+            const vatRate = 0.16;
+            const marketplaceFee = order.total * commissionRate;
+            const vatAmount = marketplaceFee * vatRate;
+            const vendorPayout = order.total - marketplaceFee - vatAmount;
+            return (
+              <VendorEarningsDisplay
+                orderAmount={order.total}
+                marketplaceFee={marketplaceFee}
+                vatAmount={vatAmount}
+                vendorPayout={vendorPayout}
+                isCollapsible={true}
+              />
+            );
+          })()}
 
           {/* Audit Trail */}
           <section>

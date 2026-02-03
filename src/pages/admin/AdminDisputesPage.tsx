@@ -1,15 +1,9 @@
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
+import { ADMIN_MENU_ITEMS } from "../../layout/adminMenuConfig";
 
 export function AdminDisputesPage() {
-  const navItems = [
-    { label: "Dashboard", to: "/admin" },
-    { label: "Vendors", to: "/admin/vendors" },
-    { label: "Disputes", to: "/admin/disputes" },
-    { label: "Reports", to: "/admin/reports" },
-  ];
-
   return (
-    <BackofficeLayout title="Admin Console" navItems={navItems}>
+    <BackofficeLayout title="Admin Console" menuItems={ADMIN_MENU_ITEMS}>
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
