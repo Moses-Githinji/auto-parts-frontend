@@ -31,6 +31,7 @@ import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { EmailVerificationPage } from "./pages/auth/EmailVerificationPage";
 import { ResetPasswordPage } from "./pages/auth/ResetPasswordPage";
+import { TrackingPage } from "./pages/TrackingPage";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +86,8 @@ const router = createBrowserRouter([
       },
     ],
   },
+  // Tracking route (public - no AppShell)
+  { path: "/tracking/:trackingId", element: <TrackingPage /> },
 ]);
 
 function CartRehydrate() {

@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   Font,
+  Image,
 } from "@react-pdf/renderer";
 import type { Order } from "../../types/order";
 
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
     borderColor: "#e2e8f0",
     borderRadius: 4,
   },
-  shippingTo: {
+  invoiceShippingTo: {
     flex: 1,
     padding: 15,
     borderWidth: 2,
@@ -180,6 +181,81 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     letterSpacing: 4,
+  },
+  qrCode: {
+    marginTop: 15,
+    padding: 10,
+    backgroundColor: "#ffffff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  qrCodeImage: {
+    width: 120,
+    height: 120,
+  },
+  trackingId: {
+    fontSize: 12,
+    fontWeight: "bold",
+    marginTop: 8,
+    letterSpacing: 2,
+  },
+  trackingLabel: {
+    fontSize: 8,
+    color: "#64748b",
+    marginTop: 4,
+  },
+  vendorFrom: {
+    flex: 1,
+    padding: 8,
+    backgroundColor: "#f8fafc",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 4,
+  },
+  shippingTo: {
+    flex: 1,
+    padding: 8,
+    borderWidth: 2,
+    borderColor: "#2b579a",
+    borderRadius: 4,
+  },
+  addressRow: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  addressLabel: {
+    fontSize: 6,
+    color: "#64748b",
+    marginBottom: 2,
+    fontWeight: "bold",
+  },
+  addressValue: {
+    fontSize: 7,
+    color: "#1e293b",
+  },
+  addressValueBold: {
+    fontSize: 8,
+    fontWeight: "bold",
+    color: "#1e293b",
+  },
+  facilitatorSection: {
+    marginTop: 10,
+    padding: 8,
+    backgroundColor: "#f0f9ff",
+    borderWidth: 1,
+    borderColor: "#bae6fd",
+    borderRadius: 4,
+  },
+  facilitatorText: {
+    fontSize: 7,
+    color: "#0369a1",
+    textAlign: "center",
+  },
+  facilitatorName: {
+    fontSize: 9,
+    fontWeight: "bold",
+    color: "#0c4a6e",
+    textAlign: "center",
   },
 });
 
@@ -457,75 +533,110 @@ export const PackingSlipPDF = ({ order }: { order: Order }) => (
 );
 
 // Shipping Label PDF Document
-export const ShippingLabelPDF = ({ order }: { order: Order }) => (
+interface ShippingLabelProps {
+  order: Order;
+  trackingId?: string;
+  qrCodeDataUri?: string;
+  trackingUrl?: string;
+  vendor?: {
+    companyName?: string;
+    city?: string;
+    state?: string;
+    street?: string;
+    phone?: string;
+  };
+}
+
+export const ShippingLabelPDF = ({
+  order,
+  trackingId,
+  qrCodeDataUri,
+  trackingUrl,
+  vendor,
+}: ShippingLabelProps) => (
   <Document>
-    <Page size="A6" style={[styles.page, { padding: 20 }]}>
-      {/* From */}
-      <View style={styles.shippingFrom}>
-        <Text
-          style={[
-            styles.cellBold,
-            { color: "#64748b", fontSize: 8, marginBottom: 4 },
-          ]}
-        >
-          FROM:
-        </Text>
-        <Text style={[styles.cellBold, { fontSize: 12, color: "#2b579a" }]}>
-          Auto Parts Kenya
-        </Text>
-        <Text style={styles.cell}>Nairobi, Kenya</Text>
+    <Page size="A6" style={[styles.page, { padding: 15 }]}>
+      {/* FROM and TO side by side */}
+      <View style={styles.addressRow}>
+        {/* From - Vendor Info */}
+        <View style={styles.vendorFrom}>
+          <Text style={styles.addressLabel}>FROM:</Text>
+          <Text style={styles.addressValueBold}>
+            {vendor?.companyName || "Vendor"}
+          </Text>
+          <Text style={styles.addressValue}>{vendor?.street || ""}</Text>
+          <Text style={styles.addressValue}>
+            {vendor?.city || ""}
+            {vendor?.city && vendor?.state ? ", " : ""}
+            {vendor?.state || ""}
+          </Text>
+          {vendor?.phone && (
+            <Text style={styles.addressValue}>Phone: {vendor.phone}</Text>
+          )}
+        </View>
+
+        {/* To */}
+        <View style={styles.shippingTo}>
+          <Text style={[styles.addressLabel, { color: "#2b579a" }]}>TO:</Text>
+          <Text style={styles.addressValueBold}>
+            {order.shippingAddress.firstName} {order.shippingAddress.lastName}
+          </Text>
+          <Text style={styles.addressValue}>
+            {order.shippingAddress.street}
+          </Text>
+          <Text style={styles.addressValue}>
+            {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
+            {order.shippingAddress.zipCode}
+          </Text>
+          <Text style={styles.addressValue}>
+            Phone: {order.customerPhone || "N/A"}
+          </Text>
+        </View>
       </View>
 
-      {/* To */}
-      <View style={styles.shippingTo}>
-        <Text
-          style={[
-            styles.cellBold,
-            { color: "#2b579a", fontSize: 8, marginBottom: 4 },
-          ]}
-        >
-          TO:
-        </Text>
-        <Text style={[styles.cellBold, { fontSize: 14 }]}>
-          {order.shippingAddress.firstName} {order.shippingAddress.lastName}
-        </Text>
-        <Text style={styles.cell}>{order.shippingAddress.street}</Text>
-        <Text style={styles.cell}>
-          {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
-          {order.shippingAddress.zipCode}
-        </Text>
-        <Text style={styles.cell}>Phone: {order.customerPhone || "N/A"}</Text>
+      {/* Facilitator Section */}
+      <View style={styles.facilitatorSection}>
+        <Text style={styles.facilitatorText}>Facilitated by</Text>
+        <Text style={styles.facilitatorName}>Auto Parts Kenya</Text>
       </View>
 
       {/* Order Info */}
-      <View style={{ marginTop: 15 }}>
+      <View style={{ marginTop: 8 }}>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.cellBold, { fontSize: 8, color: "#64748b" }]}>
-              ORDER #
-            </Text>
-            <Text style={[styles.cellBold, { fontSize: 12 }]}>
-              {order.orderNumber}
-            </Text>
+            <Text style={styles.addressLabel}>ORDER #</Text>
+            <Text style={styles.addressValueBold}>{order.orderNumber}</Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.cellBold, { fontSize: 8, color: "#64748b" }]}>
-              DATE
-            </Text>
-            <Text style={styles.cell}>
+            <Text style={styles.addressLabel}>DATE</Text>
+            <Text style={styles.addressValue}>
               {new Date(order.createdAt).toLocaleDateString()}
             </Text>
           </View>
         </View>
       </View>
 
-      {/* Barcode */}
-      <View style={styles.barcode}>
-        <Text style={styles.barcodeText}>{order.orderNumber}</Text>
-        <Text style={[styles.cell, { fontSize: 8, marginTop: 5 }]}>
-          (Scan for tracking)
-        </Text>
-      </View>
+      {/* QR Code */}
+      {qrCodeDataUri && trackingId ? (
+        <View style={styles.qrCode}>
+          <Image src={qrCodeDataUri} style={styles.qrCodeImage} />
+          <Text style={styles.trackingId}>{trackingId}</Text>
+          <Text style={styles.trackingLabel}>Scan for tracking</Text>
+          {trackingUrl && (
+            <Text style={[styles.trackingLabel, { fontSize: 6, marginTop: 2 }]}>
+              {trackingUrl}
+            </Text>
+          )}
+        </View>
+      ) : (
+        /* Fallback barcode */
+        <View style={styles.barcode}>
+          <Text style={styles.barcodeText}>{order.orderNumber}</Text>
+          <Text style={[styles.cell, { fontSize: 7, marginTop: 3 }]}>
+            (Scan for tracking)
+          </Text>
+        </View>
+      )}
     </Page>
   </Document>
 );

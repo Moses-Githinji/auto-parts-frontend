@@ -38,6 +38,10 @@ interface OrderState {
     status: OrderStatus,
     data?: Record<string, unknown>
   ) => Promise<Order>;
+  sendOrderNotification: (
+    orderId: string,
+    notificationType: "shipped" | "delivered" | "out_for_delivery"
+  ) => Promise<void>;
   fetchOrderAnalytics: (
     vendorId: string,
     startDate?: string,
@@ -222,6 +226,25 @@ export const useOrderStore = create<OrderState>()(
               error instanceof Error
                 ? error.message
                 : "Failed to update order status",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      sendOrderNotification: async (orderId, notificationType) => {
+        set({ isLoading: true, error: null });
+        try {
+          await apiClient.post(`/api/orders/${orderId}/notify`, {
+            type: notificationType,
+          });
+          set({ isLoading: false });
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error
+                ? error.message
+                : "Failed to send notification",
             isLoading: false,
           });
           throw error;

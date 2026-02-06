@@ -37,6 +37,8 @@ export function OrderDetailsDrawer({
         return "bg-purple-100 text-purple-700";
       case "SHIPPED":
         return "bg-indigo-100 text-indigo-700";
+      case "OUT_FOR_DELIVERY":
+        return "bg-cyan-100 text-cyan-700";
       case "DELIVERED":
         return "bg-green-100 text-green-700";
       case "CANCELLED":

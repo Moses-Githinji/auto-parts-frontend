@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import { toast } from "sonner";
 import type { Order, OrderStatus } from "../../types/order";
 import {
   InvoicePDF,
   PackingSlipPDF,
   ShippingLabelPDF,
 } from "../../components/pdf/OrderDocuments";
+import { generateTracking } from "../../lib/trackingService";
+import type { GenerateTrackingResponse } from "../../types/tracking";
 
 interface ProcessOrderModalProps {
   order: Order | null;
@@ -16,6 +19,12 @@ interface ProcessOrderModalProps {
     status: OrderStatus,
     data?: Record<string, unknown>
   ) => Promise<void>;
+}
+
+interface GeneratedTracking {
+  trackingId: string;
+  qrCodeDataUri: string;
+  trackingUrl: string;
 }
 
 type Step = "confirm" | "documents" | "shipping" | "handover";
@@ -43,6 +52,16 @@ export function ProcessOrderModal({
   const [dispatchNote, setDispatchNote] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [generatedTracking, setGeneratedTracking] =
+    useState<GeneratedTracking | null>(null);
+  const [isGeneratingTracking, setIsGeneratingTracking] = useState(false);
+
+  // Auto-fill tracking number when generated tracking changes
+  useEffect(() => {
+    if (generatedTracking?.trackingId && !trackingNumber) {
+      setTrackingNumber(generatedTracking.trackingId);
+    }
+  }, [generatedTracking, trackingNumber]);
 
   if (!isOpen || !order) return null;
 
@@ -100,12 +119,47 @@ export function ProcessOrderModal({
     setIsSubmitting(true);
     setError(null);
     try {
-      // In a real app, upload the dispatch note here
+      // Update order status to OUT_FOR_DELIVERY
+      await onStatusUpdate(order.id, "OUT_FOR_DELIVERY", {
+        trackingNumber,
+        courier: selectedCourier,
+        trackingUrl: generatedTracking?.trackingUrl,
+        dispatchNote: dispatchNote?.name || null,
+      });
+
+      // Email notification is now sent via the backend through the sendOrderNotification API call
+      // The vendor dashboard will trigger this automatically
+      toast.success(
+        `Order is now out for delivery! The customer will receive tracking information at ${order.shippingAddress.email || order.customerEmail}.`
+      );
+
       onClose();
     } catch (err) {
       setError("Failed to complete handover. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleGenerateTracking = async () => {
+    if (!order) return;
+    setIsGeneratingTracking(true);
+    setError(null);
+    try {
+      const result = (await generateTracking(
+        order.id
+      )) as GenerateTrackingResponse;
+      if (result && result.reconciliation) {
+        setGeneratedTracking({
+          trackingId: result.reconciliation.trackingId,
+          qrCodeDataUri: result.reconciliation.qrCodeDataUri,
+          trackingUrl: result.reconciliation.trackingUrl,
+        });
+      }
+    } catch (err) {
+      setError("Failed to generate tracking. Please try again.");
+    } finally {
+      setIsGeneratingTracking(false);
     }
   };
 
@@ -349,9 +403,21 @@ export function ProcessOrderModal({
         </PDFDownloadLink>
 
         <PDFDownloadLink
-          document={<ShippingLabelPDF order={order} />}
+          document={
+            <ShippingLabelPDF
+              order={order}
+              trackingId={generatedTracking?.trackingId}
+              qrCodeDataUri={generatedTracking?.qrCodeDataUri}
+              trackingUrl={generatedTracking?.trackingUrl}
+              vendor={order.items[0]?.product?.vendor}
+            />
+          }
           fileName={`shipping-label-${order.orderNumber}.pdf`}
-          className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50"
+          className={`flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 ${
+            generatedTracking
+              ? "border-green-200 bg-green-50"
+              : "border-gray-200"
+          }`}
         >
           {({ loading }) => (
             <>
@@ -374,7 +440,11 @@ export function ProcessOrderModal({
                 <div className="text-left">
                   <p className="font-medium text-slate-900">Shipping Label</p>
                   <p className="text-sm text-slate-500">
-                    {loading ? "Preparing..." : "Print for courier"}
+                    {loading
+                      ? "Preparing..."
+                      : generatedTracking
+                        ? `With QR: ${generatedTracking.trackingId}`
+                        : "Print for courier"}
                   </p>
                 </div>
               </div>
@@ -394,6 +464,43 @@ export function ProcessOrderModal({
             </>
           )}
         </PDFDownloadLink>
+
+        {/* Generate Tracking Button */}
+        {!generatedTracking && (
+          <button
+            onClick={handleGenerateTracking}
+            disabled={isGeneratingTracking}
+            className="flex items-center justify-between w-full p-4 border border-dashed border-[#2b579a] rounded-lg hover:bg-blue-50"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-[#2b579a] rounded-lg flex items-center justify-center">
+                <svg
+                  className="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"
+                  />
+                </svg>
+              </div>
+              <div className="text-left">
+                <p className="font-medium text-[#2b579a]">
+                  Generate QR Tracking
+                </p>
+                <p className="text-sm text-slate-500">
+                  {isGeneratingTracking
+                    ? "Generating..."
+                    : "Create tracking with QR code"}
+                </p>
+              </div>
+            </div>
+          </button>
+        )}
       </div>
 
       {error && (

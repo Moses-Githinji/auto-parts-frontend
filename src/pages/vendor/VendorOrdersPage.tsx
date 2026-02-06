@@ -14,8 +14,14 @@ export function VendorOrdersPage() {
     { label: "Settings", to: "/vendor/settings" },
   ];
 
-  const { orders, isLoading, error, fetchOrders, updateOrderStatus } =
-    useOrderStore();
+  const {
+    orders,
+    isLoading,
+    error,
+    fetchOrders,
+    updateOrderStatus,
+    sendOrderNotification,
+  } = useOrderStore();
 
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -34,6 +40,16 @@ export function VendorOrdersPage() {
   ) => {
     try {
       await updateOrderStatus(orderId, status, data);
+
+      // Send notification email when order is out for delivery
+      if (status === "OUT_FOR_DELIVERY") {
+        try {
+          await sendOrderNotification(orderId, "out_for_delivery");
+        } catch (notifyErr) {
+          console.error("Failed to send notification email:", notifyErr);
+        }
+      }
+
       fetchOrders();
     } catch (err) {
       console.error("Failed to update order status:", err);
@@ -68,6 +84,8 @@ export function VendorOrdersPage() {
         return "bg-purple-100 text-purple-700";
       case "SHIPPED":
         return "bg-indigo-100 text-indigo-700";
+      case "OUT_FOR_DELIVERY":
+        return "bg-cyan-100 text-cyan-700";
       case "DELIVERED":
         return "bg-green-100 text-green-700";
       case "CANCELLED":
@@ -172,6 +190,7 @@ export function VendorOrdersPage() {
               <option value="CONFIRMED">Confirmed</option>
               <option value="PROCESSING">Processing</option>
               <option value="SHIPPED">Shipped</option>
+              <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
               <option value="DELIVERED">Delivered</option>
               <option value="CANCELLED">Cancelled</option>
             </select>

@@ -1,144 +1,73 @@
-# Auto Parts E-Commerce Platform
+# React + TypeScript + Vite
 
-A comprehensive auto parts e-commerce platform built with React, TypeScript, and Vite. This application provides a complete solution for buying and selling auto parts online, featuring vendor management, commission tracking, and a full administrative dashboard.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Features
+Currently, two official plugins are available:
 
-### Customer Features
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-- **Product Catalog** - Browse and search for auto parts by category, make, model, and year
-- **Shopping Cart** - Add items to cart and manage quantities
-- **Checkout Process** - Complete purchase flow with shipping and payment integration
-- **User Accounts** - Manage profile, addresses, and order history
-- **Vehicle Garage** - Save and manage vehicles for easy part matching
-- **Order Tracking** - View order status and delivery updates
+## React Compiler
 
-### Vendor Features
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- **Vendor Dashboard** - Manage products, orders, and earnings
-- **Product Management** - Add, edit, and organize catalog items
-- **Order Processing** - Handle and fulfill customer orders
-- **Earnings Dashboard** - Track sales and commission earnings
-- **Commission Tracking** - Real-time view of fees and net earnings
+## Expanding the ESLint configuration
 
-### Admin Features
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-- **Admin Dashboard** - Overview of platform metrics and activity
-- **Vendor Management** - Approve and manage vendor accounts
-- **Commission Configuration** - Set and adjust commission rates
-- **Content Management** - Blog posts and categories
-- **Reports & Analytics** - Sales, delivery, and earnings reports
-- **Dispute Resolution** - Handle customer/vendor disputes
-- **Webhooks** - Manage API integrations
+```js
+export default defineConfig([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
 
-## Tech Stack
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-- **Frontend**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **State Management**: React Zustand stores
-- **Routing**: React Router
-- **API Client**: Axios with custom client
-- **PDF Generation**: Custom PDF components
-- **Image Handling**: Cloudinary integration
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── commission/     # Commission-related UI components
-│   ├── layout/         # Layout components (Sidebar, AppShell)
-│   ├── pdf/            # PDF document generation
-│   ├── providers/      # Context providers (Notifications)
-│   └── ui/             # Reusable UI components
-├── config/
-│   └── api.ts          # API configuration
-├── layout/
-│   ├── AdminSidebar.tsx
-│   └── adminMenuConfig.tsx
-├── lib/
-│   ├── apiClient.ts    # API client utilities
-│   └── cn.ts           # Class name utilities
-├── pages/
-│   ├── account/        # User account pages
-│   ├── admin/          # Admin dashboard pages
-│   ├── auth/           # Authentication pages
-│   ├── parts/          # Product detail pages
-│   └── vendor/         # Vendor management pages
-├── stores/
-│   ├── authStore.ts    # Authentication state
-│   ├── blogStore.ts    # Blog management state
-│   ├── cartStore.ts    # Shopping cart state
-│   ├── commissionStore.ts  # Commission tracking state
-│   ├── notificationStore.ts # Notification system
-│   ├── orderStore.ts   # Order management state
-│   └── productStore.ts # Product catalog state
-├── types/
-│   ├── api.ts          # API response types
-│   ├── blog.ts         # Blog post types
-│   ├── cart.ts         # Cart types
-│   ├── commission.ts   # Commission types
-│   ├── order.ts        # Order types
-│   ├── product.ts      # Product types
-│   ├── user.ts         # User types
-│   ├── vehicle.ts      # Vehicle types
-│   └── vendor.ts       # Vendor types
-└── utils/
-    └── cloudinaryService.ts  # Cloudinary image handling
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
 ```
 
-## Getting Started
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-### Prerequisites
+```js
+// eslint.config.js
+import reactX from "eslint-plugin-react-x";
+import reactDom from "eslint-plugin-react-dom";
 
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
-```bash
-npm install
+export default defineConfig([
+  globalIgnores(["dist"]),
+  {
+    files: ["**/*.{ts,tsx}"],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs["recommended-typescript"],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ["./tsconfig.node.json", "./tsconfig.app.json"],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+]);
 ```
-
-### Development
-
-```bash
-npm run dev
-```
-
-### Build
-
-```bash
-npm run build
-```
-
-### Lint
-
-```bash
-npm run lint
-```
-
-## Commission System
-
-The platform features a configurable commission system where:
-
-- Admins set global commission rates
-- Commission fees are deducted from vendor sales
-- Vendors can view detailed breakdowns of their earnings
-- Real-time tracking of pending and paid commissions
-
-## API Integration
-
-The application connects to a backend API for:
-
-- User authentication and authorization
-- Product catalog management
-- Order processing and tracking
-- Vendor management
-- Commission calculations
-- Blog content management
-
-## License
-
-MIT

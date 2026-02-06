@@ -15,6 +15,7 @@ const statusColors: Record<OrderStatus, string> = {
   CONFIRMED: "bg-blue-100 text-blue-700",
   PROCESSING: "bg-indigo-100 text-indigo-700",
   SHIPPED: "bg-purple-100 text-purple-700",
+  OUT_FOR_DELIVERY: "bg-cyan-100 text-cyan-700",
   DELIVERED: "bg-green-100 text-green-700",
   CANCELLED: "bg-red-100 text-red-700",
 };
@@ -127,6 +128,7 @@ export function AccountOrders() {
           <option value="CONFIRMED">Confirmed</option>
           <option value="PROCESSING">Processing</option>
           <option value="SHIPPED">Shipped</option>
+          <option value="OUT_FOR_DELIVERY">Out for Delivery</option>
           <option value="DELIVERED">Delivered</option>
           <option value="CANCELLED">Cancelled</option>
         </select>
@@ -339,11 +341,18 @@ export function AccountOrders() {
                   Buy Again
                 </Button>
               )}
-              {selectedOrder.status === "SHIPPED" && (
-                <Button className="bg-[#FF9900] text-white hover:bg-[#FF9900]/90">
-                  Track Order
-                </Button>
-              )}
+              {(selectedOrder.status === "OUT_FOR_DELIVERY" ||
+                selectedOrder.status === "SHIPPED") &&
+                selectedOrder.trackingNumber && (
+                  <Button
+                    className="bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
+                    onClick={() =>
+                      navigate(`/tracking/${selectedOrder.trackingNumber}`)
+                    }
+                  >
+                    Track Order
+                  </Button>
+                )}
               {selectedOrder.status === "PENDING" && (
                 <Button
                   variant="outline"
