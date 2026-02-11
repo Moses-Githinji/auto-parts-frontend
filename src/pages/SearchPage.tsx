@@ -13,6 +13,9 @@ export function SearchPage() {
   const q = params.get("q") ?? "";
   const category = params.get("cat") ?? "";
   const brand = params.get("brand") ?? "";
+  const make = params.get("make") ?? "";
+  const model = params.get("model") ?? "";
+  const year = params.get("year") ?? "";
   const addItem = useCartStore((s) => s.addItem);
   const {
     products,
@@ -39,6 +42,9 @@ export function SearchPage() {
     if (q) filters.search = q;
     if (category) filters.category = category;
     if (brand) filters.brand = brand;
+    if (make) filters.make = make;
+    if (model) filters.model = model;
+    if (year) filters.year = year;
 
     if (Object.keys(filters).length > 0) {
       setFilters(filters);
@@ -46,7 +52,18 @@ export function SearchPage() {
     } else {
       fetchProducts();
     }
-  }, [q, category, brand, fetchProducts, setFilters, clearFilters, clearError]);
+  }, [
+    q,
+    category,
+    brand,
+    make,
+    model,
+    year,
+    fetchProducts,
+    setFilters,
+    clearFilters,
+    clearError,
+  ]);
 
   async function handleAddToCart(product: Product) {
     setAddingProductId(product.id);
@@ -87,12 +104,16 @@ export function SearchPage() {
   if (q) activeFilters.push({ label: q, type: "search" });
   if (category) activeFilters.push({ label: category, type: "category" });
   if (brand) activeFilters.push({ label: brand, type: "brand" });
+  if (make || model || year) {
+    const vehicleLabel = [make, model, year].filter(Boolean).join(" ");
+    activeFilters.push({ label: vehicleLabel, type: "vehicle" });
+  }
 
   return (
     <div className="space-y-4">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-2 rounded-md border border-slate-200 bg-slate-50 p-3 md:flex-row md:items-center"
+        className="flex flex-col gap-2 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 md:flex-row md:items-center"
       >
         <Input
           name="q"
@@ -108,7 +129,7 @@ export function SearchPage() {
 
       {/* Active Filters */}
       {activeFilters.length > 0 && (
-        <div className="flex flex-wrap gap-2 text-xs text-slate-700">
+        <div className="flex flex-wrap gap-2 text-xs text-slate-700 dark:text-dark-text">
           <span className="font-semibold">Active filters:</span>
           {activeFilters.map((filter, i) => (
             <Badge key={i} variant="outline">
@@ -127,7 +148,7 @@ export function SearchPage() {
       {/* Cart Message */}
       {cartMessage && (
         <div
-          className={`rounded-lg p-3 text-sm ${cartMessage.type === "success" ? "bg-green-50 text-green-700 border border-green-200" : "bg-red-50 text-red-700 border border-red-200"}`}
+          className={`rounded-lg p-3 text-sm ${cartMessage.type === "success" ? "bg-green-50 dark:bg-green-900/20 text-green-700 border border-green-200" : "bg-red-50 dark:bg-red-900/20 text-red-700 border border-red-200"}`}
         >
           {cartMessage.text}
         </div>
@@ -142,7 +163,7 @@ export function SearchPage() {
 
       {/* Error State */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-center text-sm text-red-600">
+        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4 text-center text-sm text-red-600">
           <p>Error: {error}</p>
           <button
             onClick={() => fetchProducts()}
@@ -156,27 +177,27 @@ export function SearchPage() {
       {/* Products from Store */}
       {!isLoading && !error && products.length > 0 && (
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
             Search Results ({products.length} products)
           </h2>
-          <div className="divide-y divide-slate-100 rounded-md border border-slate-200">
+          <div className="divide-y divide-slate-100 rounded-md border border-slate-200 dark:border-dark-border">
             {products.map((product) => (
               <article
                 key={product.id}
-                className="grid gap-3 bg-white p-3 md:grid-cols-[2fr,1.5fr]"
+                className="grid gap-3 bg-white dark:bg-dark-bgLight p-3 md:grid-cols-[2fr,1.5fr]"
               >
                 <div className="space-y-1">
-                  <p className="text-xs font-mono text-slate-500">
+                  <p className="text-xs font-mono text-slate-500 dark:text-dark-textMuted">
                     OEM {product.partNumber}
                   </p>
-                  <h3 className="text-sm font-semibold text-slate-900">
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                     {product.name}
                   </h3>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {product.description?.slice(0, 100) ||
                       "No description available"}
                   </p>
-                  <div className="flex flex-wrap gap-1 text-[11px] text-slate-600">
+                  <div className="flex flex-wrap gap-1 text-[11px] text-slate-600 dark:text-dark-textMuted">
                     <Badge variant="success">In Stock ({product.stock})</Badge>
                     {product.brand && (
                       <Badge variant="outline">{product.brand}</Badge>
@@ -186,15 +207,15 @@ export function SearchPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col justify-between gap-2 rounded-md bg-slate-50 p-3 text-xs">
+                <div className="flex flex-col justify-between gap-2 rounded-md bg-slate-50 dark:bg-dark-bg p-3 text-xs">
                   <div>
-                    <p className="font-semibold text-slate-900">
+                    <p className="font-semibold text-slate-900 dark:text-dark-text">
                       KES {product.price.toLocaleString()}
                     </p>
-                    <p className="text-slate-600">
+                    <p className="text-slate-600 dark:text-dark-textMuted">
                       {product.brand || "Unknown brand"}
                     </p>
-                    <p className="text-[11px] text-slate-500">
+                    <p className="text-[11px] text-slate-500 dark:text-dark-textMuted">
                       Condition: {product.condition}
                     </p>
                   </div>
@@ -226,10 +247,10 @@ export function SearchPage() {
       {/* No Results */}
       {!isLoading && !error && products.length === 0 && (
         <section className="space-y-2">
-          <h2 className="text-sm font-semibold text-slate-900">
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
             Search results
           </h2>
-          <div className="rounded-md border border-slate-200 bg-white p-8 text-center text-sm text-slate-600">
+          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
             <p className="mb-2">No products found matching your criteria.</p>
             <p>Try adjusting your search or filters.</p>
           </div>

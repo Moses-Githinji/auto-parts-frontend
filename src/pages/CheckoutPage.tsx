@@ -141,8 +141,8 @@ export function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="space-y-4">
-        <h1 className="text-lg font-semibold text-slate-900">Checkout</h1>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">Checkout</h1>
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
           <p className="mb-4">Your cart is empty.</p>
           <Button onClick={() => navigate("/search")}>Browse parts</Button>
         </div>
@@ -153,14 +153,14 @@ export function CheckoutPage() {
   return (
     <div className="space-y-4 text-xs">
       <header className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold text-slate-900">Checkout</h1>
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">Checkout</h1>
         <Badge variant="outline">Mocked payment & logistics integration</Badge>
       </header>
 
       <section className="grid gap-4 md:grid-cols-[1.4fr,1fr]">
         <div className="space-y-3">
-          <div className="space-y-2 rounded-md border border-slate-200 bg-slate-50 p-3">
-            <h2 className="text-sm font-semibold text-slate-900">
+          <div className="space-y-2 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               Shipping address
             </h2>
             <div className="grid gap-2 md:grid-cols-2">
@@ -246,8 +246,8 @@ export function CheckoutPage() {
             </div>
           </div>
 
-          <div className="space-y-2 rounded-md border border-slate-200 bg-slate-50 p-3">
-            <h2 className="text-sm font-semibold text-slate-900">
+          <div className="space-y-2 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               Payment method
             </h2>
             <div className="flex flex-wrap gap-2">
@@ -262,18 +262,18 @@ export function CheckoutPage() {
                 </Badge>
               ))}
             </div>
-            <p className="mt-1 text-[11px] text-slate-600">
+            <p className="mt-1 text-[11px] text-slate-600 dark:text-dark-textMuted">
               In this frontend, we will call your Render API endpoints that
               initiate payment and poll status; here it is shown as a stub.
             </p>
           </div>
         </div>
 
-        <aside className="space-y-3 rounded-md border border-slate-200 bg-slate-50 p-3">
-          <h2 className="text-sm font-semibold text-slate-900">
+        <aside className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3">
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
             Order summary
           </h2>
-          <div className="space-y-1 text-[11px] text-slate-700">
+          <div className="space-y-1 text-[11px] text-slate-700 dark:text-dark-text">
             <div className="flex justify-between">
               <span>Items total</span>
               <span>KES {totalAmount.toLocaleString()}</span>
@@ -286,7 +286,7 @@ export function CheckoutPage() {
               <span>Platform fee</span>
               <span>KES 0</span>
             </div>
-            <div className="mt-1 flex justify-between border-t border-slate-200 pt-2 text-xs font-semibold">
+            <div className="mt-1 flex justify-between border-t border-slate-200 dark:border-dark-border pt-2 text-xs font-semibold">
               <span>Total</span>
               <span>KES {(totalAmount + SHIPPING_COST).toLocaleString()}</span>
             </div>
@@ -298,7 +298,7 @@ export function CheckoutPage() {
           >
             {isProcessing ? "Processing..." : "Place order"}
           </Button>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-[11px] text-slate-600 dark:text-dark-textMuted">
             Placing an order will call your backend to create a multi-vendor
             order, split vendor orders, and create payment & shipment records.
           </p>

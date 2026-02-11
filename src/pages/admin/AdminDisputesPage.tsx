@@ -7,8 +7,8 @@ export function AdminDisputesPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Disputes</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Disputes</h1>
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
               Manage and resolve customer disputes.
             </p>
           </div>
@@ -19,21 +19,21 @@ export function AdminDisputesPage() {
 
         {/* Stats */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Open Disputes</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Open Disputes</p>
             <p className="mt-1 text-2xl font-semibold text-amber-600">3</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Under Review</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Under Review</p>
             <p className="mt-1 text-2xl font-semibold text-blue-600">2</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Resolved (This Week)</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Resolved (This Week)</p>
             <p className="mt-1 text-2xl font-semibold text-green-600">5</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Avg. Resolution Time</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Avg. Resolution Time</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               2.5 days
             </p>
           </div>
@@ -44,15 +44,15 @@ export function AdminDisputesPage() {
           <input
             type="text"
             placeholder="Search disputes..."
-            className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           />
-          <select className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none">
+          <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
             <option value="">All Status</option>
             <option value="open">Open</option>
             <option value="review">Under Review</option>
             <option value="resolved">Resolved</option>
           </select>
-          <select className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none">
+          <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
             <option value="">All Priority</option>
             <option value="high">High</option>
             <option value="medium">Medium</option>
@@ -63,7 +63,7 @@ export function AdminDisputesPage() {
         {/* Disputes List */}
         <div className="space-y-4">
           {/* Dispute 1 */}
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-sm font-semibold text-red-700">
@@ -71,7 +71,7 @@ export function AdminDisputesPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">
                       DSP-2024-001
                     </h3>
                     <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
@@ -81,11 +81,11 @@ export function AdminDisputesPage() {
                       Open
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-slate-600">
+                  <p className="mt-1 text-xs text-slate-600 dark:text-dark-textMuted">
                     Customer claims received wrong item - ordered brake pads but
                     received oil filter
                   </p>
-                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500">
+                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     <span>Customer: John Doe</span>
                     <span>Vendor: AutoCare Plus</span>
                     <span>Order: #1234</span>
@@ -94,7 +94,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] px-3 py-1 text-xs hover:bg-[#f3f3f3]">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">
@@ -105,7 +105,7 @@ export function AdminDisputesPage() {
           </div>
 
           {/* Dispute 2 */}
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-sm font-semibold text-amber-700">
@@ -113,7 +113,7 @@ export function AdminDisputesPage() {
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">
                       DSP-2024-002
                     </h3>
                     <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-700">
@@ -123,11 +123,11 @@ export function AdminDisputesPage() {
                       Under Review
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-slate-600">
+                  <p className="mt-1 text-xs text-slate-600 dark:text-dark-textMuted">
                     Refund requested for damaged part - product arrived with
                     visible dents
                   </p>
-                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500">
+                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     <span>Customer: Jane Smith</span>
                     <span>Vendor: MotorParts KE</span>
                     <span>Order: #1235</span>
@@ -136,7 +136,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] px-3 py-1 text-xs hover:bg-[#f3f3f3]">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">
@@ -147,28 +147,28 @@ export function AdminDisputesPage() {
           </div>
 
           {/* Dispute 3 */}
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700 dark:text-dark-text">
                   #
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-slate-900">
+                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">
                       DSP-2024-003
                     </h3>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700 dark:text-dark-text">
                       Low Priority
                     </span>
                     <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-medium text-blue-700">
                       Under Review
                     </span>
                   </div>
-                  <p className="mt-1 text-xs text-slate-600">
+                  <p className="mt-1 text-xs text-slate-600 dark:text-dark-textMuted">
                     Delivery delay complaint - package took 2 weeks to arrive
                   </p>
-                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500">
+                  <div className="mt-2 flex gap-4 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     <span>Customer: Bob Wilson</span>
                     <span>Vendor: SparePro Ltd</span>
                     <span>Order: #1236</span>
@@ -177,7 +177,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] px-3 py-1 text-xs hover:bg-[#f3f3f3]">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">

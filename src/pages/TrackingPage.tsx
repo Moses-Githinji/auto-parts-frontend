@@ -136,10 +136,10 @@ export function TrackingPage() {
 
   if (isLoadingTracking) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading tracking information...</p>
+          <p className="text-gray-600 dark:text-dark-textMuted">Loading tracking information...</p>
         </div>
       </div>
     );
@@ -147,8 +147,8 @@ export function TrackingPage() {
 
   if (trackingError) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Tracking Not Found
@@ -164,7 +164,7 @@ export function TrackingPage() {
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="flex-1 rounded border border-gray-300 px-4 py-2 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
+              className="flex-1 rounded border border-gray-300 dark:border-dark-border px-4 py-2 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
             />
             <Button onClick={handleSearch} className="bg-[#FF9900] text-white">
               Track
@@ -183,8 +183,8 @@ export function TrackingPage() {
 
   if (!trackingInfo) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">📦</div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Track Your Shipment
@@ -199,7 +199,7 @@ export function TrackingPage() {
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
               onKeyPress={handleKeyPress}
-              className="flex-1 rounded border border-gray-300 px-4 py-2 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
+              className="flex-1 rounded border border-gray-300 dark:border-dark-border px-4 py-2 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
             />
             <Button onClick={handleSearch} className="bg-[#FF9900] text-white">
               Track
@@ -213,14 +213,14 @@ export function TrackingPage() {
   const currentStatusConfig = STATUS_CONFIG[trackingInfo.currentStatus];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-sm text-gray-500">Tracking ID</p>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-dark-text">
                 {trackingInfo.trackingId}
               </h1>
             </div>
@@ -329,7 +329,7 @@ export function TrackingPage() {
           {/* Left Column - Order Summary & Documents */}
           <div className="md:col-span-2 space-y-6">
             {/* Map Placeholder */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Live Location
               </h2>
@@ -354,7 +354,7 @@ export function TrackingPage() {
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 dark:text-dark-textMuted text-sm">
                     {trackingInfo.scanHistory.length > 0
                       ? "Map view with last scan location"
                       : "Location will appear after first scan"}
@@ -370,7 +370,7 @@ export function TrackingPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Order Summary
               </h2>
@@ -380,7 +380,7 @@ export function TrackingPage() {
                     <span className="text-2xl">🔧</span>
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-dark-text">
                       {trackingInfo.orderNumber}
                     </p>
                     <p className="text-sm text-gray-500">
@@ -398,11 +398,11 @@ export function TrackingPage() {
                         className="flex items-center justify-between py-2"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gray-50 rounded flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gray-50 dark:bg-dark-bg rounded flex items-center justify-center">
                             <span className="text-lg">🔩</span>
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm font-medium text-gray-900 dark:text-dark-text">
                               {item.product?.name || "Auto Part"}
                             </p>
                             <p className="text-xs text-gray-500">
@@ -410,7 +410,7 @@ export function TrackingPage() {
                             </p>
                           </div>
                         </div>
-                        <p className="text-sm font-medium text-gray-900">
+                        <p className="text-sm font-medium text-gray-900 dark:text-dark-text">
                           KSh {Number(item.price).toLocaleString()}
                         </p>
                       </div>
@@ -421,13 +421,13 @@ export function TrackingPage() {
             </div>
 
             {/* Timeline */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Tracking History
               </h2>
 
               {trackingInfo.scanHistory.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">
+                <p className="text-gray-500 dark:text-dark-textMuted text-center py-8">
                   No scan events yet.
                 </p>
               ) : (
@@ -460,7 +460,7 @@ export function TrackingPage() {
                           <div className="flex-1 pb-6">
                             <div className="flex items-start justify-between">
                               <div>
-                                <p className="font-semibold text-gray-900">
+                                <p className="font-semibold text-gray-900 dark:text-dark-text">
                                   {event.status.replace(/_/g, " ")}
                                 </p>
                                 {event.notes && (
@@ -487,14 +487,14 @@ export function TrackingPage() {
           <div className="space-y-6">
             {/* Estimated Delivery */}
             {trackingInfo.currentStatus !== "DELIVERED" && (
-              <div className="bg-white rounded-lg shadow-md p-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">
+              <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+                <h3 className="text-sm font-medium text-gray-500 dark:text-dark-textMuted mb-2">
                   Estimated Delivery
                 </h3>
-                <p className="text-xl font-semibold text-gray-900">
+                <p className="text-xl font-semibold text-gray-900 dark:text-dark-text">
                   {getEstimatedDelivery()}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-gray-500 dark:text-dark-textMuted mt-1">
                   You'll receive a notification once out for delivery
                 </p>
               </div>
@@ -504,7 +504,7 @@ export function TrackingPage() {
             {orderDetails &&
               trackingInfo.currentStatus === "DELIVERED" &&
               orderDetails.paymentStatus === "PAID" && (
-                <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Documents
                   </h3>
@@ -580,7 +580,7 @@ export function TrackingPage() {
               )}
 
             {/* Help & Support */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Need Help?
               </h3>

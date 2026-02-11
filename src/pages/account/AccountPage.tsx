@@ -89,7 +89,7 @@ export function AccountPage() {
   return (
     <div className="grid gap-4 md:grid-cols-[200px,1fr] text-xs">
       <nav className="space-y-2">
-        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-dark-textMuted">
           Account
         </p>
         <div className="space-y-1">
@@ -177,7 +177,7 @@ function AccountOverview({
   if (isLoading) {
     return (
       <div className="space-y-2">
-        <h1 className="text-sm font-semibold text-slate-900">
+        <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
           Account overview
         </h1>
         <div className="flex items-center justify-center py-8">
@@ -189,10 +189,10 @@ function AccountOverview({
 
   return (
     <div className="space-y-4">
-      <h1 className="text-sm font-semibold text-slate-900">Account overview</h1>
+      <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">Account overview</h1>
 
       {user ? (
-        <div className="rounded-lg border border-slate-200 bg-white p-4">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FF9900] text-lg font-bold text-white">
               {(user as { firstName?: string }).firstName?.charAt(0) ||
@@ -200,32 +200,32 @@ function AccountOverview({
                 "U"}
             </div>
             <div>
-              <p className="font-semibold text-slate-900">
+              <p className="font-semibold text-slate-900 dark:text-dark-text">
                 {(user as { firstName?: string }).firstName}{" "}
                 {(user as { lastName?: string }).lastName}
               </p>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {(user as { email?: string }).email}
               </p>
             </div>
           </div>
 
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <div className="rounded-md bg-slate-50 p-3">
-              <p className="text-xs text-slate-600">Active Orders</p>
-              <p className="text-lg font-semibold text-slate-900">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Orders</p>
+              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.activeOrders}
               </p>
             </div>
-            <div className="rounded-md bg-slate-50 p-3">
-              <p className="text-xs text-slate-600">Saved Vehicles</p>
-              <p className="text-lg font-semibold text-slate-900">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Vehicles</p>
+              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.savedVehicles}
               </p>
             </div>
-            <div className="rounded-md bg-slate-50 p-3">
-              <p className="text-xs text-slate-600">Saved Addresses</p>
-              <p className="text-lg font-semibold text-slate-900">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Addresses</p>
+              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.savedAddresses}
               </p>
             </div>
@@ -236,8 +236,8 @@ function AccountOverview({
           )}
         </div>
       ) : (
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-          <p className="mb-3 text-sm text-slate-600">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+          <p className="mb-3 text-sm text-slate-600 dark:text-dark-textMuted">
             Sign in to view your account details, orders, and saved vehicles.
           </p>
           <Button onClick={() => (window.location.href = "/login")}>

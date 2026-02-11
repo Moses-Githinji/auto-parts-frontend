@@ -42,8 +42,8 @@ export function CartPage() {
   if (items.length === 0) {
     return (
       <div className="space-y-4">
-        <h1 className="text-lg font-semibold text-slate-900">Cart</h1>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">Cart</h1>
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
           <p className="mb-4">Your cart is empty.</p>
           <a
             href="/search"
@@ -64,7 +64,7 @@ export function CartPage() {
   return (
     <div className="space-y-4">
       <header className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-lg font-semibold text-slate-900">Cart</h1>
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">Cart</h1>
         <div className="flex items-center gap-3">
           <a
             href="/search"
@@ -83,7 +83,7 @@ export function CartPage() {
       </header>
 
       {clearError && (
-        <div className="rounded-sm bg-red-50 p-2 text-xs text-red-600">
+        <div className="rounded-sm bg-red-50 dark:bg-red-900/20 p-2 text-xs text-red-600">
           {clearError}
         </div>
       )}
@@ -99,25 +99,25 @@ export function CartPage() {
         return (
           <section
             key={vendorId}
-            className="space-y-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs"
+            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 text-xs"
           >
-            <h2 className="text-sm font-semibold text-slate-900">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               {vendorName}
             </h2>
-            <p className="text-[11px] text-slate-600">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Fulfilled by vendor • Pickup or courier
             </p>
-            <div className="mt-2 divide-y divide-slate-100 rounded-md border border-slate-200 bg-white">
+            <div className="mt-2 divide-y divide-slate-100 rounded-md border border-slate-200 dark:border-dark-border bg-white">
               {vendorItems.map((item) => (
                 <div
                   key={item.id}
                   className="flex flex-wrap items-center justify-between gap-3 p-2"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="text-xs font-semibold text-slate-900">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-dark-text">
                       {item.name} – {item.partNumber}
                     </p>
-                    <p className="text-[11px] text-slate-600">
+                    <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                       Qty {item.quantity}
                       {item.fitmentVehicle
                         ? ` • Fits: ${item.fitmentVehicle}`
@@ -125,7 +125,7 @@ export function CartPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 rounded border border-slate-200 bg-slate-50">
+                    <div className="flex items-center gap-1 rounded border border-slate-200 dark:border-dark-border bg-slate-50">
                       <button
                         type="button"
                         className="h-7 w-7 rounded-l text-slate-600 hover:bg-slate-200"
@@ -150,7 +150,7 @@ export function CartPage() {
                         +
                       </button>
                     </div>
-                    <p className="text-xs font-semibold text-slate-900">
+                    <p className="text-xs font-semibold text-slate-900 dark:text-dark-text">
                       {currency}{" "}
                       {(item.price * item.quantity).toLocaleString(undefined, {
                         minimumFractionDigits: 0,
@@ -160,7 +160,7 @@ export function CartPage() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                      className="text-red-600 hover:bg-red-50 dark:bg-red-900/20 hover:text-red-700"
                       onClick={() => removeItem(item.id)}
                     >
                       Remove
@@ -170,7 +170,7 @@ export function CartPage() {
               ))}
             </div>
             <div className="flex items-center justify-between pt-2">
-              <p className="text-[11px] text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 Delivery ETA: Select at checkout
               </p>
               <Badge variant="outline">
@@ -185,18 +185,18 @@ export function CartPage() {
         );
       })}
 
-      <section className="flex flex-col justify-between gap-3 rounded-md border border-slate-200 bg-slate-50 p-3 text-xs md:flex-row md:items-center">
+      <section className="flex flex-col justify-between gap-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 text-xs md:flex-row md:items-center">
         <div>
-          <p className="font-semibold text-slate-900">Order summary</p>
-          <p className="text-[11px] text-slate-600">
+          <p className="font-semibold text-slate-900 dark:text-dark-text">Order summary</p>
+          <p className="text-xs text-slate-600 dark:text-dark-textMuted">
             {vendorEntries.length} vendor{vendorEntries.length !== 1 ? "s" : ""}{" "}
             • {items.length} item{items.length !== 1 ? "s" : ""}
           </p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <p className="text-xs text-slate-600">Total (KES)</p>
-            <p className="text-base font-semibold text-slate-900">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total (KES)</p>
+            <p className="text-base font-semibold text-slate-900 dark:text-dark-text">
               {totalAmount.toLocaleString(undefined, {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 2,
@@ -215,9 +215,9 @@ export function CartPage() {
       {/* Clear Cart Confirmation Modal */}
       {showClearModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-sm rounded-sm bg-white p-4 shadow-lg">
-            <h3 className="text-sm font-semibold text-slate-900">Clear Cart</h3>
-            <p className="mt-2 text-xs text-slate-600">
+          <div className="w-full max-w-sm rounded-sm bg-white dark:bg-dark-bgLight p-4 shadow-lg">
+            <h3 className="text-sm font-semibold text-slate-900 dark:text-dark-text">Clear Cart</h3>
+            <p className="mt-2 text-xs text-slate-600 dark:text-dark-textMuted">
               Are you sure you want to remove all items from your cart? This
               action cannot be undone.
             </p>

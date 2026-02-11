@@ -7,6 +7,7 @@ import type {
   UpdateBlogPostRequest,
   BlogCategory,
   BlogCategoriesResponse,
+  BlogPostResponse,
 } from "../types/blog";
 
 interface BlogState {
@@ -28,7 +29,7 @@ interface BlogState {
   categoriesError: string | null;
 
   // Actions
-  fetchPosts: (search?: string, page?: number) => Promise<void>;
+  fetchPosts: (search?: string, page?: number, category?: string, tag?: string) => Promise<void>;
   fetchPost: (id: string) => Promise<void>;
   createPost: (data: CreateBlogPostRequest) => Promise<BlogPost>;
   updatePost: (id: string, data: UpdateBlogPostRequest) => Promise<BlogPost>;
@@ -53,7 +54,7 @@ export const useBlogStore = create<BlogState>((set) => ({
   isLoadingCategories: false,
   categoriesError: null,
 
-  fetchPosts: async (search = "", page = 1) => {
+  fetchPosts: async (search = "", page = 1, category = "", tag = "") => {
     set({ isLoadingPosts: true, postsError: null });
     try {
       const params = new URLSearchParams();
@@ -62,10 +63,18 @@ export const useBlogStore = create<BlogState>((set) => ({
       if (search) {
         params.append("search", search);
       }
+      if (category) {
+        params.append("category", category);
+      }
+      if (tag) {
+        params.append("tag", tag);
+      }
 
       const response = await apiClient.get<BlogPostListResponse>(
         `/api/blog/posts?${params.toString()}`
       );
+      
+      console.log("Blog API Response (List):", response);
 
       set({
         posts: response.posts,
@@ -89,11 +98,20 @@ export const useBlogStore = create<BlogState>((set) => ({
   fetchPost: async (id) => {
     set({ isLoadingPosts: true, postsError: null });
     try {
-      const response = await apiClient.get<BlogPost>(`/api/blog/posts/${id}`);
-      set({
-        currentPost: response,
-        isLoadingPosts: false,
-      });
+      const response = await apiClient.get<BlogPostResponse>(`/api/blog/posts/${id}`);
+      console.log("Blog API Response (Single):", response);
+      if (response && response.post) {
+        set({
+          currentPost: response.post,
+          isLoadingPosts: false,
+        });
+      } else {
+        // Fallback for flat structure or empty response
+        set({
+          currentPost: response as unknown as BlogPost, // if it was flat
+          isLoadingPosts: false,
+        });
+      }
     } catch (error) {
       set({
         postsError:

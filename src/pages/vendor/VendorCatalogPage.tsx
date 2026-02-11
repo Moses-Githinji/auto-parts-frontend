@@ -347,10 +347,10 @@ export function VendorCatalogPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">
               Product Catalog
             </h1>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
               Manage your products and inventory.
             </p>
           </div>
@@ -364,26 +364,26 @@ export function VendorCatalogPage() {
 
         {/* Stats */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Total Products</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Products</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               {products.length}
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Active Products</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Products</p>
             <p className="mt-1 text-2xl font-semibold text-green-600">
               {activeProducts}
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Low Stock</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Low Stock</p>
             <p className="mt-1 text-2xl font-semibold text-amber-600">
               {lowStockProducts}
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Out of Stock</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Out of Stock</p>
             <p className="mt-1 text-2xl font-semibold text-red-600">
               {outOfStockProducts}
             </p>
@@ -395,9 +395,9 @@ export function VendorCatalogPage() {
           <input
             type="text"
             placeholder="Search products..."
-            className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           />
-          <select className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none">
+          <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
             <option value="">All Categories</option>
             {categories.map((cat) => (
               <option key={cat} value={cat.toLowerCase()}>
@@ -405,52 +405,52 @@ export function VendorCatalogPage() {
               </option>
             ))}
           </select>
-          <select className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none">
+          <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
             <option value="">All Status</option>
             <option value="ACTIVE">Active</option>
             <option value="INACTIVE">Inactive</option>
           </select>
           <button
             onClick={fetchProducts}
-            className="rounded-sm border border-[#c8c8c8] bg-white px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg"
           >
             Refresh
           </button>
         </div>
 
         {/* Products Table */}
-        <div className="rounded-sm border border-[#c8c8c8]">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
           {loading ? (
-            <div className="p-8 text-center text-sm text-slate-600">
+            <div className="p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
               Loading products...
             </div>
           ) : products.length === 0 ? (
-            <div className="p-8 text-center text-sm text-slate-600">
+            <div className="p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
               No products found.
             </div>
           ) : (
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3]">
-                <tr className="border-b border-[#c8c8c8]">
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+                <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Product
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     SKU
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Category
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Price
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Stock
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Status
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Actions
                   </th>
                 </tr>
@@ -459,7 +459,7 @@ export function VendorCatalogPage() {
                 {products.map((product) => (
                   <tr
                     key={product.id}
-                    className="border-b border-[#e8e8e8] hover:bg-[#f8f8f8]"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
@@ -476,22 +476,22 @@ export function VendorCatalogPage() {
                           <div className="h-10 w-10 rounded-sm bg-slate-200" />
                         )}
                         <div>
-                          <p className="font-medium text-slate-900">
+                          <p className="font-medium text-slate-900 dark:text-dark-text">
                             {product.name}
                           </p>
-                          <p className="text-[10px] text-slate-500">
+                          <p className="text-[10px] text-slate-500 dark:text-dark-textMuted">
                             {product.brand}
                           </p>
                         </div>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       {product.partNumber}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       {product.category || "-"}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       KSh {product.price.toLocaleString()}
                     </td>
                     <td className="px-4 py-3">
@@ -501,7 +501,7 @@ export function VendorCatalogPage() {
                             ? "text-red-600"
                             : product.stock < 10
                               ? "text-amber-600"
-                              : "text-slate-700"
+                              : "text-slate-700 dark:text-dark-text"
                         }
                       >
                         {product.stock}
@@ -511,8 +511,8 @@ export function VendorCatalogPage() {
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${
                           product.status === "ACTIVE"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-slate-100 text-slate-700"
+                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                            : "bg-slate-100 text-slate-700 dark:text-dark-text"
                         }`}
                       >
                         {product.status === "ACTIVE" ? "Active" : "Inactive"}
@@ -522,13 +522,13 @@ export function VendorCatalogPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleEditProduct(product)}
-                          className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => handleViewProduct(product)}
-                          className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                         >
                           View
                         </button>
@@ -550,14 +550,14 @@ export function VendorCatalogPage() {
         {/* Add Product Modal */}
         {showAddModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-sm bg-white p-6 shadow-lg">
+            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                   Add New Product
                 </h2>
                 <button
                   onClick={() => setShowAddModal(false)}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   <svg
                     className="h-5 w-5"
@@ -578,7 +578,7 @@ export function VendorCatalogPage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Product Name *
                     </label>
                     <input
@@ -587,12 +587,12 @@ export function VendorCatalogPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter product name"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Part Number *
                     </label>
                     <input
@@ -601,14 +601,14 @@ export function VendorCatalogPage() {
                       value={formData.partNumber}
                       onChange={handleInputChange}
                       required
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="e.g., BP-001-CER"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Description
                   </label>
                   <textarea
@@ -616,14 +616,14 @@ export function VendorCatalogPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Describe your product..."
                   />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Price (KES) *
                     </label>
                     <input
@@ -633,11 +633,11 @@ export function VendorCatalogPage() {
                       onChange={handleInputChange}
                       required
                       min="0"
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Stock Quantity *
                     </label>
                     <input
@@ -647,18 +647,18 @@ export function VendorCatalogPage() {
                       onChange={handleInputChange}
                       required
                       min="0"
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Condition
                     </label>
                     <select
                       name="condition"
                       value={formData.condition}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       {conditions.map((c) => (
                         <option key={c} value={c}>
@@ -671,14 +671,14 @@ export function VendorCatalogPage() {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Category
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       <option value="">Select category</option>
                       {categories.map((cat) => (
@@ -689,7 +689,7 @@ export function VendorCatalogPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Brand
                     </label>
                     <input
@@ -697,7 +697,7 @@ export function VendorCatalogPage() {
                       name="brand"
                       value={formData.brand}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter brand name"
                     />
                   </div>
@@ -705,16 +705,16 @@ export function VendorCatalogPage() {
 
                 {/* Product Images */}
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Product Images
                   </label>
-                  <p className="mb-2 text-[10px] text-slate-500">
+                  <p className="mb-2 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     Upload multiple images (front, back, OEM stamp, etc.)
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-sm border border-dashed border-[#c8c8c8] bg-slate-50 hover:bg-slate-100">
+                    <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-sm border border-dashed border-[#c8c8c8] dark:border-dark-border bg-slate-50 hover:bg-slate-100">
                       <svg
-                        className="h-6 w-6 text-slate-400"
+                        className="h-6 w-6 text-slate-400 dark:text-dark-textMuted"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -726,7 +726,7 @@ export function VendorCatalogPage() {
                           d="M12 4v16m8-8H4"
                         />
                       </svg>
-                      <span className="mt-1 text-[10px] text-slate-500">
+                      <span className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                         Add Image
                       </span>
                       <input
@@ -777,7 +777,7 @@ export function VendorCatalogPage() {
                           style={{ width: `${uploadProgress}%` }}
                         />
                       </div>
-                      <p className="mt-1 text-[10px] text-slate-500">
+                      <p className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                         Uploading images... {uploadProgress}%
                       </p>
                     </div>
@@ -787,7 +787,7 @@ export function VendorCatalogPage() {
                 {/* Specifications */}
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <label className="block text-xs font-medium text-slate-700">
+                    <label className="block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Specifications
                     </label>
                     <button
@@ -811,7 +811,7 @@ export function VendorCatalogPage() {
                           )
                         }
                         placeholder="Key (e.g., Material)"
-                        className="flex-1 rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                        className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       />
                       <input
                         type="text"
@@ -824,7 +824,7 @@ export function VendorCatalogPage() {
                           )
                         }
                         placeholder="Value (e.g., Ceramic)"
-                        className="flex-1 rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                        className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       />
                       {formData.specifications.length > 1 && (
                         <button
@@ -851,7 +851,7 @@ export function VendorCatalogPage() {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                   >
                     Cancel
                   </button>
@@ -873,14 +873,14 @@ export function VendorCatalogPage() {
         {/* View Product Modal */}
         {showViewModal && selectedProduct && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-sm bg-white p-6 shadow-lg">
+            <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                   Product Details
                 </h2>
                 <button
                   onClick={() => setShowViewModal(false)}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   <svg
                     className="h-5 w-5"
@@ -903,7 +903,7 @@ export function VendorCatalogPage() {
                 {selectedProduct.images &&
                   selectedProduct.images.length > 0 && (
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-slate-500">
+                      <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                         Images
                       </label>
                       <div className="flex flex-wrap gap-2">
@@ -920,53 +920,53 @@ export function VendorCatalogPage() {
                   )}
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-500">
+                  <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                     Product Name
                   </label>
-                  <p className="text-sm text-slate-900">
+                  <p className="text-sm text-slate-900 dark:text-dark-text">
                     {selectedProduct.name}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Part Number
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedProduct.partNumber}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Brand
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedProduct.brand || "-"}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-500">
+                  <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                     Description
                   </label>
-                  <p className="text-sm text-slate-900">
+                  <p className="text-sm text-slate-900 dark:text-dark-text">
                     {selectedProduct.description || "No description provided"}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Price
                     </label>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                       KSh {selectedProduct.price.toLocaleString()}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Stock
                     </label>
                     <p
@@ -975,17 +975,17 @@ export function VendorCatalogPage() {
                           ? "text-red-600"
                           : selectedProduct.stock < 10
                             ? "text-amber-600"
-                            : "text-slate-900"
+                            : "text-slate-900 dark:text-dark-text"
                       }`}
                     >
                       {selectedProduct.stock}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Condition
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedProduct.condition.charAt(0) +
                         selectedProduct.condition.slice(1).toLowerCase()}
                     </p>
@@ -994,22 +994,22 @@ export function VendorCatalogPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Category
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedProduct.category || "-"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Status
                     </label>
                     <span
                       className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${
                         selectedProduct.status === "ACTIVE"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-slate-100 text-slate-700"
+                          ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                          : "bg-slate-100 text-slate-700 dark:text-dark-text"
                       }`}
                     >
                       {selectedProduct.status === "ACTIVE"
@@ -1023,20 +1023,20 @@ export function VendorCatalogPage() {
                 {selectedProduct.specifications &&
                   Object.keys(selectedProduct.specifications).length > 0 && (
                     <div>
-                      <label className="mb-1 block text-xs font-medium text-slate-500">
+                      <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                         Specifications
                       </label>
-                      <div className="rounded-sm border border-[#e8e8e8] p-3">
+                      <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-3">
                         {Object.entries(selectedProduct.specifications).map(
                           ([key, value]) => (
                             <div
                               key={key}
-                              className="flex justify-between border-b border-[#e8e8e8] py-1 last:border-0"
+                              className="flex justify-between border-b border-[#e8e8e8] dark:border-dark-border py-1 last:border-0"
                             >
-                              <span className="text-xs text-slate-600">
+                              <span className="text-xs text-slate-600 dark:text-dark-textMuted">
                                 {key}
                               </span>
-                              <span className="text-xs font-medium text-slate-900">
+                              <span className="text-xs font-medium text-slate-900 dark:text-dark-text">
                                 {value}
                               </span>
                             </div>
@@ -1047,7 +1047,7 @@ export function VendorCatalogPage() {
                   )}
 
                 <div className="border-t border-[#c8c8c8] pt-4">
-                  <div className="flex justify-between text-xs text-slate-500">
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-dark-textMuted">
                     <span>
                       Created:{" "}
                       {new Date(selectedProduct.createdAt).toLocaleDateString(
@@ -1092,14 +1092,14 @@ export function VendorCatalogPage() {
         {/* Edit Product Modal */}
         {showEditModal && selectedProduct && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-sm bg-white p-6 shadow-lg">
+            <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                   Edit Product
                 </h2>
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   <svg
                     className="h-5 w-5"
@@ -1120,7 +1120,7 @@ export function VendorCatalogPage() {
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Product Name *
                     </label>
                     <input
@@ -1129,12 +1129,12 @@ export function VendorCatalogPage() {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter product name"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Part Number *
                     </label>
                     <input
@@ -1143,14 +1143,14 @@ export function VendorCatalogPage() {
                       value={formData.partNumber}
                       onChange={handleInputChange}
                       required
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="e.g., BP-001-CER"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Description
                   </label>
                   <textarea
@@ -1158,14 +1158,14 @@ export function VendorCatalogPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Describe your product..."
                   />
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Price (KES) *
                     </label>
                     <input
@@ -1175,11 +1175,11 @@ export function VendorCatalogPage() {
                       onChange={handleInputChange}
                       required
                       min="0"
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Stock Quantity *
                     </label>
                     <input
@@ -1189,18 +1189,18 @@ export function VendorCatalogPage() {
                       onChange={handleInputChange}
                       required
                       min="0"
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Condition
                     </label>
                     <select
                       name="condition"
                       value={formData.condition}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       {conditions.map((c) => (
                         <option key={c} value={c}>
@@ -1213,14 +1213,14 @@ export function VendorCatalogPage() {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Category
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       <option value="">Select category</option>
                       {categories.map((cat) => (
@@ -1231,7 +1231,7 @@ export function VendorCatalogPage() {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Brand
                     </label>
                     <input
@@ -1239,7 +1239,7 @@ export function VendorCatalogPage() {
                       name="brand"
                       value={formData.brand}
                       onChange={handleInputChange}
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter brand name"
                     />
                   </div>
@@ -1247,16 +1247,16 @@ export function VendorCatalogPage() {
 
                 {/* Product Images */}
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Product Images
                   </label>
-                  <p className="mb-2 text-[10px] text-slate-500">
+                  <p className="mb-2 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     Upload additional images or remove existing ones
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-sm border border-dashed border-[#c8c8c8] bg-slate-50 hover:bg-slate-100">
+                    <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center rounded-sm border border-dashed border-[#c8c8c8] dark:border-dark-border bg-slate-50 hover:bg-slate-100">
                       <svg
-                        className="h-6 w-6 text-slate-400"
+                        className="h-6 w-6 text-slate-400 dark:text-dark-textMuted"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -1268,7 +1268,7 @@ export function VendorCatalogPage() {
                           d="M12 4v16m8-8H4"
                         />
                       </svg>
-                      <span className="mt-1 text-[10px] text-slate-500">
+                      <span className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                         Add Image
                       </span>
                       <input
@@ -1319,7 +1319,7 @@ export function VendorCatalogPage() {
                           style={{ width: `${uploadProgress}%` }}
                         />
                       </div>
-                      <p className="mt-1 text-[10px] text-slate-500">
+                      <p className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                         Uploading images... {uploadProgress}%
                       </p>
                     </div>
@@ -1329,7 +1329,7 @@ export function VendorCatalogPage() {
                 {/* Specifications */}
                 <div>
                   <div className="mb-2 flex items-center justify-between">
-                    <label className="block text-xs font-medium text-slate-700">
+                    <label className="block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Specifications
                     </label>
                     <button
@@ -1353,7 +1353,7 @@ export function VendorCatalogPage() {
                           )
                         }
                         placeholder="Key (e.g., Material)"
-                        className="flex-1 rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                        className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       />
                       <input
                         type="text"
@@ -1366,7 +1366,7 @@ export function VendorCatalogPage() {
                           )
                         }
                         placeholder="Value (e.g., Ceramic)"
-                        className="flex-1 rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#2b579a] focus:outline-none"
+                        className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       />
                       {formData.specifications.length > 1 && (
                         <button
@@ -1393,7 +1393,7 @@ export function VendorCatalogPage() {
                   <button
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                   >
                     Cancel
                   </button>
@@ -1415,7 +1415,7 @@ export function VendorCatalogPage() {
         {/* Delete Confirmation Modal */}
         {showDeleteModal && productToDelete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-sm rounded-sm bg-white p-6 shadow-lg">
+            <div className="w-full max-w-sm rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg">
               <div className="mb-4 flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100">
                   <svg
@@ -1433,16 +1433,16 @@ export function VendorCatalogPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-slate-900">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                     Delete Product
                   </h3>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     This action cannot be undone.
                   </p>
                 </div>
               </div>
 
-              <p className="mb-6 text-sm text-slate-700">
+              <p className="mb-6 text-sm text-slate-700 dark:text-dark-text">
                 Are you sure you want to delete{" "}
                 <strong>{productToDelete.name}</strong>?
               </p>
@@ -1450,7 +1450,7 @@ export function VendorCatalogPage() {
               <div className="flex justify-end gap-3">
                 <button
                   onClick={cancelDelete}
-                  className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                  className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                 >
                   Cancel
                 </button>

@@ -4,6 +4,8 @@ import { useOrderStore } from "../../stores/orderStore";
 import { OrderDetailsDrawer } from "./OrderDetailsDrawer";
 import { ProcessOrderModal } from "./ProcessOrderModal";
 import type { Order, OrderStatus } from "../../types/order";
+import { Alert } from "../../components/ui/Alert";
+import type { NotificationType } from "../../stores/notificationStore";
 
 export function VendorOrdersPage() {
   const vendorNavItems = [
@@ -28,6 +30,12 @@ export function VendorOrdersPage() {
   const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  
+  // Alert state
+  const [alert, setAlert] = useState<{
+    type: NotificationType;
+    title: string;
+  } | null>(null);
 
   useEffect(() => {
     fetchOrders();
@@ -69,17 +77,18 @@ export function VendorOrdersPage() {
   const openReportIssue = (order: Order) => {
     // TODO: Implement report issue flow
     console.log("Report issue for order:", order.id);
-    alert(
-      `Report issue feature for order ${order.orderNumber} would open here. This will alert SYSTEM_ADMIN and the customer.`
-    );
+    setAlert({
+      type: "info",
+      title: `Report issue feature for order ${order.orderNumber} would open here. This will alert SYSTEM_ADMIN and the customer.`,
+    });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-amber-100 text-amber-700";
+        return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
       case "CONFIRMED":
-        return "bg-blue-100 text-blue-700";
+        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
       case "PROCESSING":
         return "bg-purple-100 text-purple-700";
       case "SHIPPED":
@@ -87,11 +96,11 @@ export function VendorOrdersPage() {
       case "OUT_FOR_DELIVERY":
         return "bg-cyan-100 text-cyan-700";
       case "DELIVERED":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
       case "CANCELLED":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
     }
   };
 
@@ -129,8 +138,8 @@ export function VendorOrdersPage() {
         <div className="p-6">
           <div className="mb-6 flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-semibold text-slate-900">Orders</h1>
-              <p className="text-sm text-slate-600">
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Orders</h1>
+              <p className="text-sm text-slate-600 dark:text-dark-textMuted">
                 Manage and fulfill customer orders.
               </p>
             </div>
@@ -138,14 +147,14 @@ export function VendorOrdersPage() {
 
           {/* Stats */}
           <section className="mb-6 grid gap-4 md:grid-cols-4">
-            <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-              <p className="text-xs text-slate-600">Pending</p>
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Pending</p>
               <p className="mt-1 text-2xl font-semibold text-amber-600">
                 {orders.filter((o) => o.status === "PENDING").length}
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-              <p className="text-xs text-slate-600">Processing</p>
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Processing</p>
               <p className="mt-1 text-2xl font-semibold text-blue-600">
                 {
                   orders.filter(
@@ -154,14 +163,14 @@ export function VendorOrdersPage() {
                 }
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-              <p className="text-xs text-slate-600">Shipped</p>
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Shipped</p>
               <p className="mt-1 text-2xl font-semibold text-indigo-600">
                 {orders.filter((o) => o.status === "SHIPPED").length}
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-              <p className="text-xs text-slate-600">Total Revenue</p>
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Revenue</p>
               <p className="mt-1 text-2xl font-semibold text-green-600">
                 KSh{" "}
                 {orders
@@ -178,12 +187,12 @@ export function VendorOrdersPage() {
               placeholder="Search orders..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
             />
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
             >
               <option value="">All Status</option>
               <option value="PENDING">Pending</option>
@@ -196,36 +205,36 @@ export function VendorOrdersPage() {
             </select>
             <button
               onClick={() => fetchOrders()}
-              className="rounded-sm border border-[#c8c8c8] bg-white px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg"
             >
               Refresh
             </button>
           </div>
 
           {/* Orders Table */}
-          <div className="rounded-sm border border-[#c8c8c8]">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3]">
-                <tr className="border-b border-[#c8c8c8]">
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+                <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Order ID
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Customer
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Items
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Total
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Date
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Status
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Actions
                   </th>
                 </tr>
@@ -234,21 +243,21 @@ export function VendorOrdersPage() {
                 {filteredOrders.map((order) => (
                   <tr
                     key={order.id}
-                    className="border-b border-[#e8e8e8] hover:bg-[#f8f8f8]"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
                   >
-                    <td className="px-4 py-3 font-medium text-slate-900">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                       {order.orderNumber}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       {order.customerName}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       {order.items?.length || 0}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       KSh {Number(order.total || 0).toLocaleString()}
                     </td>
-                    <td className="px-4 py-3 text-slate-700">
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </td>
                     <td className="px-4 py-3">
@@ -262,7 +271,7 @@ export function VendorOrdersPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => openOrderDetails(order)}
-                          className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                         >
                           View
                         </button>
@@ -291,7 +300,7 @@ export function VendorOrdersPage() {
                   <tr>
                     <td
                       colSpan={7}
-                      className="px-4 py-8 text-center text-slate-500"
+                      className="px-4 py-8 text-center text-slate-500 dark:text-dark-textMuted"
                     >
                       No orders found
                     </td>
@@ -319,6 +328,16 @@ export function VendorOrdersPage() {
         onClose={() => setIsProcessModalOpen(false)}
         onStatusUpdate={handleProcessOrder}
       />
+
+      {/* Alert */}
+      {alert && (
+        <Alert
+          type={alert.type}
+          title={alert.title}
+          onDismiss={() => setAlert(null)}
+          className="fixed bottom-4 right-4 w-96"
+        />
+      )}
     </BackofficeLayout>
   );
 }

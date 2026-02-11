@@ -72,36 +72,44 @@ export const useCommissionStore = create<CommissionState>((set) => ({
         `/api/products/calculate-fees?price=${price}&categorySlug=${categorySlug}`
       );
 
+      // Final safety check on response data
+      if (!response || typeof response.price !== "number") {
+        throw new Error("Invalid response format from fee calculation API");
+      }
+
       set({
         feePreview: response,
         isCalculatingFees: false,
       });
     } catch (error) {
+      console.warn("Fee calculation API failed, using fallback:", error);
       // If API fails, calculate locally as fallback
       const baseCommission = price * 0.08; // Default 8% rate
       const vatAmount = baseCommission * VAT_RATE;
       const totalDeductions = baseCommission + vatAmount;
       const vendorPayout = price - totalDeductions;
 
-      set({
-        feePreview: {
-          price,
-          categorySlug,
-          categoryName: categorySlug,
+      const fallbackPreview: FeeCalculationResponse = {
+        price,
+        categorySlug,
+        categoryName: categorySlug,
+        baseCommission,
+        commissionRate: 8,
+        minFee: 50,
+        maxFee: 2000,
+        ruleType: "STANDARD",
+        appliedFee: baseCommission,
+        vatAmount,
+        totalDeductions,
+        vendorPayout,
+        breakdown: {
           baseCommission,
-          commissionRate: 8,
-          minFee: 50,
-          maxFee: 2000,
-          ruleType: "STANDARD",
-          appliedFee: baseCommission,
           vatAmount,
-          totalDeductions,
-          vendorPayout,
-          breakdown: {
-            baseCommission,
-            vatAmount,
-          },
         },
+      };
+
+      set({
+        feePreview: fallbackPreview,
         isCalculatingFees: false,
         feeError: null,
       });

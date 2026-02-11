@@ -190,6 +190,11 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
     icon: <BlogIcon />,
   },
   {
+    title: "Delivery Fleet",
+    path: "/admin/riders",
+    icon: <DeliveryIcon />,
+  },
+  {
     title: "Integrations",
     path: "/admin/integrations",
     icon: <IntegrationsIcon />,

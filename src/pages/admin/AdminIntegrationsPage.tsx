@@ -7,8 +7,8 @@ export function AdminIntegrationsPage() {
     <BackofficeLayout title="Admin Console" menuItems={ADMIN_MENU_ITEMS}>
       <div className="p-6">
         <div className="mb-6">
-          <h1 className="text-xl font-semibold text-slate-900">Integrations</h1>
-          <p className="text-sm text-slate-600">
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Integrations</h1>
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
             Configure webhooks, payment gateways, and notification services.
           </p>
         </div>

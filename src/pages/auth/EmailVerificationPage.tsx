@@ -117,7 +117,7 @@ export function EmailVerificationPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="text-center">
             <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
@@ -135,10 +135,10 @@ export function EmailVerificationPage() {
                 />
               </svg>
             </div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-dark-text">
               Email verified successfully!
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-sm text-gray-600 dark:text-dark-textMuted">
               You will be redirected to the login page shortly.
             </p>
           </div>
@@ -148,7 +148,7 @@ export function EmailVerificationPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         {/* Auto-verification loading state */}
         {token && isLoading && (
@@ -168,10 +168,10 @@ export function EmailVerificationPage() {
                 />
               </svg>
             </div>
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-dark-text">
               Verifying your email
             </h2>
-            <p className="mt-3 text-sm text-gray-600">
+            <p className="mt-3 text-sm text-gray-600 dark:text-dark-textMuted">
               Please wait while we verify your email address...
             </p>
             <div className="flex justify-center mt-6">
@@ -198,7 +198,7 @@ export function EmailVerificationPage() {
                 />
               </svg>
             </div>
-            <h2 className="mt-6 text-2xl font-bold text-gray-900">
+            <h2 className="mt-6 text-2xl font-bold text-gray-900 dark:text-dark-text">
               Verification Failed
             </h2>
             <p className="mt-3 text-sm text-red-600">{error}</p>
@@ -206,7 +206,7 @@ export function EmailVerificationPage() {
               <button
                 onClick={handleResendLink}
                 disabled={isLoading || resendCooldown > 0}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-dark-primary disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <svg
                   className="mr-2 h-4 w-4"
@@ -253,10 +253,10 @@ export function EmailVerificationPage() {
                   />
                 </svg>
               </div>
-              <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-dark-text">
                 Verify your email
               </h2>
-              <p className="mt-3 text-sm text-gray-600">
+              <p className="mt-3 text-sm text-gray-600 dark:text-dark-textMuted">
                 We've sent a verification code to
               </p>
               <p className="mt-1 text-sm font-medium text-indigo-600">
@@ -281,12 +281,12 @@ export function EmailVerificationPage() {
                 type="text"
                 required
                 maxLength={6}
-                className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-center text-lg tracking-widest font-mono"
+                className="appearance-none relative block w-full px-4 py-3 border border-gray-300 dark:border-dark-border placeholder-gray-400 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-dark-primary focus:border-indigo-500 dark:focus:border-dark-primary text-center text-lg tracking-widest font-mono"
                 placeholder="000000"
                 value={verificationCode}
                 onChange={(e) => setVerificationCode(e.target.value.replace(/[^0-9]/g, ''))}
               />
-              <p className="mt-2 text-xs text-gray-500 text-center">
+              <p className="mt-2 text-xs text-gray-500 dark:text-dark-textMuted text-center">
                 Enter the 6-digit code from your email
               </p>
             </div>
@@ -311,7 +311,7 @@ export function EmailVerificationPage() {
           </div>
 
           <div className="flex flex-col items-center space-y-3 pt-4">
-            <p className="text-sm text-gray-600">Didn't receive the code?</p>
+            <p className="text-sm text-gray-600 dark:text-dark-textMuted">Didn't receive the code?</p>
             <button
               type="button"
               onClick={handleResendCode}

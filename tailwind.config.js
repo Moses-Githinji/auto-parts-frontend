@@ -24,11 +24,22 @@ export default {
           background: "#EAEDED",
           border: "#DEBD5F",
         },
+        // Dark mode palette
+        dark: {
+          primary: "#1a3d6b", // Darker shade of #2b579a
+          bg: "#0f1419",
+          bgLight: "#1a1f2e",
+          border: "#2d3748",
+          text: "#e2e8f0",
+          textMuted: "#a0aec0",
+        },
       },
       boxShadow: {
         amazon: "0 2px 5px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.05)",
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/typography"),
+  ],
 };

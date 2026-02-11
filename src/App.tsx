@@ -27,11 +27,19 @@ import { AdminIntegrationsPage } from "./pages/admin/AdminIntegrationsPage";
 import { AdminWebhooksPage } from "./pages/admin/AdminWebhooksPage";
 import { AdminBlogsPage } from "./pages/admin/AdminBlogsPage";
 import { AdminCommissionConfigPage } from "./pages/admin/AdminCommissionConfigPage";
+import { AdminRidersPage } from "./pages/admin/AdminRidersPage";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { EmailVerificationPage } from "./pages/auth/EmailVerificationPage";
 import { ResetPasswordPage } from "./pages/auth/ResetPasswordPage";
 import { TrackingPage } from "./pages/TrackingPage";
+
+import { DeliveryDashboardPage } from "./pages/delivery/DeliveryDashboardPage";
+import { ActiveDeliveriesPage } from "./pages/delivery/ActiveDeliveriesPage";
+import { QRScannerPage } from "./pages/delivery/QRScannerPage";
+import { DeliveryHistoryPage } from "./pages/delivery/DeliveryHistoryPage";
+import { BlogListPage } from "./pages/blog/BlogListPage";
+import { BlogPostPage } from "./pages/blog/BlogPostPage";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +64,9 @@ const router = createBrowserRouter([
       { path: "checkout", element: <CheckoutPage /> },
       { path: "orders", element: <OrdersPage /> },
       { path: "account/*", element: <AccountPage /> },
+      // Blog routes
+      { path: "blog", element: <BlogListPage /> },
+      { path: "blog/:slug", element: <BlogPostPage /> },
       // Vendor routes
       { path: "vendor", element: <VendorDashboardPage /> },
       { path: "vendor/orders", element: <VendorOrdersPage /> },
@@ -65,6 +76,7 @@ const router = createBrowserRouter([
       // Admin routes
       { path: "admin", element: <AdminDashboardPage /> },
       { path: "admin/vendors", element: <AdminVendorsPage /> },
+      { path: "admin/riders", element: <AdminRidersPage /> },
       { path: "admin/disputes", element: <AdminDisputesPage /> },
       { path: "admin/reports", element: <AdminReportsPage /> },
       { path: "admin/earnings", element: <AdminEarningsPage /> },
@@ -84,6 +96,11 @@ const router = createBrowserRouter([
           { path: "webhooks", element: <AdminWebhooksPage /> },
         ],
       },
+      // Delivery routes
+      { path: "delivery", element: <DeliveryDashboardPage /> },
+      { path: "delivery/active", element: <ActiveDeliveriesPage /> },
+      { path: "delivery/history", element: <DeliveryHistoryPage /> },
+      { path: "delivery/scan", element: <QRScannerPage /> },
     ],
   },
   // Tracking route (public - no AppShell)

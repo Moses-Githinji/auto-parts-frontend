@@ -7,19 +7,19 @@ export function AdminReportsPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Reports</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Reports</h1>
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
               Analytics and performance reports.
             </p>
           </div>
           <div className="flex gap-2">
-            <select className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none">
+            <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
               <option>Last 7 days</option>
               <option>Last 30 days</option>
               <option>Last 90 days</option>
               <option>This year</option>
             </select>
-            <button className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]">
+            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg">
               Export
             </button>
           </div>
@@ -27,32 +27,32 @@ export function AdminReportsPage() {
 
         {/* Key Metrics */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Total Revenue</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Revenue</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               KSh 4.2M
             </p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 12% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Total Orders</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">1,234</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Orders</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">1,234</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 8% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Active Vendors</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">45</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Vendors</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">45</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 5 new this month
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <p className="text-xs text-slate-600">Customer Satisfaction</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900">4.5/5</p>
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Customer Satisfaction</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">4.5/5</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 0.2 vs last period
             </p>
@@ -61,15 +61,15 @@ export function AdminReportsPage() {
 
         {/* Charts Section */}
         <section className="mb-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <h3 className="mb-4 text-sm font-semibold text-slate-900">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Revenue by Category
             </h3>
             <div className="space-y-3">
               <div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-600">Brakes</span>
-                  <span className="font-medium text-slate-900">KSh 1.2M</span>
+                  <span className="text-slate-600 dark:text-dark-textMuted">Brakes</span>
+                  <span className="font-medium text-slate-900 dark:text-dark-text">KSh 1.2M</span>
                 </div>
                 <div className="mt-1 h-2 rounded-full bg-slate-100">
                   <div
@@ -80,8 +80,8 @@ export function AdminReportsPage() {
               </div>
               <div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-600">Engine Parts</span>
-                  <span className="font-medium text-slate-900">KSh 980K</span>
+                  <span className="text-slate-600 dark:text-dark-textMuted">Engine Parts</span>
+                  <span className="font-medium text-slate-900 dark:text-dark-text">KSh 980K</span>
                 </div>
                 <div className="mt-1 h-2 rounded-full bg-slate-100">
                   <div
@@ -92,8 +92,8 @@ export function AdminReportsPage() {
               </div>
               <div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-600">Suspension</span>
-                  <span className="font-medium text-slate-900">KSh 750K</span>
+                  <span className="text-slate-600 dark:text-dark-textMuted">Suspension</span>
+                  <span className="font-medium text-slate-900 dark:text-dark-text">KSh 750K</span>
                 </div>
                 <div className="mt-1 h-2 rounded-full bg-slate-100">
                   <div
@@ -104,8 +104,8 @@ export function AdminReportsPage() {
               </div>
               <div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-600">Electrical</span>
-                  <span className="font-medium text-slate-900">KSh 450K</span>
+                  <span className="text-slate-600 dark:text-dark-textMuted">Electrical</span>
+                  <span className="font-medium text-slate-900 dark:text-dark-text">KSh 450K</span>
                 </div>
                 <div className="mt-1 h-2 rounded-full bg-slate-100">
                   <div
@@ -117,8 +117,8 @@ export function AdminReportsPage() {
             </div>
           </div>
 
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-            <h3 className="mb-4 text-sm font-semibold text-slate-900">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Orders by Status
             </h3>
             <div className="flex items-center justify-center">
@@ -127,25 +127,25 @@ export function AdminReportsPage() {
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-lg font-semibold text-green-700">
                     65%
                   </div>
-                  <p className="mt-2 text-slate-600">Delivered</p>
+                  <p className="mt-2 text-slate-600 dark:text-dark-textMuted">Delivered</p>
                 </div>
                 <div className="text-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-lg font-semibold text-blue-700">
                     20%
                   </div>
-                  <p className="mt-2 text-slate-600">Shipped</p>
+                  <p className="mt-2 text-slate-600 dark:text-dark-textMuted">Shipped</p>
                 </div>
                 <div className="text-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-lg font-semibold text-amber-700">
                     10%
                   </div>
-                  <p className="mt-2 text-slate-600">Processing</p>
+                  <p className="mt-2 text-slate-600 dark:text-dark-textMuted">Processing</p>
                 </div>
                 <div className="text-center">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-lg font-semibold text-red-700">
                     5%
                   </div>
-                  <p className="mt-2 text-slate-600">Cancelled</p>
+                  <p className="mt-2 text-slate-600 dark:text-dark-textMuted">Cancelled</p>
                 </div>
               </div>
             </div>
@@ -153,26 +153,26 @@ export function AdminReportsPage() {
         </section>
 
         {/* Top Vendors */}
-        <div className="rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm">
-          <h3 className="mb-4 text-sm font-semibold text-slate-900">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
             Top Performing Vendors
           </h3>
           <table className="w-full text-xs">
-            <thead className="bg-[#f3f3f3]">
-              <tr className="border-b border-[#c8c8c8]">
-                <th className="px-4 py-2 text-left font-medium text-slate-700">
+            <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
+                <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Rank
                 </th>
-                <th className="px-4 py-2 text-left font-medium text-slate-700">
+                <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Vendor
                 </th>
-                <th className="px-4 py-2 text-left font-medium text-slate-700">
+                <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Orders
                 </th>
-                <th className="px-4 py-2 text-left font-medium text-slate-700">
+                <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Revenue
                 </th>
-                <th className="px-4 py-2 text-left font-medium text-slate-700">
+                <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Rating
                 </th>
               </tr>
@@ -182,33 +182,33 @@ export function AdminReportsPage() {
                 <td className="px-4 py-3">
                   <span className="font-semibold text-amber-500">1</span>
                 </td>
-                <td className="px-4 py-3 font-medium text-slate-900">
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                   MotorParts KE
                 </td>
-                <td className="px-4 py-3 text-slate-700">456</td>
-                <td className="px-4 py-3 text-slate-700">KSh 1.2M</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">456</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 1.2M</td>
                 <td className="px-4 py-3 text-green-600">4.8 ★</td>
               </tr>
               <tr className="border-b border-[#e8e8e8]">
                 <td className="px-4 py-3">
-                  <span className="font-semibold text-slate-400">2</span>
+                  <span className="font-semibold text-slate-400 dark:text-dark-textMuted">2</span>
                 </td>
-                <td className="px-4 py-3 font-medium text-slate-900">
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                   AutoCare Plus
                 </td>
-                <td className="px-4 py-3 text-slate-700">312</td>
-                <td className="px-4 py-3 text-slate-700">KSh 890K</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">312</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 890K</td>
                 <td className="px-4 py-3 text-green-600">4.6 ★</td>
               </tr>
               <tr>
                 <td className="px-4 py-3">
                   <span className="font-semibold text-amber-700">3</span>
                 </td>
-                <td className="px-4 py-3 font-medium text-slate-900">
+                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                   SparePro Ltd
                 </td>
-                <td className="px-4 py-3 text-slate-700">234</td>
-                <td className="px-4 py-3 text-slate-700">KSh 650K</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">234</td>
+                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 650K</td>
                 <td className="px-4 py-3 text-green-600">4.4 ★</td>
               </tr>
             </tbody>

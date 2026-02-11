@@ -11,20 +11,20 @@ import type {
 } from "../../types/order";
 
 const statusColors: Record<OrderStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  CONFIRMED: "bg-blue-100 text-blue-700",
+  PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  CONFIRMED: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
   PROCESSING: "bg-indigo-100 text-indigo-700",
   SHIPPED: "bg-purple-100 text-purple-700",
   OUT_FOR_DELIVERY: "bg-cyan-100 text-cyan-700",
-  DELIVERED: "bg-green-100 text-green-700",
-  CANCELLED: "bg-red-100 text-red-700",
+  DELIVERED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  CANCELLED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
 };
 
 const paymentStatusColors: Record<PaymentStatus, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-slate-100 text-slate-700",
+  PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  PAID: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  FAILED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  REFUNDED: "bg-slate-100 text-slate-700 dark:text-dark-text",
 };
 
 export function AccountOrders() {
@@ -70,8 +70,8 @@ export function AccountOrders() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">My Orders</h1>
-            <p className="text-xs text-slate-600">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Track and manage your orders from all vendors
             </p>
           </div>
@@ -88,13 +88,13 @@ export function AccountOrders() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">My Orders</h1>
-            <p className="text-xs text-slate-600">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Track and manage your orders from all vendors
             </p>
           </div>
         </div>
-        <div className="rounded-sm border border-red-200 bg-red-50 p-4">
+        <div className="rounded-sm border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
           <p className="text-sm text-red-700">{error}</p>
           <Button
             variant="outline"
@@ -113,8 +113,8 @@ export function AccountOrders() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-sm font-semibold text-slate-900">My Orders</h1>
-          <p className="text-xs text-slate-600">
+          <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
+          <p className="text-xs text-slate-600 dark:text-dark-textMuted">
             Track and manage your orders from all vendors
           </p>
         </div>
@@ -137,8 +137,8 @@ export function AccountOrders() {
       {/* Orders List */}
       <div className="space-y-3">
         {filteredOrders.length === 0 ? (
-          <div className="rounded-sm border border-[#c8c8c8] bg-white p-6 text-center">
-            <p className="text-sm text-slate-600">No orders found</p>
+          <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-6 text-center">
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">No orders found</p>
             <Button
               className="mt-3 bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
               onClick={() => navigate("/search")}
@@ -150,13 +150,13 @@ export function AccountOrders() {
           filteredOrders.map((order) => (
             <div
               key={order.id}
-              className="cursor-pointer rounded-sm border border-[#c8c8c8] bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
+              className="cursor-pointer rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-4 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => setSelectedOrder(order)}
             >
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-slate-900 dark:text-dark-text">
                       {order.orderNumber}
                     </span>
                     <Badge className={statusColors[order.status]}>
@@ -166,25 +166,25 @@ export function AccountOrders() {
                       {order.paymentStatus}
                     </Badge>
                   </div>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {new Date(order.createdAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
                     })}
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {order.items.length} item{order.items.length > 1 ? "s" : ""}{" "}
                     •{" "}
-                    <span className="font-medium text-slate-900">
+                    <span className="font-medium text-slate-900 dark:text-dark-text">
                       KSh {order.total.toLocaleString()}
                     </span>
                   </p>
                 </div>
                 {order.trackingNumber && (
                   <div className="text-right">
-                    <p className="text-xs text-slate-500">Tracking</p>
-                    <p className="text-xs font-medium text-slate-700">
+                    <p className="text-xs text-slate-500 dark:text-dark-textMuted">Tracking</p>
+                    <p className="text-xs font-medium text-slate-700 dark:text-dark-text">
                       {order.trackingNumber}
                     </p>
                   </div>
@@ -196,13 +196,13 @@ export function AccountOrders() {
                 {order.items.slice(0, 3).map((item) => (
                   <div
                     key={item.id}
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-[10px] text-slate-500"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-[10px] text-slate-500 dark:text-dark-textMuted"
                   >
                     {item.product?.name.substring(0, 15)}...
                   </div>
                 ))}
                 {order.items.length > 3 && (
-                  <span className="text-xs text-slate-500">
+                  <span className="text-xs text-slate-500 dark:text-dark-textMuted">
                     +{order.items.length - 3} more
                   </span>
                 )}
@@ -215,13 +215,13 @@ export function AccountOrders() {
       {/* Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-2xl rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                   {selectedOrder.orderNumber}
                 </h2>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                   Placed on{" "}
                   {new Date(selectedOrder.createdAt).toLocaleDateString(
                     "en-US",
@@ -235,7 +235,7 @@ export function AccountOrders() {
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="text-slate-500 hover:text-slate-700"
+                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:text-dark-text"
               >
                 ✕
               </button>
@@ -255,29 +255,29 @@ export function AccountOrders() {
 
             {/* Order Items */}
             <div className="mb-4">
-              <h3 className="mb-2 text-sm font-medium text-slate-900">Items</h3>
+              <h3 className="mb-2 text-sm font-medium text-slate-900 dark:text-dark-text">Items</h3>
               <div className="space-y-2">
                 {selectedOrder.items.map((item) => (
                   <div
                     key={item.id}
                     className="flex items-start gap-3 rounded-sm border border-[#e8e8e8] p-3"
                   >
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-xs text-slate-500">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-xs text-slate-500 dark:text-dark-textMuted">
                       IMG
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-slate-900">
+                      <p className="font-medium text-slate-900 dark:text-dark-text">
                         {item.product?.name}
                       </p>
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                         {item.product?.vendor.companyName}
                       </p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                         Qty: {item.quantity} • KSh{" "}
                         {Number(item.price).toLocaleString()}
                       </p>
                       {item.fitmentVehicle && (
-                        <p className="text-[10px] text-slate-500">
+                        <p className="text-[10px] text-slate-500 dark:text-dark-textMuted">
                           Fits: {item.fitmentVehicle}
                         </p>
                       )}
@@ -289,17 +289,17 @@ export function AccountOrders() {
 
             {/* Shipping Address */}
             <div className="mb-4">
-              <h3 className="mb-2 text-sm font-medium text-slate-900">
+              <h3 className="mb-2 text-sm font-medium text-slate-900 dark:text-dark-text">
                 Shipping Address
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {selectedOrder.shippingAddress.firstName}{" "}
                 {selectedOrder.shippingAddress.lastName}
               </p>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {selectedOrder.shippingAddress.street}
               </p>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {selectedOrder.shippingAddress.city},{" "}
                 {selectedOrder.shippingAddress.state}{" "}
                 {selectedOrder.shippingAddress.zipCode}
@@ -307,28 +307,28 @@ export function AccountOrders() {
             </div>
 
             {/* Order Summary */}
-            <div className="rounded-sm bg-slate-50 p-3">
+            <div className="rounded-sm bg-slate-50 dark:bg-dark-bg p-3">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-600">Subtotal</span>
-                <span className="text-slate-900">
+                <span className="text-slate-600 dark:text-dark-textMuted">Subtotal</span>
+                <span className="text-slate-900 dark:text-dark-text">
                   KSh {selectedOrder.subtotal.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-slate-600">Shipping</span>
-                <span className="text-slate-900">
+                <span className="text-slate-600 dark:text-dark-textMuted">Shipping</span>
+                <span className="text-slate-900 dark:text-dark-text">
                   KSh {selectedOrder.shipping.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className="text-slate-600">Tax</span>
-                <span className="text-slate-900">
+                <span className="text-slate-600 dark:text-dark-textMuted">Tax</span>
+                <span className="text-slate-900 dark:text-dark-text">
                   KSh {selectedOrder.tax.toLocaleString()}
                 </span>
               </div>
-              <div className="mt-2 flex justify-between border-t border-slate-200 pt-2 text-sm font-semibold">
-                <span className="text-slate-900">Total</span>
-                <span className="text-slate-900">
+              <div className="mt-2 flex justify-between border-t border-slate-200 dark:border-dark-border pt-2 text-sm font-semibold">
+                <span className="text-slate-900 dark:text-dark-text">Total</span>
+                <span className="text-slate-900 dark:text-dark-text">
                   KSh {selectedOrder.total.toLocaleString()}
                 </span>
               </div>

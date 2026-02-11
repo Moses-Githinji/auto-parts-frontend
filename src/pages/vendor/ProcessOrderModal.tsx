@@ -226,7 +226,7 @@ export function ProcessOrderModal({
   const renderConfirmStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
           Step 1: Confirm Availability
         </h3>
         <p className="text-sm text-slate-500 mt-1">
@@ -252,10 +252,10 @@ export function ProcessOrderModal({
               className="w-5 h-5 text-[#2b579a] border-gray-300 rounded focus:ring-[#2b579a]"
             />
             <div className="flex-1">
-              <p className="font-medium text-slate-900">
+              <p className="font-medium text-slate-900 dark:text-dark-text">
                 {item.product?.name || "Unknown Product"}
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-dark-textMuted">
                 SKU: {item.product?.partNumber || "N/A"} • Qty: {item.quantity}
               </p>
               {item.product?.specifications?.Volume && (
@@ -264,7 +264,7 @@ export function ProcessOrderModal({
                 </p>
               )}
             </div>
-            <p className="font-medium text-slate-900">
+            <p className="font-medium text-slate-900 dark:text-dark-text">
               KSh {Number(item.price || 0).toLocaleString()}
             </p>
           </label>
@@ -299,7 +299,7 @@ export function ProcessOrderModal({
   const renderDocumentsStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
           Step 2: Prepare Documents
         </h3>
         <p className="text-sm text-slate-500 mt-1">
@@ -332,14 +332,14 @@ export function ProcessOrderModal({
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-slate-900">Invoice</p>
-                  <p className="text-sm text-slate-500">
+                  <p className="font-medium text-slate-900 dark:text-dark-text">Invoice</p>
+                  <p className="text-sm text-slate-500 dark:text-dark-textMuted">
                     {loading ? "Preparing..." : "Download customer invoice"}
                   </p>
                 </div>
               </div>
               <svg
-                className="w-5 h-5 text-slate-400"
+                className="w-5 h-5 text-slate-400 dark:text-dark-textMuted"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -379,14 +379,14 @@ export function ProcessOrderModal({
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-slate-900">Packing Slip</p>
-                  <p className="text-sm text-slate-500">
+                  <p className="font-medium text-slate-900 dark:text-dark-text">Packing Slip</p>
+                  <p className="text-sm text-slate-500 dark:text-dark-textMuted">
                     {loading ? "Preparing..." : "For warehouse picking"}
                   </p>
                 </div>
               </div>
               <svg
-                className="w-5 h-5 text-slate-400"
+                className="w-5 h-5 text-slate-400 dark:text-dark-textMuted"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -438,8 +438,8 @@ export function ProcessOrderModal({
                   </svg>
                 </div>
                 <div className="text-left">
-                  <p className="font-medium text-slate-900">Shipping Label</p>
-                  <p className="text-sm text-slate-500">
+                  <p className="font-medium text-slate-900 dark:text-dark-text">Shipping Label</p>
+                  <p className="text-sm text-slate-500 dark:text-dark-textMuted">
                     {loading
                       ? "Preparing..."
                       : generatedTracking
@@ -449,7 +449,7 @@ export function ProcessOrderModal({
                 </div>
               </div>
               <svg
-                className="w-5 h-5 text-slate-400"
+                className="w-5 h-5 text-slate-400 dark:text-dark-textMuted"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -492,7 +492,7 @@ export function ProcessOrderModal({
                 <p className="font-medium text-[#2b579a]">
                   Generate QR Tracking
                 </p>
-                <p className="text-sm text-slate-500">
+                <p className="text-sm text-slate-500 dark:text-dark-textMuted">
                   {isGeneratingTracking
                     ? "Generating..."
                     : "Create tracking with QR code"}
@@ -531,7 +531,7 @@ export function ProcessOrderModal({
   const renderShippingStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
           Step 3: Shipping Details
         </h3>
         <p className="text-sm text-slate-500 mt-1">
@@ -547,7 +547,7 @@ export function ProcessOrderModal({
           <select
             value={selectedCourier}
             onChange={(e) => setSelectedCourier(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:border-[#2b579a] focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           >
             <option value="">Select courier...</option>
             {couriers.map((courier) => (
@@ -567,7 +567,7 @@ export function ProcessOrderModal({
             value={trackingNumber}
             onChange={(e) => setTrackingNumber(e.target.value)}
             placeholder="Enter tracking number"
-            className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:border-[#2b579a] focus:outline-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-sm focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           />
         </div>
 
@@ -575,13 +575,13 @@ export function ProcessOrderModal({
           <p className="text-sm font-medium text-slate-900 mb-2">
             Shipping Address
           </p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
             {order.shippingAddress.firstName} {order.shippingAddress.lastName}
           </p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
             {order.shippingAddress.street}
           </p>
-          <p className="text-sm text-slate-600">
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
             {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
             {order.shippingAddress.zipCode}
           </p>
@@ -616,7 +616,7 @@ export function ProcessOrderModal({
   const renderHandoverStep = () => (
     <div className="space-y-6">
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
           Step 4: Proof of Handover
         </h3>
         <p className="text-sm text-slate-500 mt-1">
@@ -646,10 +646,10 @@ export function ProcessOrderModal({
               d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
             />
           </svg>
-          <p className="mt-2 text-sm font-medium text-slate-900">
+          <p className="mt-2 text-sm font-medium text-slate-900 dark:text-dark-text">
             {dispatchNote ? dispatchNote.name : "Upload dispatch note or photo"}
           </p>
-          <p className="mt-1 text-xs text-slate-500">Supports images and PDF</p>
+          <p className="mt-1 text-xs text-slate-500 dark:text-dark-textMuted">Supports images and PDF</p>
         </label>
       </div>
 
@@ -691,7 +691,7 @@ export function ProcessOrderModal({
         >
           {/* Header */}
           <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
               Process Order #{order.orderNumber}
             </h2>
           </div>

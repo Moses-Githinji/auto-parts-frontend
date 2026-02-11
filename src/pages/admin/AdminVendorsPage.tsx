@@ -225,15 +225,15 @@ export function AdminVendorsPage() {
   const getStatusBadgeClass = (status: VendorStatus) => {
     switch (status) {
       case "ACTIVE":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
       case "INACTIVE":
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
       case "SUSPENDED":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
       case "PENDING":
-        return "bg-amber-100 text-amber-700";
+        return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
     }
   };
 
@@ -267,8 +267,8 @@ export function AdminVendorsPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Vendors</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Vendors</h1>
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
               Manage vendor accounts and KYC verification.
             </p>
           </div>
@@ -282,14 +282,14 @@ export function AdminVendorsPage() {
 
         {/* Success Message */}
         {successMessage && (
-          <div className="mb-4 rounded-sm bg-green-50 p-3 text-sm text-green-700">
+          <div className="mb-4 rounded-sm bg-green-50 dark:bg-green-900/20 p-3 text-sm text-green-700 dark:text-green-400">
             {successMessage}
           </div>
         )}
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 rounded-sm bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-4 rounded-sm bg-red-50 dark:bg-red-900/20 p-3 text-sm text-red-700 dark:text-red-400">
             {error}
           </div>
         )}
@@ -301,12 +301,12 @@ export function AdminVendorsPage() {
             placeholder="Search vendors..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           >
             <option value="">All Status</option>
             <option value="PENDING">Pending KYC</option>
@@ -316,14 +316,14 @@ export function AdminVendorsPage() {
           </select>
           <button
             onClick={fetchVendors}
-            className="rounded-sm border border-[#c8c8c8] bg-white px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg"
           >
             Refresh
           </button>
         </div>
 
         {loading ? (
-          <div className="py-8 text-center text-sm text-slate-500">
+          <div className="py-8 text-center text-sm text-slate-500 dark:text-dark-textMuted">
             Loading vendors...
           </div>
         ) : error && vendors.length === 0 ? (
@@ -337,32 +337,32 @@ export function AdminVendorsPage() {
             </button>
           </div>
         ) : filteredVendors.length === 0 ? (
-          <div className="py-8 text-center text-sm text-slate-500">
+          <div className="py-8 text-center text-sm text-slate-500 dark:text-dark-textMuted">
             No vendors found.
           </div>
         ) : (
           <>
             {/* Vendors Table */}
-            <div className="rounded-sm border border-[#c8c8c8]">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
               <table className="w-full text-xs">
-                <thead className="bg-[#f3f3f3]">
-                  <tr className="border-b border-[#c8c8c8]">
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+                  <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Vendor
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Contact
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Status
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Rating
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Joined
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-700">
+                    <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Actions
                     </th>
                   </tr>
@@ -371,26 +371,26 @@ export function AdminVendorsPage() {
                   {filteredVendors.map((vendor) => (
                     <tr
                       key={vendor.id}
-                      className="border-b border-[#e8e8e8] hover:bg-[#f8f8f8]"
+                      className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-sm font-semibold text-slate-700">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bgLight text-sm font-semibold text-slate-700 dark:text-dark-text">
                             {vendor.companyName.charAt(0)}
                           </div>
                           <div>
-                            <p className="font-medium text-slate-900">
+                            <p className="font-medium text-slate-900 dark:text-dark-text">
                               {vendor.companyName}
                             </p>
-                            <p className="text-[10px] text-slate-500">
+                            <p className="text-[10px] text-slate-500 dark:text-dark-textMuted">
                               ID: {vendor.id}
                             </p>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        <p className="text-slate-700">{vendor.email}</p>
-                        <p className="text-[10px] text-slate-500">
+                        <p className="text-slate-700 dark:text-dark-text">{vendor.email}</p>
+                        <p className="text-[10px] text-slate-500 dark:text-dark-textMuted">
                           {vendor.phone || "No phone"}
                         </p>
                       </td>
@@ -403,17 +403,17 @@ export function AdminVendorsPage() {
                           {getStatusLabel(vendor.status)}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-slate-700">
+                      <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                         {typeof vendor.rating === "number" &&
                         vendor.rating > 0 ? (
                           <span>
                             {vendor.rating.toFixed(1)} ({vendor.totalReviews})
                           </span>
                         ) : (
-                          <span className="text-slate-400">No ratings</span>
+                          <span className="text-slate-400 dark:text-dark-textMuted">No ratings</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-slate-700">
+                      <td className="px-4 py-3 text-slate-700 dark:text-dark-text">
                         {new Date(vendor.createdAt).toLocaleDateString(
                           "en-US",
                           {
@@ -428,21 +428,21 @@ export function AdminVendorsPage() {
                           {vendor.status === "PENDING" ? (
                             <button
                               onClick={() => handleReviewVendor(vendor.id)}
-                              className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                             >
                               Review
                             </button>
                           ) : (
                             <button
                               onClick={() => handleViewVendor(vendor.id)}
-                              className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                             >
                               View
                             </button>
                           )}
                           <button
                             onClick={() => handleEditVendor(vendor.id)}
-                            className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3]"
+                            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
                           >
                             Edit
                           </button>
@@ -456,14 +456,14 @@ export function AdminVendorsPage() {
 
             {/* Pagination */}
             <div className="mt-4 flex items-center justify-between">
-              <span className="text-xs text-slate-500">
+              <span className="text-xs text-slate-500 dark:text-dark-textMuted">
                 Showing 1-{filteredVendors.length} of {vendors.length} vendors
               </span>
               <div className="flex gap-1">
-                <button className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-xs hover:bg-[#f3f3f3]">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
                   Previous
                 </button>
-                <button className="rounded-sm border border-[#c8c8c8] px-2 py-0.5 text-xs hover:bg-[#f3f3f3]">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
                   Next
                 </button>
               </div>
@@ -474,21 +474,21 @@ export function AdminVendorsPage() {
         {/* Add Vendor Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-slate-900">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Add New Vendor
                 </h2>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   ✕
                 </button>
               </div>
               <form onSubmit={handleSubmitVendor} className="space-y-4">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -501,12 +501,12 @@ export function AdminVendorsPage() {
                       })
                     }
                     required
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter company name"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Contact Name
                   </label>
                   <input
@@ -518,12 +518,12 @@ export function AdminVendorsPage() {
                         contactName: e.target.value,
                       })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter contact person name"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -533,12 +533,12 @@ export function AdminVendorsPage() {
                       setNewVendor({ ...newVendor, email: e.target.value })
                     }
                     required
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter email address"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Phone
                   </label>
                   <input
@@ -547,12 +547,12 @@ export function AdminVendorsPage() {
                     onChange={(e) =>
                       setNewVendor({ ...newVendor, phone: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter phone number"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Address
                   </label>
                   <input
@@ -561,13 +561,13 @@ export function AdminVendorsPage() {
                     onChange={(e) =>
                       setNewVendor({ ...newVendor, address: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter street address"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       City
                     </label>
                     <input
@@ -576,12 +576,12 @@ export function AdminVendorsPage() {
                       onChange={(e) =>
                         setNewVendor({ ...newVendor, city: e.target.value })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter city"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       State/County
                     </label>
                     <input
@@ -590,14 +590,14 @@ export function AdminVendorsPage() {
                       onChange={(e) =>
                         setNewVendor({ ...newVendor, state: e.target.value })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter state"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Zip Code
                     </label>
                     <input
@@ -606,12 +606,12 @@ export function AdminVendorsPage() {
                       onChange={(e) =>
                         setNewVendor({ ...newVendor, zipCode: e.target.value })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter zip code"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Status
                     </label>
                     <select
@@ -622,7 +622,7 @@ export function AdminVendorsPage() {
                           status: e.target.value as VendorStatus,
                         })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       <option value="PENDING">Pending</option>
                       <option value="ACTIVE">Active</option>
@@ -632,7 +632,7 @@ export function AdminVendorsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Description
                   </label>
                   <textarea
@@ -644,7 +644,7 @@ export function AdminVendorsPage() {
                       })
                     }
                     rows={2}
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter vendor description"
                   />
                 </div>
@@ -663,7 +663,7 @@ export function AdminVendorsPage() {
                   />
                   <label
                     htmlFor="sendCredentials"
-                    className="text-xs text-slate-700"
+                    className="text-xs text-slate-700 dark:text-dark-text"
                   >
                     Send credentials email to vendor
                   </label>
@@ -672,7 +672,7 @@ export function AdminVendorsPage() {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                     disabled={submitting}
                   >
                     Cancel
@@ -693,9 +693,9 @@ export function AdminVendorsPage() {
         {/* View Vendor Modal */}
         {viewModalOpen && selectedVendor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-slate-900">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Vendor Details
                 </h2>
                 <button
@@ -703,7 +703,7 @@ export function AdminVendorsPage() {
                     setViewModalOpen(false);
                     setSelectedVendor(null);
                   }}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   ✕
                 </button>
@@ -714,10 +714,10 @@ export function AdminVendorsPage() {
                     {selectedVendor.companyName.charAt(0)}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-900">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                       {selectedVendor.companyName}
                     </h3>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                       ID: {selectedVendor.id}
                     </p>
                     <span
@@ -732,34 +732,34 @@ export function AdminVendorsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Email
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.email}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Phone
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.phone || "Not provided"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Contact Name
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.contactName || "Not provided"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Rating
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {typeof selectedVendor.rating === "number" &&
                       selectedVendor.rating > 0
                         ? `${selectedVendor.rating.toFixed(1)} (${selectedVendor.totalReviews} reviews)`
@@ -767,50 +767,50 @@ export function AdminVendorsPage() {
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       City
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.city || "Not provided"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       State/County
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.state || "Not provided"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Address
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.address || "Not provided"}
                     </p>
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-500">
+                    <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                       Zip Code
                     </label>
-                    <p className="text-sm text-slate-900">
+                    <p className="text-sm text-slate-900 dark:text-dark-text">
                       {selectedVendor.zipCode || "Not provided"}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-500">
+                  <label className="mb-1 block text-xs font-medium text-slate-500 dark:text-dark-textMuted">
                     Description
                   </label>
-                  <p className="text-sm text-slate-900">
+                  <p className="text-sm text-slate-900 dark:text-dark-text">
                     {selectedVendor.description || "No description provided"}
                   </p>
                 </div>
 
                 <div className="border-t border-[#c8c8c8] pt-4">
-                  <div className="flex justify-between text-xs text-slate-500">
+                  <div className="flex justify-between text-xs text-slate-500 dark:text-dark-textMuted">
                     <span>
                       Created:{" "}
                       {new Date(selectedVendor.createdAt).toLocaleDateString(
@@ -842,7 +842,7 @@ export function AdminVendorsPage() {
                       setViewModalOpen(false);
                       setSelectedVendor(null);
                     }}
-                    className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                   >
                     Close
                   </button>
@@ -864,9 +864,9 @@ export function AdminVendorsPage() {
         {/* Edit Vendor Modal */}
         {editModalOpen && selectedVendor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-semibold text-slate-900">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Edit Vendor
                 </h2>
                 <button
@@ -874,14 +874,14 @@ export function AdminVendorsPage() {
                     setEditModalOpen(false);
                     setSelectedVendor(null);
                   }}
-                  className="text-slate-500 hover:text-slate-700"
+                  className="text-slate-500 hover:text-slate-700 dark:text-dark-text"
                 >
                   ✕
                 </button>
               </div>
               <form onSubmit={handleEditSubmit} className="space-y-4">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -894,12 +894,12 @@ export function AdminVendorsPage() {
                       })
                     }
                     required
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter company name"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Contact Name
                   </label>
                   <input
@@ -911,27 +911,27 @@ export function AdminVendorsPage() {
                         contactName: e.target.value,
                       })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter contact person name"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
                     value={editVendor.email}
                     disabled
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs bg-gray-100 text-slate-500 cursor-not-allowed"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs bg-gray-100 text-slate-500 cursor-not-allowed"
                     placeholder="Enter email address"
                   />
-                  <p className="mt-1 text-[10px] text-slate-500">
+                  <p className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     Email cannot be changed
                   </p>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Phone
                   </label>
                   <input
@@ -940,12 +940,12 @@ export function AdminVendorsPage() {
                     onChange={(e) =>
                       setEditVendor({ ...editVendor, phone: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter phone number"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Address
                   </label>
                   <input
@@ -954,13 +954,13 @@ export function AdminVendorsPage() {
                     onChange={(e) =>
                       setEditVendor({ ...editVendor, address: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter street address"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       City
                     </label>
                     <input
@@ -969,12 +969,12 @@ export function AdminVendorsPage() {
                       onChange={(e) =>
                         setEditVendor({ ...editVendor, city: e.target.value })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter city"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       State/County
                     </label>
                     <input
@@ -983,14 +983,14 @@ export function AdminVendorsPage() {
                       onChange={(e) =>
                         setEditVendor({ ...editVendor, state: e.target.value })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter state"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Zip Code
                     </label>
                     <input
@@ -1002,12 +1002,12 @@ export function AdminVendorsPage() {
                           zipCode: e.target.value,
                         })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                       placeholder="Enter zip code"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-xs font-medium text-slate-700">
+                    <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                       Status
                     </label>
                     <select
@@ -1018,7 +1018,7 @@ export function AdminVendorsPage() {
                           status: e.target.value as VendorStatus,
                         })
                       }
-                      className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                      className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     >
                       <option value="PENDING">Pending</option>
                       <option value="ACTIVE">Active</option>
@@ -1028,7 +1028,7 @@ export function AdminVendorsPage() {
                   </div>
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Description
                   </label>
                   <textarea
@@ -1040,7 +1040,7 @@ export function AdminVendorsPage() {
                       })
                     }
                     rows={2}
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#2b579a] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="Enter vendor description"
                   />
                 </div>
@@ -1051,7 +1051,7 @@ export function AdminVendorsPage() {
                       setEditModalOpen(false);
                       setSelectedVendor(null);
                     }}
-                    className="rounded-sm border border-[#c8c8c8] bg-white px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
                     disabled={submitting}
                   >
                     Cancel

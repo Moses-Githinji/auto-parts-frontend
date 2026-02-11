@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "../lib/cn";
 import { useAuthStore } from "../stores/authStore";
+import { ThemeSwitcher } from "../components/ThemeSwitcher";
 
 export interface MenuItem {
   title: string;
@@ -70,8 +71,8 @@ const SidebarItem = ({
           className={cn(
             "flex w-full items-center justify-between rounded-sm px-3 py-1.5 text-xs transition-colors",
             hasActiveChild || isActive
-              ? "bg-[#2b579a] text-white"
-              : "text-slate-700 hover:bg-[#e8e8e8]"
+              ? "bg-[#2b579a] dark:bg-dark-primary text-white"
+              : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
           )}
         >
           <div className="flex items-center gap-2">
@@ -92,8 +93,8 @@ const SidebarItem = ({
             cn(
               "flex items-center gap-2 rounded-sm px-3 py-1.5 text-xs transition-colors",
               isActive
-                ? "bg-[#2b579a] text-white"
-                : "text-slate-700 hover:bg-[#e8e8e8]"
+                ? "bg-[#2b579a] dark:bg-dark-primary text-white"
+                : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
             )
           }
           end={item.path === "/"}
@@ -111,7 +112,7 @@ const SidebarItem = ({
       {hasChildren && isOpen && (
         <div
           className={cn(
-            "mt-0.5 flex flex-col gap-0.5 border-l border-[#c8c8c8]",
+            "mt-0.5 flex flex-col gap-0.5 border-l border-[#c8c8c8] dark:border-dark-border",
             depth > 0 ? "ml-3" : "ml-3"
           )}
         >
@@ -134,26 +135,38 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-[#f3f3f3] dark:bg-dark-bg">
       {/* Logo area */}
-      <div className="flex h-12 items-center gap-2 border-b border-[#c8c8c8] bg-[#e8e8e8] px-3">
+      <div className="flex h-12 items-center gap-2 border-b border-[#c8c8c8] dark:border-dark-border bg-[#e8e8e8] dark:bg-dark-bgLight px-3">
         <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-blue-500 to-blue-700 text-white text-xs font-bold">
           W
         </div>
-        <span className="text-sm font-semibold text-slate-700">{title}</span>
+        <span className="text-sm font-semibold text-slate-700 dark:text-dark-text">{title}</span>
       </div>
 
       {/* User info */}
-      <div className="border-b border-[#c8c8c8] p-3">
+      <div className="border-b border-[#c8c8c8] dark:border-dark-border p-3">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-300 text-sm font-semibold text-slate-700">
-            {user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}
-          </div>
+          {user?.avatarUrl ? (
+            <img
+              src={user.avatarUrl}
+              alt={user.firstName || "User"}
+              className="h-8 w-8 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-300 dark:bg-dark-bgLight text-sm font-semibold text-slate-700 dark:text-dark-text">
+              {user?.firstName?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || "U"}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
-            <p className="truncate text-xs font-medium text-slate-900">
-              {user?.firstName} {user?.lastName}
+            <p className="truncate text-xs font-medium text-slate-900 dark:text-dark-text">
+              {user?.firstName && user?.lastName
+                ? `${user.firstName} ${user.lastName}`
+                : user?.email || "Loading..."}
             </p>
-            <p className="truncate text-[10px] text-slate-600">{user?.email}</p>
+            {user?.email && (
+              <p className="truncate text-[10px] text-slate-600 dark:text-dark-textMuted">{user.email}</p>
+            )}
           </div>
         </div>
       </div>
@@ -167,11 +180,12 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
         </div>
       </nav>
 
-      {/* Logout button */}
-      <div className="border-t border-[#c8c8c8] p-2">
+      {/* Footer: Theme Switcher and Logout */}
+      <div className="border-t border-[#c8c8c8] dark:border-dark-border p-2 space-y-1">
+        <ThemeSwitcher />
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-xs text-slate-700 hover:bg-[#e8e8e8]"
+          className="flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
         >
           <svg
             className="h-4 w-4"

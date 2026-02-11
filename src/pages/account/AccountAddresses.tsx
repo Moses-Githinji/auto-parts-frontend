@@ -166,10 +166,10 @@ export function AccountAddresses() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               My Addresses
             </h1>
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Manage your shipping and billing addresses
             </p>
           </div>
@@ -186,15 +186,15 @@ export function AccountAddresses() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               My Addresses
             </h1>
-            <p className="text-xs text-slate-600">
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Manage your shipping and billing addresses
             </p>
           </div>
         </div>
-        <div className="rounded-sm border border-red-200 bg-red-50 p-4">
+        <div className="rounded-sm border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
           <p className="text-sm text-red-700">{error}</p>
           <Button
             variant="outline"
@@ -213,8 +213,8 @@ export function AccountAddresses() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-sm font-semibold text-slate-900">My Addresses</h1>
-          <p className="text-xs text-slate-600">
+          <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Addresses</h1>
+          <p className="text-xs text-slate-600 dark:text-dark-textMuted">
             Manage your shipping and billing addresses
           </p>
         </div>
@@ -228,8 +228,8 @@ export function AccountAddresses() {
 
       {/* Addresses Grid */}
       {addresses.length === 0 ? (
-        <div className="rounded-sm border border-[#c8c8c8] bg-white p-6 text-center">
-          <p className="text-sm text-slate-600">No addresses saved yet</p>
+        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-6 text-center">
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">No addresses saved yet</p>
           <Button
             className="mt-3 bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
             onClick={() => setIsAddingAddress(true)}
@@ -242,7 +242,7 @@ export function AccountAddresses() {
           {addresses.map((address) => (
             <div
               key={address.id}
-              className={`rounded-sm border bg-white p-4 shadow-sm ${
+              className={`rounded-sm border bg-white dark:bg-dark-bgLight p-4 shadow-sm ${
                 address.isDefault
                   ? "border-[#FF9900] ring-1 ring-[#FF9900]"
                   : "border-[#c8c8c8]"
@@ -251,18 +251,18 @@ export function AccountAddresses() {
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-slate-900 dark:text-dark-text">
                       {typeLabels[address.type || "home"]}
                     </span>
                     {address.isDefault && (
                       <Badge className="bg-[#FF9900] text-white">Default</Badge>
                     )}
                   </div>
-                  <p className="text-xs text-slate-600">{address.street}</p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">{address.street}</p>
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {address.city}, {address.state} {address.zipCode}
                   </p>
-                  <p className="text-xs text-slate-600">{address.country}</p>
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">{address.country}</p>
                 </div>
                 <div className="flex gap-1">
                   {!address.isDefault && (
@@ -315,14 +315,14 @@ export function AccountAddresses() {
       {/* Add/Edit Address Modal */}
       {isAddingAddress && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-sm bg-white p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {editingAddress ? "Edit Address" : "Add New Address"}
               </h2>
               <button
                 onClick={resetForm}
-                className="text-slate-500 hover:text-slate-700"
+                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:text-dark-text"
               >
                 ✕
               </button>
@@ -330,7 +330,7 @@ export function AccountAddresses() {
 
             <div className="space-y-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Address Type
                 </label>
                 <div className="flex gap-2">
@@ -347,7 +347,7 @@ export function AccountAddresses() {
                       className={`flex-1 rounded-sm border px-3 py-2 text-xs transition-colors ${
                         formData.type === type
                           ? "border-[#FF9900] bg-[#FF9900]/10 text-[#FF9900]"
-                          : "border-[#c8c8c8] text-slate-700 hover:bg-slate-50"
+                          : "border-[#c8c8c8] text-slate-700 hover:bg-slate-50 dark:hover:bg-dark-bg"
                       }`}
                     >
                       {typeLabels[type]}
@@ -357,8 +357,8 @@ export function AccountAddresses() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
-                  Street Address <span className="text-red-500">*</span>
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                  Street Address <span className="text-red-500 dark:text-red-400">*</span>
                 </label>
                 <input
                   type="text"
@@ -373,8 +373,8 @@ export function AccountAddresses() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
-                    City <span className="text-red-500">*</span>
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                    City <span className="text-red-500 dark:text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -387,8 +387,8 @@ export function AccountAddresses() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
-                    County/State <span className="text-red-500">*</span>
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                    County/State <span className="text-red-500 dark:text-red-400">*</span>
                   </label>
                   <select
                     value={formData.state}
@@ -409,8 +409,8 @@ export function AccountAddresses() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
-                    Zip Code <span className="text-red-500">*</span>
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                    Zip Code <span className="text-red-500 dark:text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -423,7 +423,7 @@ export function AccountAddresses() {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-slate-700">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Country
                   </label>
                   <input
@@ -448,7 +448,7 @@ export function AccountAddresses() {
                   }
                   className="h-4 w-4 rounded border-[#c8c8c8] text-[#FF9900] focus:ring-[#FF9900]"
                 />
-                <label htmlFor="setDefault" className="text-xs text-slate-700">
+                <label htmlFor="setDefault" className="text-xs text-slate-700 dark:text-dark-text">
                   Set as default address
                 </label>
               </div>

@@ -1,4 +1,4 @@
-export type UserRole = "USER" | "VENDOR" | "SYSTEM_ADMIN";
+export type UserRole = "USER" | "VENDOR" | "SYSTEM_ADMIN" | "RIDER";
 export type UserStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED" | "DELETED";
 
 export interface User {

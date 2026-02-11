@@ -73,8 +73,8 @@ export function OrdersPage() {
   if (orders.length === 0) {
     return (
       <div className="space-y-4">
-        <h1 className="text-lg font-semibold text-slate-900">My Orders</h1>
-        <div className="rounded-lg border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">
+        <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
           <p className="mb-4">You haven't placed any orders yet.</p>
           <Link to="/" className="text-blue-600 hover:underline">
             Continue shopping
@@ -86,7 +86,7 @@ export function OrdersPage() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-lg font-semibold text-slate-900">My Orders</h1>
+      <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
 
       {orders.map((order, index) => {
         if (!order) return null;
@@ -102,14 +102,14 @@ export function OrdersPage() {
         return (
           <section
             key={`${order.id}-${index}`}
-            className="space-y-3 rounded-md border border-slate-200 bg-slate-50 p-4"
+            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4"
           >
             <header className="flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">
+                <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Order #{order.orderNumber}
                 </h2>
-                <p className="text-xs text-slate-600">
+                <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                   {new Date(order.createdAt).toLocaleDateString()} •{" "}
                   {order.paymentMethod || "N/A"}
                 </p>
@@ -120,10 +120,10 @@ export function OrdersPage() {
             </header>
 
             <div className="space-y-2">
-              <h3 className="text-xs font-semibold text-slate-900">
+              <h3 className="text-xs font-semibold text-slate-900 dark:text-dark-text">
                 Shipping Address
               </h3>
-              <p className="text-xs text-slate-600">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {order.shippingAddress.firstName}{" "}
                 {order.shippingAddress.lastName}
                 <br />
@@ -157,9 +157,9 @@ export function OrdersPage() {
                 return (
                   <div
                     key={vendorId}
-                    className="space-y-2 rounded-md border border-slate-200 bg-white p-3 text-xs"
+                    className="space-y-2 rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-3 text-xs"
                   >
-                    <h4 className="font-semibold text-slate-900">
+                    <h4 className="font-semibold text-slate-900 dark:text-dark-text">
                       {vendorName}
                     </h4>
                     <div className="divide-y divide-slate-100">
@@ -170,18 +170,18 @@ export function OrdersPage() {
                         >
                           <div>
                             {/* FIX: Access name and partNumber from 'product' */}
-                            <p className="font-semibold text-slate-900">
+                            <p className="font-semibold text-slate-900 dark:text-dark-text">
                               {item.product?.name || "Unknown Product"} –{" "}
                               {item.product?.partNumber || "N/A"}
                             </p>
-                            <p className="text-[11px] text-slate-600">
+                            <p className="text-[11px] text-slate-600 dark:text-dark-textMuted">
                               Qty {item.quantity}
                               {item.product?.specifications?.Volume
                                 ? ` • ${item.product.specifications.Volume}`
                                 : ""}
                             </p>
                           </div>
-                          <p className="font-semibold text-slate-900">
+                          <p className="font-semibold text-slate-900 dark:text-dark-text">
                             {currency}{" "}
                             {(
                               Number(item.price || item.unitPrice || 0) *
@@ -200,7 +200,7 @@ export function OrdersPage() {
                 );
               })
             ) : (
-              <div className="rounded-md border border-slate-200 bg-white p-3 text-xs">
+              <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-3 text-xs">
                 <p className="mb-2 text-slate-600 italic">
                   Order details not available
                 </p>

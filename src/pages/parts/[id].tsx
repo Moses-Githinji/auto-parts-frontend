@@ -13,12 +13,21 @@ import {
   Package,
   Calendar,
   Tag,
+  Bell,
 } from "lucide-react";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { useCartStore } from "../../stores/cartStore";
 import { useProductStore } from "../../stores/productStore";
+import { useAuthStore } from "../../stores/authStore";
+import {
+  subscribeToStockAlert,
+  unsubscribeFromStockAlert,
+  isValidEmail,
+} from "../../services/stockAlertService";
 import type { ProductCondition } from "../../types/product";
+import { Alert } from "../../components/ui/Alert";
+import type { NotificationType } from "../../stores/notificationStore";
 
 // Default placeholder images for products without images
 const PLACEHOLDER_IMAGES = [
@@ -35,7 +44,7 @@ function getConditionColor(condition: ProductCondition): string {
     case "REFURBISHED":
       return "bg-blue-100 text-blue-700";
     default:
-      return "bg-slate-100 text-slate-700";
+      return "bg-slate-100 text-slate-700 dark:text-dark-text";
   }
 }
 
@@ -50,8 +59,22 @@ export default function ProductDetailPage() {
   const addItem = useCartStore((s) => s.addItem);
   const { currentProduct, isLoading, error, fetchProduct, clearError } =
     useProductStore();
+  const { user } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  
+  // Stock alert state
+  const [alertEmail, setAlertEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [alertLoading, setAlertLoading] = useState(false);
+  const [alertError, setAlertError] = useState("");
+  const [alertSuccess, setAlertSuccess] = useState("");
+  
+  // Share alert state
+  const [shareAlert, setShareAlert] = useState<{
+    type: NotificationType;
+    title: string;
+  } | null>(null);
 
   useEffect(() => {
     clearError();
@@ -75,6 +98,8 @@ export default function ProductDetailPage() {
       quantity,
       vendorId: currentProduct.vendorId,
       vendorName: "Vendor Store", // This could be enhanced with vendor store name
+      image: currentProduct.images?.[0],
+      inStock: currentProduct.stock > 0,
     });
   }
 
@@ -93,9 +118,66 @@ export default function ProductDetailPage() {
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
-      alert("Link copied to clipboard!");
+      setShareAlert({ type: "success", title: "Link copied to clipboard!" });
     }
   }
+
+  async function handleStockAlertSubscribe() {
+    if (!currentProduct) return;
+
+    // Validate email
+    const email = alertEmail.trim();
+    if (!email) {
+      setAlertError("Please enter your email address");
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      setAlertError("Please enter a valid email address");
+      return;
+    }
+
+    setAlertLoading(true);
+    setAlertError("");
+    setAlertSuccess("");
+
+    try {
+      await subscribeToStockAlert(currentProduct.id, email, user?.id);
+      setIsSubscribed(true);
+      setAlertSuccess(
+        `Great! We'll email you at ${email} when ${currentProduct.name} is back in stock.`
+      );
+    } catch (err: any) {
+      setAlertError(err.message || "Failed to subscribe to stock alerts");
+    } finally {
+      setAlertLoading(false);
+    }
+  }
+
+  async function handleStockAlertUnsubscribe() {
+    if (!currentProduct || !alertEmail) return;
+
+    setAlertLoading(true);
+    setAlertError("");
+    setAlertSuccess("");
+
+    try {
+      await unsubscribeFromStockAlert(currentProduct.id, alertEmail);
+      setIsSubscribed(false);
+      setAlertSuccess("You've been removed from the notification list.");
+    } catch (err: any) {
+      setAlertError(err.message || "Failed to unsubscribe from stock alerts");
+    } finally {
+      setAlertLoading(false);
+    }
+  }
+
+  // Pre-fill email for logged-in users
+  useEffect(() => {
+    if (user?.email) {
+      setAlertEmail(user.email);
+    }
+  }, [user]);
 
   // Loading state
   if (isLoading) {
@@ -103,7 +185,7 @@ export default function ProductDetailPage() {
       <div className="flex min-h-[60vh] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
-          <p className="text-sm text-slate-600">Loading product details...</p>
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">Loading product details...</p>
         </div>
       </div>
     );
@@ -130,12 +212,12 @@ export default function ProductDetailPage() {
   if (!currentProduct) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16">
-        <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8 text-center">
           <Package className="mx-auto mb-4 h-16 w-16 text-slate-300" />
-          <h2 className="mb-2 text-xl font-semibold text-slate-900">
+          <h2 className="mb-2 text-xl font-semibold text-slate-900 dark:text-dark-text">
             Product Not Found
           </h2>
-          <p className="mb-6 text-slate-600">
+          <p className="mb-6 text-slate-600 dark:text-dark-textMuted">
             The product you're looking for doesn't exist or has been removed.
           </p>
           <div className="flex justify-center gap-3">
@@ -156,9 +238,9 @@ export default function ProductDetailPage() {
       : PLACEHOLDER_IMAGES;
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6">
+    <div className="mx-auto max-w-7xl px-4 py-6 min-h-screen pb-28 lg:pb-12">
       {/* Breadcrumb */}
-      <nav className="mb-6 flex items-center gap-2 text-sm text-slate-600">
+      <nav className="mb-6 flex items-center gap-2 text-sm text-slate-600 dark:text-dark-textMuted">
         <button
           onClick={() => navigate(-1)}
           className="flex items-center gap-1 hover:text-sky-600"
@@ -166,11 +248,11 @@ export default function ProductDetailPage() {
           <ArrowLeft className="h-4 w-4" />
           Back
         </button>
-        <span className="text-slate-400">/</span>
+        <span className="text-slate-400 dark:text-dark-textMuted">/</span>
         <button onClick={() => navigate("/")} className="hover:text-sky-600">
           Home
         </button>
-        <span className="text-slate-400">/</span>
+        <span className="text-slate-400 dark:text-dark-textMuted">/</span>
         {currentProduct.category && (
           <>
             <button
@@ -179,10 +261,10 @@ export default function ProductDetailPage() {
             >
               {currentProduct.category}
             </button>
-            <span className="text-slate-400">/</span>
+            <span className="text-slate-400 dark:text-dark-textMuted">/</span>
           </>
         )}
-        <span className="truncate text-slate-900">
+        <span className="truncate text-slate-900 dark:text-dark-text">
           {currentProduct.partNumber}
         </span>
       </nav>
@@ -192,22 +274,22 @@ export default function ProductDetailPage() {
         {/* Left Column: Product Images */}
         <div className="space-y-4">
           {/* Main Image */}
-          <div className="relative overflow-hidden rounded-lg border border-slate-200 bg-white">
-            <div className="aspect-square">
+          <div className="relative overflow-hidden rounded-lg border border-slate-200 dark:border-dark-border bg-white">
+            <div className="aspect-square w-full">
               <img
                 src={images[selectedImage]}
                 alt={currentProduct.name}
-                className="h-full w-full object-contain p-4"
+                className="h-full w-full max-w-full max-h-full object-contain object-center p-4"
               />
             </div>
             {/* Zoom button */}
             <button className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow-sm hover:bg-white">
-              <ZoomIn className="h-4 w-4 text-slate-600" />
+              <ZoomIn className="h-4 w-4 text-slate-600 dark:text-dark-textMuted" />
             </button>
             {/* Condition badge */}
             <Badge
               className={`absolute left-3 top-3 ${getConditionColor(
-                currentProduct.condition,
+                currentProduct.condition
               )}`}
             >
               {formatCondition(currentProduct.condition)}
@@ -224,7 +306,7 @@ export default function ProductDetailPage() {
                   className={`h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border-2 transition-colors ${
                     selectedImage === i
                       ? "border-[#FF9900]"
-                      : "border-slate-200 hover:border-slate-300"
+                      : "border-slate-200 dark:border-dark-border hover:border-slate-300"
                   }`}
                 >
                   <img
@@ -257,11 +339,11 @@ export default function ProductDetailPage() {
         <div className="space-y-5">
           {/* Title & Part Number */}
           <div>
-            <h1 className="text-2xl font-semibold text-slate-900">
+            <h1 className="text-2xl font-semibold text-slate-900 dark:text-dark-text">
               {currentProduct.name}
             </h1>
             <div className="mt-2 flex items-center gap-3">
-              <p className="text-sm font-mono text-slate-500">
+              <p className="text-sm font-mono text-slate-500 dark:text-dark-textMuted">
                 Part #: {currentProduct.partNumber}
               </p>
               {currentProduct.brand && (
@@ -285,24 +367,24 @@ export default function ProductDetailPage() {
                   }`}
                 />
               ))}
-              <span className="ml-1 text-sm text-slate-600">
+              <span className="ml-1 text-sm text-slate-600 dark:text-dark-textMuted">
                 {currentProduct.rating?.toFixed(1) || "No ratings"}
               </span>
             </div>
             <span className="text-slate-300">|</span>
-            <span className="text-sm text-slate-600">
+            <span className="text-sm text-slate-600 dark:text-dark-textMuted">
               {currentProduct.views.toLocaleString()} views
             </span>
             <span className="text-slate-300">|</span>
-            <span className="text-sm text-slate-600">
+            <span className="text-sm text-slate-600 dark:text-dark-textMuted">
               {currentProduct.ordersCount} sold
             </span>
           </div>
 
           {/* Price */}
-          <div className="border-y border-slate-200 py-4">
+          <div className="border-y border-slate-200 dark:border-dark-border py-4">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-900">
+              <span className="text-3xl font-bold text-slate-900 dark:text-dark-text">
                 KES {currentProduct.price.toLocaleString()}
               </span>
               {currentProduct.condition !== "NEW" && (
@@ -316,10 +398,10 @@ export default function ProductDetailPage() {
           {/* Description */}
           {currentProduct.description && (
             <div>
-              <h3 className="mb-2 text-sm font-semibold text-slate-900">
+              <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-dark-text">
                 Description
               </h3>
-              <p className="text-sm leading-relaxed text-slate-600">
+              <p className="text-sm leading-relaxed text-slate-600 dark:text-dark-textMuted">
                 {currentProduct.description}
               </p>
             </div>
@@ -357,26 +439,26 @@ export default function ProductDetailPage() {
           {/* Technical Specifications */}
           {currentProduct.specifications &&
             Object.keys(currentProduct.specifications).length > 0 && (
-              <div className="rounded-lg border border-slate-200 bg-white p-4">
-                <h3 className="mb-3 text-sm font-semibold text-slate-900">
+              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+                <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Technical Specifications
                 </h3>
                 <dl className="space-y-2 text-sm">
                   <div className="flex justify-between border-b border-slate-100 py-2">
-                    <dt className="text-slate-600">Brand</dt>
-                    <dd className="font-medium text-slate-900">
+                    <dt className="text-slate-600 dark:text-dark-textMuted">Brand</dt>
+                    <dd className="font-medium text-slate-900 dark:text-dark-text">
                       {currentProduct.brand || "N/A"}
                     </dd>
                   </div>
                   <div className="flex justify-between border-b border-slate-100 py-2">
-                    <dt className="text-slate-600">Condition</dt>
-                    <dd className="font-medium text-slate-900">
+                    <dt className="text-slate-600 dark:text-dark-textMuted">Condition</dt>
+                    <dd className="font-medium text-slate-900 dark:text-dark-text">
                       {formatCondition(currentProduct.condition)}
                     </dd>
                   </div>
                   <div className="flex justify-between border-b border-slate-100 py-2">
-                    <dt className="text-slate-600">Category</dt>
-                    <dd className="font-medium text-slate-900">
+                    <dt className="text-slate-600 dark:text-dark-textMuted">Category</dt>
+                    <dd className="font-medium text-slate-900 dark:text-dark-text">
                       {currentProduct.category || "N/A"}
                     </dd>
                   </div>
@@ -386,35 +468,35 @@ export default function ProductDetailPage() {
                         key={key}
                         className="flex justify-between border-b border-slate-100 py-2 last:border-0"
                       >
-                        <dt className="text-slate-600">
+                        <dt className="text-slate-600 dark:text-dark-textMuted">
                           {key.charAt(0).toUpperCase() + key.slice(1)}
                         </dt>
-                        <dd className="font-medium text-slate-900">{value}</dd>
+                        <dd className="font-medium text-slate-900 dark:text-dark-text">{value}</dd>
                       </div>
-                    ),
+                    )
                   )}
                 </dl>
               </div>
             )}
 
           {/* Product Info */}
-          <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <h3 className="mb-3 text-sm font-semibold text-slate-900">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+            <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Product Information
             </h3>
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600 dark:text-dark-textMuted">
                 <Tag className="h-4 w-4" />
                 <span>Product ID: {currentProduct.id}</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600 dark:text-dark-textMuted">
                 <Calendar className="h-4 w-4" />
                 <span>
                   Added:{" "}
                   {new Date(currentProduct.createdAt).toLocaleDateString()}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
+              <div className="flex items-center gap-2 text-slate-600 dark:text-dark-textMuted">
                 <Package className="h-4 w-4" />
                 <span>
                   Last Updated:{" "}
@@ -429,10 +511,10 @@ export default function ProductDetailPage() {
         <div className="space-y-4">
           <div className="sticky top-4 space-y-4">
             {/* Purchase Card */}
-            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-5 shadow-sm">
               {/* Price */}
               <div className="mb-4">
-                <span className="text-3xl font-bold text-slate-900">
+                <span className="text-3xl font-bold text-slate-900 dark:text-dark-text">
                   KES {currentProduct.price.toLocaleString()}
                 </span>
                 {inStock ? (
@@ -448,20 +530,20 @@ export default function ProductDetailPage() {
 
               {/* Delivery Info */}
               <div className="mb-4 space-y-2 text-sm">
-                <div className="flex items-start gap-2 text-slate-700">
+                <div className="flex items-start gap-2 text-slate-700 dark:text-dark-text">
                   <Truck className="mt-0.5 h-4 w-4 flex-shrink-0" />
                   <div>
                     <p>Free delivery available</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                       On orders above KES 5,000
                     </p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2 text-slate-700">
+                <div className="flex items-start gap-2 text-slate-700 dark:text-dark-text">
                   <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" />
                   <div>
                     <p>Delivered from Nairobi</p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                       Estimated 1-3 business days
                     </p>
                   </div>
@@ -470,7 +552,7 @@ export default function ProductDetailPage() {
 
               {/* Quantity Selector */}
               <div className="mb-4">
-                <label className="mb-2 block text-sm font-medium text-slate-700">
+                <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-dark-text">
                   Quantity
                 </label>
                 <select
@@ -481,7 +563,7 @@ export default function ProductDetailPage() {
                 >
                   {Array.from(
                     { length: Math.min(currentProduct.stock || 0, 10) },
-                    (_, i) => i + 1,
+                    (_, i) => i + 1
                   ).map((n) => (
                     <option key={n} value={n}>
                       {n}
@@ -509,8 +591,72 @@ export default function ProductDetailPage() {
                 Buy Now
               </Button>
 
+              {/* Stock Alert - Only show when out of stock */}
+              {!inStock && (
+                <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+                  <div className="mb-3 flex items-center gap-2">
+                    <Bell className="h-5 w-5 text-amber-600" />
+                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">
+                      Get notified when back in stock
+                    </h3>
+                  </div>
+
+                  {!isSubscribed ? (
+                    <div className="space-y-3">
+                      <input
+                        type="email"
+                        value={alertEmail}
+                        onChange={(e) => {
+                          setAlertEmail(e.target.value);
+                          setAlertError("");
+                        }}
+                        placeholder="Enter your email"
+                        disabled={alertLoading}
+                        className="h-10 w-full rounded-md border border-slate-300 px-3 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900] disabled:bg-slate-100"
+                      />
+                      <Button
+                        onClick={handleStockAlertSubscribe}
+                        disabled={alertLoading}
+                        className="h-10 w-full rounded-md bg-amber-600 text-white hover:bg-amber-700 disabled:opacity-50"
+                      >
+                        {alertLoading ? "Subscribing..." : "Notify Me"}
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-2 rounded-md bg-green-50 p-3">
+                        <Check className="h-5 w-5 flex-shrink-0 text-green-600" />
+                        <p className="text-sm text-green-800">
+                          You'll be notified when this product is back in stock
+                        </p>
+                      </div>
+                      <Button
+                        onClick={handleStockAlertUnsubscribe}
+                        disabled={alertLoading}
+                        variant="outline"
+                        className="h-10 w-full text-sm"
+                      >
+                        {alertLoading ? "Unsubscribing..." : "Unsubscribe"}
+                      </Button>
+                    </div>
+                  )}
+
+                  {alertSuccess && (
+                    <div className="mt-3 rounded-md bg-green-50 p-3 text-sm text-green-800">
+                      {alertSuccess}
+                    </div>
+                  )}
+
+                  {alertError && (
+                    <div className="mt-3 rounded-md bg-red-50 p-3 text-sm text-red-800">
+                      {alertError}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Trust Badges */}
-              <div className="flex items-center justify-center gap-4 border-t border-slate-100 pt-4 text-xs text-slate-600">
+              <div className="flex items-center justify-center gap-4 border-t border-slate-100 pt-4 text-xs text-slate-600 dark:text-dark-textMuted">
                 <div className="flex items-center gap-1">
                   <Shield className="h-4 w-4 text-green-600" />
                   <span>Secure</span>
@@ -527,18 +673,18 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Vendor Card */}
-            <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3 text-sm font-semibold text-slate-900">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-5 shadow-sm">
+              <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                 Sold by
               </h3>
               <div className="space-y-3">
                 <div>
-                  <p className="font-medium text-slate-900">Vendor Store</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="font-medium text-slate-900 dark:text-dark-text">Vendor Store</p>
+                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                     Vendor ID: {currentProduct.vendorId}
                   </p>
                 </div>
-                <div className="flex items-center gap-4 text-sm text-slate-600">
+                <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-dark-textMuted">
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
                     <span>4.5</span>
@@ -558,16 +704,16 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Return Policy */}
-            <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
               <div className="flex items-start gap-3">
                 <div className="rounded-full bg-green-100 p-1.5">
                   <Check className="h-4 w-4 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-sm font-medium text-slate-900 dark:text-dark-text">
                     30-Day Return Policy
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     Return or exchange within 30 days of delivery
                   </p>
                 </div>
@@ -575,16 +721,16 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Warranty */}
-            <div className="rounded-lg border border-slate-200 bg-white p-4">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
               <div className="flex items-start gap-3">
                 <div className="rounded-full bg-blue-100 p-1.5">
                   <Shield className="h-4 w-4 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-sm font-medium text-slate-900 dark:text-dark-text">
                     Warranty Protected
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {currentProduct.condition === "NEW"
                       ? "Manufacturer warranty included"
                       : "Seller warranty may apply"}
@@ -595,6 +741,57 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
+
+
+      {/* Mobile Sticky Buy Box - only visible until large screens */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] lg:hidden">
+        <div className="flex items-center justify-between gap-4">
+          {inStock ? (
+            <>
+              <div>
+                <p className="text-xs text-slate-500 dark:text-dark-textMuted">Price</p>
+                <span className="text-lg font-bold text-slate-900 dark:text-dark-text">
+                  KES {currentProduct.price.toLocaleString()}
+                </span>
+              </div>
+              <Button
+                className="flex-1 rounded-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
+                onClick={handleAddToCart}
+              >
+                Add to Cart
+              </Button>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <Bell className="h-5 w-5 text-amber-600" />
+                <div>
+                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">Out of Stock</p>
+                  <p className="text-sm font-medium text-slate-900 dark:text-dark-text">
+                    Get notified
+                  </p>
+                </div>
+              </div>
+              <Button
+                className="flex-1 rounded-full bg-amber-600 text-white hover:bg-amber-700"
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              >
+                Notify Me
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Share Alert */}
+      {shareAlert && (
+        <Alert
+          type={shareAlert.type}
+          title={shareAlert.title}
+          onDismiss={() => setShareAlert(null)}
+          className="fixed bottom-4 right-4 w-96"
+        />
+      )}
     </div>
   );
 }

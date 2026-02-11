@@ -23,9 +23,10 @@ import {
 } from "lucide-react";
 import { useCartStore } from "../stores/cartStore";
 import { useAuthStore } from "../stores/authStore";
-import { Button } from "../components/ui/button";
+import { useThemeStore } from "../stores/themeStore";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
+import { Footer } from "./Footer";
 
 interface AppShellProps {
   children: ReactNode;
@@ -82,8 +83,9 @@ export function AppShell({ children }: AppShellProps) {
 
   const isVendorContext = pathname.startsWith("/vendor");
   const isAdminContext = pathname.startsWith("/admin");
+  const isDeliveryContext = pathname.startsWith("/delivery");
 
-  if (isVendorContext || isAdminContext) {
+  if (isVendorContext || isAdminContext || isDeliveryContext) {
     return <BackofficeShell>{children}</BackofficeShell>;
   }
 
@@ -99,6 +101,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
     initializeAuth();
@@ -119,9 +122,9 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#EAEDED]">
+    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
       {/* Amazon-style Header */}
-      <header className="bg-[#131921] text-slate-50 sticky top-0 z-50">
+      <header className="bg-[#131921] dark:bg-dark-primary text-slate-50 sticky top-0 z-50">
         {/* Top row: Logo, Search, Account, Orders, Cart */}
         <div className="flex items-center gap-2 px-2 py-1.5 md:px-4 md:py-2">
           {/* Logo */}
@@ -234,12 +237,22 @@ function StorefrontShell({ children }: { children: ReactNode }) {
 
           {/* Right Side Icons */}
           <div className="flex items-center gap-1">
-            {/* Language / Country */}
+            {/* Theme Toggle */}
             <button
               type="button"
-              className="hidden items-center rounded-sm px-2 py-1.5 hover:outline hover:outline-1 hover:outline-slate-400 md:flex"
+              onClick={toggleTheme}
+              className="flex items-center rounded-sm px-2 py-1.5 hover:outline hover:outline-1 hover:outline-slate-400"
+              aria-label="Toggle theme"
             >
-              <span className="text-xs font-semibold">EN</span>
+              {theme === "light" ? (
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              ) : (
+                <svg className="h-4 w-4 text-[#F7CA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              )}
             </button>
 
             {/* Account & Lists */}
@@ -290,7 +303,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Second row: Departments, Menu button, Navigation links */}
-        <div className="flex items-center gap-1 bg-[#232F3E] px-2 py-1.5 text-xs text-slate-100">
+        <div className="flex items-center gap-1 bg-[#232F3E] dark:bg-dark-bgLight px-2 py-1.5 text-xs text-slate-100">
           {/* Departments Hamburger */}
           <button
             type="button"
@@ -420,15 +433,18 @@ function StorefrontShell({ children }: { children: ReactNode }) {
           transition={{ duration: 0.15 }}
           className="mx-auto max-w-7xl"
         >
-          <div className="rounded-md border border-slate-200 bg-white shadow-sm md:rounded-md">
+          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm md:rounded-md">
             {children}
           </div>
         </motion.div>
       </main>
 
+      {/* Footer (desktop only) */}
+      <Footer />
+
       {/* Mobile Bottom Tab Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white md:hidden">
-        <div className="grid grid-cols-5 divide-x divide-slate-100">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight md:hidden">
+        <div className="grid grid-cols-5 divide-x divide-slate-100 dark:divide-dark-border">
           <TabBarButton
             icon={Home}
             label="Home"
@@ -479,7 +495,7 @@ function TabBarButton({
     <button
       type="button"
       onClick={onClick}
-      className="relative flex flex-col items-center justify-center py-2 text-[10px] text-slate-600 hover:text-[#131921]"
+      className="relative flex flex-col items-center justify-center py-2 text-[11px] text-slate-600 dark:text-dark-textMuted hover:text-[#131921] dark:hover:text-dark-text"
     >
       <Icon className="h-5 w-5" />
       <span className="mt-0.5">{label}</span>
@@ -497,10 +513,11 @@ function BackofficeShell({ children }: { children: ReactNode }) {
 
   const location = useLocation();
   const isVendorContext = location.pathname.startsWith("/vendor");
+  const isDeliveryContext = location.pathname.startsWith("/delivery");
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#EAEDED]">
-      <header className="border-b border-slate-200 bg-[#131921] text-slate-50">
+    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
+      <header className="border-b border-slate-200 dark:border-dark-border bg-[#131921] text-slate-50">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2">
             <button
@@ -523,32 +540,23 @@ function BackofficeShell({ children }: { children: ReactNode }) {
             </Badge>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-xs bg-white text-slate-800 hover:bg-slate-700 hover:text-white"
-              onClick={() => navigate("/account")}
-            >
-              Switch to buyer view
-            </Button>
-          </div>
+          <div className="flex items-center gap-2" />
         </div>
 
         <div className="flex items-center gap-1 bg-[#232F3E] px-4 py-1.5 text-xs text-slate-100">
           <button
             type="button"
-            onClick={() => navigate(isVendorContext ? "/vendor" : "/admin")}
+            onClick={() => navigate(isVendorContext ? "/vendor" : isDeliveryContext ? "/delivery" : "/admin")}
             className="rounded-sm px-2 py-1 font-semibold hover:bg-slate-700"
           >
-            {isVendorContext ? "Vendor Dashboard" : "Admin Dashboard"}
+            {isVendorContext ? "Vendor Dashboard" : isDeliveryContext ? "Delivery Dashboard" : "Admin Dashboard"}
           </button>
         </div>
       </header>
 
       <main className="flex-1 px-4 py-4">
         <div className="mx-auto max-w-7xl">
-          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
             {children}
           </div>
         </div>

@@ -102,40 +102,40 @@ export function FeePreview({
             <div className="flex justify-between">
               <span className="text-slate-600">Order Amount</span>
               <span className="font-medium text-slate-900">
-                KSh {feePreview.price.toLocaleString()}
+                KSh {(feePreview?.price || 0).toLocaleString()}
               </span>
             </div>
             <div className="border-t border-[#c8c8c8] pt-2">
               <div className="flex justify-between">
                 <span className="text-slate-600">
-                  Marketplace Fee ({feePreview.commissionRate}%)
+                  Marketplace Fee ({feePreview?.commissionRate || 0}%)
                 </span>
                 <span className="font-medium text-slate-900">
-                  KSh {feePreview.breakdown.baseCommission.toLocaleString()}
+                  KSh {(feePreview?.breakdown?.baseCommission || 0).toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-600">VAT (16% on fee)</span>
                 <span className="font-medium text-slate-900">
-                  KSh {feePreview.breakdown.vatAmount.toLocaleString()}
+                  KSh {(feePreview?.breakdown?.vatAmount || 0).toLocaleString()}
                 </span>
               </div>
-              {feePreview.breakdown.floorAdjustment !== undefined &&
+              {feePreview?.breakdown?.floorAdjustment !== undefined &&
                 feePreview.breakdown.floorAdjustment > 0 && (
                   <div className="flex justify-between text-amber-600">
                     <span>Floor Adjustment</span>
                     <span className="font-medium">
                       +KSh{" "}
-                      {feePreview.breakdown.floorAdjustment.toLocaleString()}
+                      {(feePreview.breakdown.floorAdjustment || 0).toLocaleString()}
                     </span>
                   </div>
                 )}
-              {feePreview.breakdown.capAdjustment !== undefined &&
+              {feePreview?.breakdown?.capAdjustment !== undefined &&
                 feePreview.breakdown.capAdjustment > 0 && (
                   <div className="flex justify-between text-amber-600">
                     <span>Cap Adjustment</span>
                     <span className="font-medium">
-                      -KSh {feePreview.breakdown.capAdjustment.toLocaleString()}
+                      -KSh {(feePreview.breakdown.capAdjustment || 0).toLocaleString()}
                     </span>
                   </div>
                 )}
@@ -146,7 +146,7 @@ export function FeePreview({
                   Total Deductions
                 </span>
                 <span className="font-semibold text-slate-900">
-                  KSh {feePreview.totalDeductions.toLocaleString()}
+                  KSh {(feePreview?.totalDeductions || 0).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -156,7 +156,7 @@ export function FeePreview({
                   Your Payout
                 </span>
                 <span className="text-lg font-bold text-green-700">
-                  KSh {feePreview.vendorPayout.toLocaleString()}
+                  KSh {(feePreview?.vendorPayout || 0).toLocaleString()}
                 </span>
               </div>
             </div>
@@ -222,14 +222,14 @@ export function FeePreview({
               )}
               {feePreview.ruleType} Rule
             </span>
-            {feePreview.minFee > 0 && (
+            {feePreview?.minFee !== undefined && feePreview.minFee > 0 && (
               <span className="ml-2 text-xs text-slate-500">
-                Min: KSh {feePreview.minFee.toLocaleString()}
+                Min: KSh {(feePreview.minFee || 0).toLocaleString()}
               </span>
             )}
-            {feePreview.maxFee > 0 && (
+            {feePreview?.maxFee !== undefined && feePreview.maxFee > 0 && (
               <span className="ml-2 text-xs text-slate-500">
-                Max: KSh {feePreview.maxFee.toLocaleString()}
+                Max: KSh {(feePreview.maxFee || 0).toLocaleString()}
               </span>
             )}
           </div>

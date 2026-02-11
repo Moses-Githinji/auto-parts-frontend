@@ -166,8 +166,8 @@ export function AccountGarage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">My Garage</h1>
-            <p className="text-xs text-slate-600">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Garage</h1>
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Manage your saved vehicles for quick fitment checking
             </p>
           </div>
@@ -184,13 +184,13 @@ export function AccountGarage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-sm font-semibold text-slate-900">My Garage</h1>
-            <p className="text-xs text-slate-600">
+            <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Garage</h1>
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Manage your saved vehicles for quick fitment checking
             </p>
           </div>
         </div>
-        <div className="rounded-sm border border-red-200 bg-red-50 p-4">
+        <div className="rounded-sm border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
           <p className="text-sm text-red-700">{error}</p>
           <Button
             variant="outline"
@@ -209,8 +209,8 @@ export function AccountGarage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-sm font-semibold text-slate-900">My Garage</h1>
-          <p className="text-xs text-slate-600">
+          <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">My Garage</h1>
+          <p className="text-xs text-slate-600 dark:text-dark-textMuted">
             Manage your saved vehicles for quick fitment checking
           </p>
         </div>
@@ -224,8 +224,8 @@ export function AccountGarage() {
 
       {/* Vehicles Grid */}
       {vehicles.length === 0 ? (
-        <div className="rounded-sm border border-[#c8c8c8] bg-white p-6 text-center">
-          <p className="text-sm text-slate-600">No vehicles saved yet</p>
+        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-6 text-center">
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">No vehicles saved yet</p>
           <p className="text-xs text-slate-500 mt-1">
             Add your vehicles to see compatible parts
           </p>
@@ -241,7 +241,7 @@ export function AccountGarage() {
           {vehicles.map((vehicle) => (
             <div
               key={vehicle.id}
-              className={`rounded-sm border bg-white p-4 shadow-sm ${
+              className={`rounded-sm border bg-white dark:bg-dark-bgLight p-4 shadow-sm ${
                 vehicle.isDefault
                   ? "border-[#FF9900] ring-1 ring-[#FF9900]"
                   : "border-[#c8c8c8]"
@@ -250,17 +250,17 @@ export function AccountGarage() {
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-slate-900">
+                    <span className="font-semibold text-slate-900 dark:text-dark-text">
                       {vehicle.year} {vehicle.make} {vehicle.model}
                     </span>
                     {vehicle.isDefault && (
                       <Badge className="bg-[#FF9900] text-white">Default</Badge>
                     )}
                   </div>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {vehicle.engine || "Engine not specified"}
                   </p>
-                  <p className="text-xs text-slate-600">
+                  <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {vehicle.transmission || "Transmission not specified"}
                   </p>
                 </div>
@@ -310,14 +310,14 @@ export function AccountGarage() {
       {/* Add Vehicle Modal */}
       {isAddingVehicle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-sm bg-white p-6 shadow-lg">
+          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 Add Vehicle
               </h2>
               <button
                 onClick={() => setIsAddingVehicle(false)}
-                className="text-slate-500 hover:text-slate-700"
+                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:text-dark-text"
               >
                 ✕
               </button>
@@ -325,7 +325,7 @@ export function AccountGarage() {
 
             <div className="space-y-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Make
                 </label>
                 <select
@@ -349,7 +349,7 @@ export function AccountGarage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Model
                 </label>
                 <select
@@ -370,7 +370,7 @@ export function AccountGarage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Year
                 </label>
                 <select
@@ -392,7 +392,7 @@ export function AccountGarage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Engine (Optional)
                 </label>
                 <input
@@ -407,7 +407,7 @@ export function AccountGarage() {
               </div>
 
               <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700">
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                   Transmission (Optional)
                 </label>
                 <select

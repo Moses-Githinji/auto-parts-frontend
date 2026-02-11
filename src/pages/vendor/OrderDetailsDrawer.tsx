@@ -30,9 +30,9 @@ export function OrderDetailsDrawer({
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-amber-100 text-amber-700";
+        return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
       case "CONFIRMED":
-        return "bg-blue-100 text-blue-700";
+        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
       case "PROCESSING":
         return "bg-purple-100 text-purple-700";
       case "SHIPPED":
@@ -40,11 +40,11 @@ export function OrderDetailsDrawer({
       case "OUT_FOR_DELIVERY":
         return "bg-cyan-100 text-cyan-700";
       case "DELIVERED":
-        return "bg-green-100 text-green-700";
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
       case "CANCELLED":
-        return "bg-red-100 text-red-700";
+        return "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-700";
+        return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
     }
   };
 
@@ -58,14 +58,14 @@ export function OrderDetailsDrawer({
       <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="fixed right-0 top-0 h-full w-full max-w-xl bg-white shadow-xl z-50 flex flex-col">
+      <div className="fixed right-0 top-0 h-full w-full max-w-xl bg-white dark:bg-dark-bgLight shadow-xl z-50 flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
           <div>
-            <h2 className="text-lg font-semibold text-slate-900">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
               Order #{order.orderNumber}
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-500 dark:text-dark-textMuted">
               Created {new Date(order.createdAt).toLocaleString()}
             </p>
           </div>
@@ -101,8 +101,8 @@ export function OrderDetailsDrawer({
             <span
               className={`px-3 py-1 rounded-full text-sm font-medium ${
                 order.paymentStatus === "PAID"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-amber-100 text-amber-700"
+                  ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
               }`}
             >
               {formatStatus(order.paymentStatus)}
@@ -116,20 +116,20 @@ export function OrderDetailsDrawer({
             </h3>
             <div className="bg-gray-50 rounded-lg p-4 space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Name</span>
-                <span className="text-sm font-medium text-slate-900">
+                <span className="text-sm text-slate-600 dark:text-dark-textMuted">Name</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-dark-text">
                   {order.customerName}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">Email</span>
-                <span className="text-sm font-medium text-slate-900">
+                <span className="text-sm text-slate-600 dark:text-dark-textMuted">Email</span>
+                <span className="text-sm font-medium text-slate-900 dark:text-dark-text">
                   {order.customerEmail}
                 </span>
               </div>
               {order.customerPhone && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-600">Phone</span>
+                  <span className="text-sm text-slate-600 dark:text-dark-textMuted">Phone</span>
                   <a
                     href={`tel:${order.customerPhone}`}
                     className="text-sm font-medium text-[#2b579a] hover:underline"
@@ -154,7 +154,7 @@ export function OrderDetailsDrawer({
               <p className="text-sm text-slate-600 mt-1">
                 {order.shippingAddress.street}
               </p>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-slate-600 dark:text-dark-textMuted">
                 {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
                 {order.shippingAddress.zipCode}
               </p>
@@ -213,16 +213,16 @@ export function OrderDetailsDrawer({
               <table className="w-full text-xs">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-2 text-left font-medium text-slate-600">
+                    <th className="px-4 py-2 text-left font-medium text-slate-600 dark:text-dark-textMuted">
                       Part
                     </th>
-                    <th className="px-4 py-2 text-left font-medium text-slate-600">
+                    <th className="px-4 py-2 text-left font-medium text-slate-600 dark:text-dark-textMuted">
                       SKU
                     </th>
-                    <th className="px-4 py-2 text-center font-medium text-slate-600">
+                    <th className="px-4 py-2 text-center font-medium text-slate-600 dark:text-dark-textMuted">
                       Qty
                     </th>
-                    <th className="px-4 py-2 text-right font-medium text-slate-600">
+                    <th className="px-4 py-2 text-right font-medium text-slate-600 dark:text-dark-textMuted">
                       Subtotal
                     </th>
                   </tr>
@@ -231,7 +231,7 @@ export function OrderDetailsDrawer({
                   {order.items.map((item) => (
                     <tr key={item.id} className="border-t border-gray-200">
                       <td className="px-4 py-3">
-                        <p className="font-medium text-slate-900">
+                        <p className="font-medium text-slate-900 dark:text-dark-text">
                           {item.product?.name || "Unknown Product"}
                         </p>
                         {item.product?.specifications?.Volume && (
@@ -240,13 +240,13 @@ export function OrderDetailsDrawer({
                           </p>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-slate-600">
+                      <td className="px-4 py-3 text-slate-600 dark:text-dark-textMuted">
                         {item.product?.partNumber || "N/A"}
                       </td>
-                      <td className="px-4 py-3 text-center text-slate-600">
+                      <td className="px-4 py-3 text-center text-slate-600 dark:text-dark-textMuted">
                         {item.quantity}
                       </td>
-                      <td className="px-4 py-3 text-right font-medium text-slate-900">
+                      <td className="px-4 py-3 text-right font-medium text-slate-900 dark:text-dark-text">
                         KSh {Number(item.price || 0).toLocaleString()}
                       </td>
                     </tr>
@@ -256,44 +256,44 @@ export function OrderDetailsDrawer({
                   <tr className="border-t border-gray-200">
                     <td
                       colSpan={3}
-                      className="px-4 py-2 text-right text-sm text-slate-600"
+                      className="px-4 py-2 text-right text-sm text-slate-600 dark:text-dark-textMuted"
                     >
                       Subtotal
                     </td>
-                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900">
+                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900 dark:text-dark-text">
                       KSh {Number(order.subtotal).toLocaleString()}
                     </td>
                   </tr>
                   <tr>
                     <td
                       colSpan={3}
-                      className="px-4 py-2 text-right text-sm text-slate-600"
+                      className="px-4 py-2 text-right text-sm text-slate-600 dark:text-dark-textMuted"
                     >
                       Shipping
                     </td>
-                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900">
+                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900 dark:text-dark-text">
                       KSh {Number(order.shipping).toLocaleString()}
                     </td>
                   </tr>
                   <tr>
                     <td
                       colSpan={3}
-                      className="px-4 py-2 text-right text-sm text-slate-600"
+                      className="px-4 py-2 text-right text-sm text-slate-600 dark:text-dark-textMuted"
                     >
                       Tax
                     </td>
-                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900">
+                    <td className="px-4 py-2 text-right text-sm font-medium text-slate-900 dark:text-dark-text">
                       KSh {Number(order.tax).toLocaleString()}
                     </td>
                   </tr>
                   <tr className="border-t border-gray-200">
                     <td
                       colSpan={3}
-                      className="px-4 py-3 text-right font-semibold text-slate-900"
+                      className="px-4 py-3 text-right font-semibold text-slate-900 dark:text-dark-text"
                     >
                       Total
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-slate-900">
+                    <td className="px-4 py-3 text-right font-semibold text-slate-900 dark:text-dark-text">
                       KSh {Number(order.total).toLocaleString()}
                     </td>
                   </tr>
@@ -329,10 +329,10 @@ export function OrderDetailsDrawer({
               <div className="flex items-start gap-3">
                 <div className="w-2 h-2 mt-1.5 rounded-full bg-green-500"></div>
                 <div>
-                  <p className="text-sm font-medium text-slate-900">
+                  <p className="text-sm font-medium text-slate-900 dark:text-dark-text">
                     Order Placed
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                     {new Date(order.createdAt).toLocaleString()}
                   </p>
                 </div>
@@ -341,10 +341,10 @@ export function OrderDetailsDrawer({
                 <div className="flex items-start gap-3">
                   <div className="w-2 h-2 mt-1.5 rounded-full bg-blue-500"></div>
                   <div>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-sm font-medium text-slate-900 dark:text-dark-text">
                       Shipped
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-500 dark:text-dark-textMuted">
                       Tracking: {order.trackingNumber}
                     </p>
                   </div>

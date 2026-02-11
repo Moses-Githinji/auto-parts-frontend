@@ -195,13 +195,13 @@ export function AdminBlogsPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-900">Blog Posts</h1>
-            <p className="text-sm text-slate-600">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Blog Posts</h1>
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
               Manage blog posts, categories, and tags.
             </p>
           </div>
           <Button
-            className="bg-[#2b579a] text-white hover:bg-[#2b579a]/90"
+            className="bg-[#2b579a] text-white hover:bg-[#2b579a]/90 dark:bg-blue-600 dark:hover:bg-blue-700"
             onClick={() => handleOpenModal()}
           >
             Create Post
@@ -225,12 +225,12 @@ export function AdminBlogsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1 rounded border border-slate-300 px-4 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+            className="flex-1 rounded border border-slate-300 dark:border-dark-border px-4 py-2 text-sm focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:bg-dark-bgLight dark:text-dark-text"
           />
           <Button
             variant="outline"
             onClick={handleSearch}
-            className="border-slate-300"
+            className="border-slate-300 dark:border-dark-border dark:text-gray-500 dark:bg-dark-bgLight dark:hover:bg-dark-bgLight dark:hover:text-dark-text "
           >
             Search
           </Button>
@@ -241,8 +241,8 @@ export function AdminBlogsPage() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2b579a] border-t-transparent"></div>
           </div>
         ) : posts.length === 0 ? (
-          <div className="rounded-lg border border-slate-200 bg-white p-8 text-center">
-            <p className="text-sm text-slate-600">No blog posts found.</p>
+          <div className="rounded-lg border border-slate-200 bg-white dark:bg-dark-bgLight p-8 text-center">
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">No blog posts found.</p>
             <Button
               className="mt-4 bg-[#2b579a] text-white hover:bg-[#2b579a]/90"
               onClick={() => handleOpenModal()}
@@ -251,54 +251,54 @@ export function AdminBlogsPage() {
             </Button>
           </div>
         ) : (
-          <div className="rounded-sm border border-[#c8c8c8] bg-white">
+          <div className="rounded-sm border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight">
             <table className="w-full text-sm">
-              <thead className="bg-[#f3f3f3]">
+              <thead className="bg-slate-50 dark:bg-dark-bg">
                 <tr>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Title
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Author
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Category
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Status
                   </th>
-                  <th className="px-4 py-2 text-left font-medium text-slate-700">
+                  <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Date
                   </th>
-                  <th className="px-4 py-2 text-right font-medium text-slate-700">
+                  <th className="px-4 py-2 text-right font-medium text-slate-700 dark:text-dark-text">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {posts.map((post) => (
-                  <tr key={post.id} className="border-t border-[#c8c8c8]">
-                    <td className="px-4 py-3 text-slate-900">{post.title}</td>
-                    <td className="px-4 py-3 text-slate-600">
+                  <tr key={post.id} className="border-t border-slate-200 dark:border-dark-border">
+                    <td className="px-4 py-3 text-slate-900 dark:text-dark-text">{post.title}</td>
+                    <td className="px-4 py-3 text-slate-600 dark:text-dark-textMuted">
                       {post.author
                         ? `${post.author.firstName} ${post.author.lastName}`
                         : "-"}
                     </td>
-                    <td className="px-4 py-3 text-slate-600">
+                    <td className="px-4 py-3 text-slate-600 dark:text-dark-textMuted">
                       {post.category?.name || "-"}
                     </td>
                     <td className="px-4 py-3">
                       {post.isPublished ? (
-                        <Badge className="bg-green-100 text-green-700">
+                        <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
                           Published
                         </Badge>
                       ) : (
-                        <Badge className="bg-amber-100 text-amber-700">
+                        <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
                           Draft
                         </Badge>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-slate-600">
+                    <td className="px-4 py-3 text-slate-600 dark:text-dark-textMuted">
                       {post.createdAt
                         ? new Date(post.createdAt).toLocaleDateString()
                         : "-"}
@@ -327,8 +327,8 @@ export function AdminBlogsPage() {
 
             {/* Pagination */}
             {postsPagination.pages > 1 && (
-              <div className="flex items-center justify-between border-t border-[#c8c8c8] px-4 py-3">
-                <span className="text-sm text-slate-600">
+              <div className="flex items-center justify-between border-t border-[#c8c8c8] dark:border-dark-border px-4 py-3">
+                <span className="text-sm text-slate-600 dark:text-dark-textMuted">
                   Showing {(postsPagination.page - 1) * 20 + 1} to{" "}
                   {Math.min(postsPagination.page * 20, postsPagination.total)}{" "}
                   of {postsPagination.total} posts
@@ -341,7 +341,7 @@ export function AdminBlogsPage() {
                     onClick={() =>
                       fetchPosts(searchQuery, postsPagination.page - 1)
                     }
-                    className="border-slate-300"
+                    className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
                   >
                     Previous
                   </Button>
@@ -366,14 +366,14 @@ export function AdminBlogsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-lg">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white dark:bg-dark-bgLight p-6 shadow-lg">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {editingPost ? "Edit Post" : "Create New Post"}
               </h2>
               <button
                 onClick={handleCloseModal}
-                className="text-slate-400 hover:text-slate-600"
+                className="text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
               >
                 <svg
                   className="h-6 w-6"
@@ -400,7 +400,7 @@ export function AdminBlogsPage() {
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                     Title *
                   </label>
                   <input
@@ -409,13 +409,13 @@ export function AdminBlogsPage() {
                     value={formData.title}
                     onChange={handleInputChange}
                     required
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
                     placeholder="Enter post title"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                     Slug
                   </label>
                   <input
@@ -423,13 +423,13 @@ export function AdminBlogsPage() {
                     name="slug"
                     value={formData.slug}
                     onChange={handleInputChange}
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
                     placeholder="Auto-generated from title if empty"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                     Excerpt
                   </label>
                   <textarea
@@ -437,13 +437,13 @@ export function AdminBlogsPage() {
                     value={formData.excerpt}
                     onChange={handleInputChange}
                     rows={2}
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
                     placeholder="Brief description of the post"
                   />
                 </div>
 
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                     Content *
                   </label>
                   <BlogEditor
@@ -458,14 +458,14 @@ export function AdminBlogsPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                    <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                       Category
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
                     >
                       <option value="">Select category</option>
                       {categories.map((cat) => (
@@ -477,7 +477,7 @@ export function AdminBlogsPage() {
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                    <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                       Tags
                     </label>
                     <input
@@ -485,7 +485,7 @@ export function AdminBlogsPage() {
                       name="tags"
                       value={formData.tags}
                       onChange={handleInputChange}
-                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] focus:outline-none focus:ring-1 focus:ring-[#2b579a]"
+                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
                       placeholder="tag1, tag2, tag3"
                     />
                   </div>
@@ -513,7 +513,7 @@ export function AdminBlogsPage() {
                   />
                   <label
                     htmlFor="isPublished"
-                    className="text-sm font-medium text-slate-700"
+                    className="text-sm font-medium text-slate-700 dark:text-dark-text"
                   >
                     Publish immediately
                   </label>
@@ -525,14 +525,14 @@ export function AdminBlogsPage() {
                   type="button"
                   variant="outline"
                   onClick={handleCloseModal}
-                  className="border-slate-300"
+                  className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="bg-[#2b579a] text-white hover:bg-[#2b579a]/90"
+                  className="bg-[#2b579a] text-white hover:bg-[#2b579a]/90 dark:bg-blue-600 dark:hover:bg-blue-700"
                 >
                   {isSubmitting
                     ? "Saving..."

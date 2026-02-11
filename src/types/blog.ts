@@ -15,14 +15,27 @@ export interface BlogPost {
     id: string;
     firstName: string;
     lastName: string;
+    avatarUrl?: string;
   };
   category?: {
     id: string;
     name: string;
+    slug?: string;
   };
-  tags?: string[];
+  tags?: { tag: { id: string; name: string; slug: string } }[];
+  // Interaction state (populated when authenticated)
+  isLiked?: boolean;
+  isSaved?: boolean;
+  userRating?: number;
+  // Aggregates
   averageRating?: number;
   ratingsCount?: number;
+  _count?: {
+    likes: number;
+    comments: number;
+    saves: number;
+    ratings: number;
+  };
 }
 
 export interface BlogPostListResponse {
@@ -30,11 +43,18 @@ export interface BlogPostListResponse {
   total: number;
 }
 
+export interface BlogPostResponse {
+  post: BlogPost;
+}
+
 export interface BlogCategory {
   id: string;
   name: string;
   slug: string;
-  postCount: number;
+  postCount?: number;
+  _count?: {
+    posts: number;
+  };
 }
 
 export interface BlogCategoriesResponse {
@@ -82,12 +102,15 @@ export interface AddCommentRequest {
 }
 
 export interface LikeResponse {
-  likes: number;
-  isLiked: boolean;
+  liked: boolean;
+}
+
+export interface SaveResponse {
+  saved: boolean;
 }
 
 export interface RatingResponse {
-  rating: number;
+  rating: { id: string; value: number };
   averageRating: number;
   ratingsCount: number;
 }
