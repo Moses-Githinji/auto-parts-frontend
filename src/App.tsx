@@ -28,6 +28,7 @@ import { AdminWebhooksPage } from "./pages/admin/AdminWebhooksPage";
 import { AdminBlogsPage } from "./pages/admin/AdminBlogsPage";
 import { AdminCommissionConfigPage } from "./pages/admin/AdminCommissionConfigPage";
 import { AdminRidersPage } from "./pages/admin/AdminRidersPage";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { EmailVerificationPage } from "./pages/auth/EmailVerificationPage";
@@ -119,6 +120,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <NotificationProvider>
         <CartRehydrate />
+        <SpeedInsights />
         <RouterProvider router={router} />
       </NotificationProvider>
       <ReactQueryDevtools initialIsOpen={false} />
