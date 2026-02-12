@@ -282,7 +282,7 @@ export function HomePage() {
                   <p className="mb-1 text-xs font-mono text-slate-500 dark:text-dark-textMuted">
                     {product.partNumber}
                   </p>
-                  <h3 className="mb-1 text-sm font-semibold text-slate-900 line-clamp-2">
+                  <h3 className="mb-1 text-sm font-semibold text-slate-900 dark:text-dark-text line-clamp-2">
                     {product.name}
                   </h3>
                   <p className="mb-2 text-xs text-slate-600 dark:text-dark-textMuted">
