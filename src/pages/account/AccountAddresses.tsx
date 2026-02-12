@@ -228,8 +228,11 @@ export function AccountAddresses() {
 
       {/* Addresses Grid */}
       {addresses.length === 0 ? (
-        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-6 text-center">
+        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight dark:border-dark-border p-6 text-center">
           <p className="text-sm text-slate-600 dark:text-dark-textMuted">No addresses saved yet</p>
+          <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
+            Add addresses for faster checkout
+          </p>
           <Button
             className="mt-3 bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
             onClick={() => setIsAddingAddress(true)}
@@ -244,8 +247,8 @@ export function AccountAddresses() {
               key={address.id}
               className={`rounded-sm border bg-white dark:bg-dark-bgLight p-4 shadow-sm ${
                 address.isDefault
-                  ? "border-[#FF9900] ring-1 ring-[#FF9900]"
-                  : "border-[#c8c8c8]"
+                  ? "border-[#FF9900] ring-1 ring-[#FF9900] dark:border-[#FF9900] dark:ring-[#FF9900]"
+                  : "border-[#c8c8c8] dark:border-dark-border"
               }`}
             >
               <div className="flex items-start justify-between">
@@ -286,7 +289,7 @@ export function AccountAddresses() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="text-red-600"
+                    className="text-red-600 dark:text-red-400 dark:hover:text-red-300"
                     onClick={() => handleDeleteAddress(address.id)}
                   >
                     Remove
@@ -315,14 +318,14 @@ export function AccountAddresses() {
       {/* Add/Edit Address Modal */}
       {isAddingAddress && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg border border-transparent dark:border-dark-border max-h-[90vh] overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {editingAddress ? "Edit Address" : "Add New Address"}
               </h2>
               <button
-                onClick={resetForm}
-                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:text-dark-text"
+                onClick={() => setIsAddingAddress(false)}
+                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:hover:text-dark-text"
               >
                 ✕
               </button>
@@ -346,8 +349,8 @@ export function AccountAddresses() {
                       }
                       className={`flex-1 rounded-sm border px-3 py-2 text-xs transition-colors ${
                         formData.type === type
-                          ? "border-[#FF9900] bg-[#FF9900]/10 text-[#FF9900]"
-                          : "border-[#c8c8c8] text-slate-700 hover:bg-slate-50 dark:hover:bg-dark-bg"
+                          ? "border-[#FF9900] bg-[#FF9900]/10 text-[#FF9900] dark:bg-[#FF9900]/20"
+                          : "border-slate-200 hover:bg-slate-50 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
                       }`}
                     >
                       {typeLabels[type]}
@@ -395,7 +398,7 @@ export function AccountAddresses() {
                     onChange={(e) =>
                       setFormData({ ...formData, state: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
                   >
                     <option value="">Select County</option>
                     {counties.map((county) => (
@@ -478,11 +481,11 @@ export function AccountAddresses() {
       )}
 
       {/* Info Section */}
-      <div className="rounded-sm bg-blue-50 p-4">
-        <h3 className="text-xs font-semibold text-blue-900">
-          Why add multiple addresses?
+      <div className="rounded-sm bg-blue-50 p-4 dark:bg-blue-900/20">
+        <h3 className="text-xs font-semibold text-blue-900 dark:text-blue-200">
+          Why add your addresses?
         </h3>
-        <ul className="mt-2 space-y-1 text-xs text-blue-800">
+        <ul className="mt-2 space-y-1 text-xs text-blue-800 dark:text-blue-300">
           <li>• Save time during checkout by selecting saved addresses</li>
           <li>• Have orders delivered to home, work, or other locations</li>
           <li>• Manage billing and shipping addresses separately</li>

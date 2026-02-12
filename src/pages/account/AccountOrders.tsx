@@ -13,9 +13,9 @@ import type {
 const statusColors: Record<OrderStatus, string> = {
   PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
   CONFIRMED: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-  PROCESSING: "bg-indigo-100 text-indigo-700",
-  SHIPPED: "bg-purple-100 text-purple-700",
-  OUT_FOR_DELIVERY: "bg-cyan-100 text-cyan-700",
+  PROCESSING: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400",
+  SHIPPED: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  OUT_FOR_DELIVERY: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
   DELIVERED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   CANCELLED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
 };
@@ -24,7 +24,7 @@ const paymentStatusColors: Record<PaymentStatus, string> = {
   PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
   PAID: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   FAILED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-  REFUNDED: "bg-slate-100 text-slate-700 dark:text-dark-text",
+  REFUNDED: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400",
 };
 
 export function AccountOrders() {
@@ -121,7 +121,7 @@ export function AccountOrders() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#FF9900] focus:outline-none"
+          className="rounded-sm border border-[#c8c8c8] px-3 py-1.5 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
         >
           <option value="">All Orders</option>
           <option value="PENDING">Pending</option>
@@ -137,7 +137,7 @@ export function AccountOrders() {
       {/* Orders List */}
       <div className="space-y-3">
         {filteredOrders.length === 0 ? (
-          <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-6 text-center">
+          <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight dark:border-dark-border p-6 text-center">
             <p className="text-sm text-slate-600 dark:text-dark-textMuted">No orders found</p>
             <Button
               className="mt-3 bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
@@ -150,7 +150,7 @@ export function AccountOrders() {
           filteredOrders.map((order) => (
             <div
               key={order.id}
-              className="cursor-pointer rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight p-4 shadow-sm transition-shadow hover:shadow-md"
+              className="cursor-pointer rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight dark:border-dark-border p-4 shadow-sm transition-shadow hover:shadow-md"
               onClick={() => setSelectedOrder(order)}
             >
               <div className="flex items-start justify-between">
@@ -196,7 +196,7 @@ export function AccountOrders() {
                 {order.items.slice(0, 3).map((item) => (
                   <div
                     key={item.id}
-                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-[10px] text-slate-500 dark:text-dark-textMuted"
+                    className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-[10px] text-slate-500 dark:bg-slate-800 dark:text-dark-textMuted"
                   >
                     {item.product?.name.substring(0, 15)}...
                   </div>
@@ -215,7 +215,7 @@ export function AccountOrders() {
       {/* Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-2xl rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-2xl rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto border border-transparent dark:border-dark-border">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -235,7 +235,7 @@ export function AccountOrders() {
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:text-dark-text"
+                className="text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:hover:text-dark-text"
               >
                 ✕
               </button>
@@ -260,9 +260,9 @@ export function AccountOrders() {
                 {selectedOrder.items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start gap-3 rounded-sm border border-[#e8e8e8] p-3"
+                    className="flex items-start gap-3 rounded-sm border border-[#e8e8e8] dark:border-dark-border p-3"
                   >
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-xs text-slate-500 dark:text-dark-textMuted">
+                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded bg-slate-100 text-xs text-slate-500 dark:bg-slate-800 dark:text-dark-textMuted">
                       IMG
                     </div>
                     <div className="flex-1">
@@ -357,7 +357,7 @@ export function AccountOrders() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-red-300 text-red-700 hover:bg-red-50"
+                  className="border-red-300 text-red-700 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20"
                 >
                   Cancel Order
                 </Button>

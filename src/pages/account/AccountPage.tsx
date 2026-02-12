@@ -154,7 +154,9 @@ function SideNavButton({
       variant={isActive ? "subtle" : "ghost"}
       size="sm"
       className={`w-full justify-start rounded-sm px-2 text-[11px] font-normal ${
-        isActive ? "bg-[#FF9900]/10 text-[#FF9900]" : ""
+        isActive
+          ? "bg-[#FF9900]/10 text-[#FF9900] dark:bg-dark-bgLight dark:text-amber-400 hover:bg-[#FF9900]/20 dark:hover:bg-dark-bgLight"
+          : "text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5"
       }`}
       onClick={onClick}
     >
@@ -232,7 +234,7 @@ function AccountOverview({
           </div>
 
           {statsError && (
-            <p className="mt-2 text-xs text-amber-600">{statsError}</p>
+            <p className="mt-2 text-xs text-amber-600 dark:text-amber-500">{statsError}</p>
           )}
         </div>
       ) : (
