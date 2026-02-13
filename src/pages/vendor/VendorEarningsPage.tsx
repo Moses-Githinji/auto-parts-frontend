@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useEarningsStore } from "../../stores/earningsStore";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
-import { Loader2, DollarSign, Clock, CheckCircle2, AlertCircle, Download } from "lucide-react";
+import { Loader2, DollarSign, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 
 export function VendorEarningsPage() {
   const {

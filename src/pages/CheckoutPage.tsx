@@ -26,7 +26,7 @@ interface OrderGroup {
 
 export function CheckoutPage() {
   const navigate = useNavigate();
-  const { items, total, clearCart } = useCartStore();
+  const { items, totalAmount, clearCart } = useCartStore();
   const { user } = useAuthStore();
 
   const [step, setStep] = useState<"address" | "payment">("address");
@@ -389,7 +389,7 @@ export function CheckoutPage() {
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-dark-textMuted">Subtotal</span>
                 <span className="font-medium text-slate-900 dark:text-dark-text">
-                  KES {total.toLocaleString()}
+                  KES {totalAmount().toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
@@ -405,7 +405,7 @@ export function CheckoutPage() {
             <div className="flex justify-between">
               <span className="text-lg font-semibold text-slate-900 dark:text-dark-text">Total</span>
               <span className="text-lg font-bold text-[#FF9900]">
-                KES {total.toLocaleString()}
+                KES {totalAmount().toLocaleString()}
               </span>
             </div>
           </div>

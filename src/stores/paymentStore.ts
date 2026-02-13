@@ -49,7 +49,7 @@ interface PaymentStore {
   reset: () => void;
 }
 
-let pollingInterval: NodeJS.Timeout | null = null;
+let pollingInterval: ReturnType<typeof setInterval> | null = null;
 
 export const usePaymentStore = create<PaymentStore>((set, get) => ({
   currentTransaction: null,
