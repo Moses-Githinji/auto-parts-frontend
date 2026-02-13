@@ -185,6 +185,23 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
     ],
   },
   {
+    title: "Finance",
+    path: "/admin/finances",
+    icon: <EarningsIcon />,
+    children: [
+      {
+        title: "Financial Overview",
+        path: "/admin/finances",
+        icon: <EarningsIcon />,
+      },
+      {
+        title: "Commissions",
+        path: "/admin/commissions",
+        icon: <EarningsIcon />,
+      },
+    ],
+  },
+  {
     title: "Blog Posts",
     path: "/admin/blogs",
     icon: <BlogIcon />,

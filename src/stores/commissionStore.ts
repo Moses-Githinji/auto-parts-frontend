@@ -26,6 +26,26 @@ interface CommissionState {
     pages: number;
   };
 
+  // Admin Dashboard State
+  totalCommissions: number;
+  commissionsByVendor: Array<{
+    vendorId: string;
+    vendorName: string;
+    totalSales: number;
+    commissionRate: number;
+    commissionEarned: number;
+    orderCount: number;
+  }>;
+  recentCommissions: Array<{
+    id: string;
+    orderNumber: string;
+    vendorName: string;
+    orderAmount: number;
+    commissionRate: number;
+    commissionAmount: number;
+    createdAt: string;
+  }>;
+
   // Actions
   calculateFees: (price: number, categorySlug: string) => Promise<void>;
   fetchConfigs: (search?: string, page?: number) => Promise<void>;
@@ -38,6 +58,7 @@ interface CommissionState {
     data: UpdateCommissionConfigRequest
   ) => Promise<CommissionConfig>;
   deleteConfig: (id: string) => Promise<void>;
+  fetchCommissions: (dateRange?: string) => Promise<void>;
   clearFeePreview: () => void;
   clearError: () => void;
 }
@@ -58,6 +79,9 @@ export const useCommissionStore = create<CommissionState>((set) => ({
     total: 0,
     pages: 0,
   },
+  totalCommissions: 0,
+  commissionsByVendor: [],
+  recentCommissions: [],
 
   calculateFees: async (price, categorySlug) => {
     if (price <= 0 || !categorySlug) {
@@ -237,6 +261,47 @@ export const useCommissionStore = create<CommissionState>((set) => ({
         isLoadingConfigs: false,
       });
       throw new Error(message);
+    }
+  },
+
+  fetchCommissions: async (dateRange = "month") => {
+    set({ isLoadingConfigs: true, configError: null });
+    try {
+      const response = await apiClient.get<{
+        totalCommissions: number;
+        commissionsByVendor: Array<{
+          vendorId: string;
+          vendorName: string;
+          totalSales: number;
+          commissionRate: number;
+          commissionEarned: number;
+          orderCount: number;
+        }>;
+        recentCommissions: Array<{
+          id: string;
+          orderNumber: string;
+          vendorName: string;
+          orderAmount: number;
+          commissionRate: number;
+          commissionAmount: number;
+          createdAt: string;
+        }>;
+      }>(`/api/admin/commissions?dateRange=${dateRange}`);
+
+      set({
+        totalCommissions: response.totalCommissions,
+        commissionsByVendor: response.commissionsByVendor,
+        recentCommissions: response.recentCommissions,
+        isLoadingConfigs: false,
+      });
+    } catch (error) {
+      set({
+        configError:
+          error instanceof Error
+            ? error.message
+            : "Failed to fetch commissions",
+        isLoadingConfigs: false,
+      });
     }
   },
 

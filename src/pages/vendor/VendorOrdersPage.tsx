@@ -205,7 +205,7 @@ export function VendorOrdersPage() {
             </select>
             <button
               onClick={() => fetchOrders()}
-              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
             >
               Refresh
             </button>

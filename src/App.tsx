@@ -41,6 +41,11 @@ import { QRScannerPage } from "./pages/delivery/QRScannerPage";
 import { DeliveryHistoryPage } from "./pages/delivery/DeliveryHistoryPage";
 import { BlogListPage } from "./pages/blog/BlogListPage";
 import { BlogPostPage } from "./pages/blog/BlogPostPage";
+import { PaymentStatusPage } from "./pages/PaymentStatusPage";
+import { VendorEarningsPage } from "./pages/vendor/VendorEarningsPage";
+import { AdminCommissionsPage } from "./pages/admin/AdminCommissionsPage";
+import { AdminFinancesPage } from "./pages/admin/AdminFinancesPage";
+import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
 
 const queryClient = new QueryClient();
 
@@ -63,7 +68,9 @@ const router = createBrowserRouter([
       { path: "parts/:id", element: <ProductDetailPage /> },
       { path: "cart", element: <CartPage /> },
       { path: "checkout", element: <CheckoutPage /> },
+      { path: "payment/status/:transactionId", element: <PaymentStatusPage /> },
       { path: "orders", element: <OrdersPage /> },
+      { path: "orders/:orderId/confirm", element: <OrderConfirmationPage /> },
       { path: "account/*", element: <AccountPage /> },
       // Blog routes
       { path: "blog", element: <BlogListPage /> },
@@ -73,6 +80,7 @@ const router = createBrowserRouter([
       { path: "vendor/orders", element: <VendorOrdersPage /> },
       { path: "vendor/catalog", element: <VendorCatalogPage /> },
       { path: "vendor/analytics", element: <VendorAnalyticsPage /> },
+      { path: "vendor/earnings", element: <VendorEarningsPage /> },
       { path: "vendor/settings", element: <VendorSettingsPage /> },
       // Admin routes
       { path: "admin", element: <AdminDashboardPage /> },
@@ -81,6 +89,8 @@ const router = createBrowserRouter([
       { path: "admin/disputes", element: <AdminDisputesPage /> },
       { path: "admin/reports", element: <AdminReportsPage /> },
       { path: "admin/earnings", element: <AdminEarningsPage /> },
+      { path: "admin/commissions", element: <AdminCommissionsPage /> },
+      { path: "admin/finances", element: <AdminFinancesPage /> },
       { path: "admin/delivery-reports", element: <AdminDeliveryReportsPage /> },
       { path: "admin/blogs", element: <AdminBlogsPage /> },
       // Commission Settings route
