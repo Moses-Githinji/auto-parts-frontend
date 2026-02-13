@@ -1,6 +1,27 @@
 import type { MenuItem } from "./AdminSidebar";
 
 // Icons as simple SVG elements
+// ... (previous icons)
+
+// Using Lucide icon for consistency if possible, or SVG if others are SVGs. 
+// The file seems to use raw SVGs for everything. I should stick to that pattern or import from lucide-react if convenient/allowed.
+// The file imports `MenuItem` from `./AdminSidebar`.
+// Let's stick to the pattern of the file.
+const PromotionsIcon = () => (
+   <svg
+     className="h-4 w-4"
+     fill="none"
+     stroke="currentColor"
+     viewBox="0 0 24 24"
+   >
+     <path
+       strokeLinecap="round"
+       strokeLinejoin="round"
+       strokeWidth={2}
+       d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 8V5a2 2 0 012-2h2z"
+     />
+   </svg>
+);
 const DashboardIcon = () => (
   <svg
     className="h-4 w-4"
@@ -200,6 +221,11 @@ export const ADMIN_MENU_ITEMS: MenuItem[] = [
         icon: <EarningsIcon />,
       },
     ],
+  },
+  {
+    title: "Promotions",
+    path: "/admin/promotions",
+    icon: <PromotionsIcon />,
   },
   {
     title: "Blog Posts",

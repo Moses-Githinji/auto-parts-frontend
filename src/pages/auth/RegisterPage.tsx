@@ -52,6 +52,14 @@ export function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
+          {/* Marketing Banner */}
+          <div className="mb-6 rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-center text-white shadow-lg">
+            <p className="font-bold text-lg">Special Offer 🎉</p>
+            <p className="text-sm mt-1">
+              The first 100 vendors get <span className="font-extrabold text-yellow-300">20% off</span> commission fees for 30 days!
+            </p>
+          </div>
+
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-dark-text">
             Create your account
           </h2>

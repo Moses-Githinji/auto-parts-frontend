@@ -1,4 +1,32 @@
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
+import { useAuthStore } from "../../stores/authStore";
+import { format } from "date-fns";
+import { Tag } from "lucide-react";
+
+function VendorPromotionBadge() {
+  const { user } = useAuthStore();
+  // We need to cast or guard because user might not be a Vendor (though this page is protected)
+  // and we just added 'promotions' to the interface.
+  // Ideally, useAuthStore should return a typed user based on role, but for now we check safely.
+  const promotions = (user as any)?.promotions; 
+  const activePromo = promotions?.[0];
+
+  if (!activePromo) return null;
+
+  const isPercentage = activePromo.promotion.discountType === "PERCENTAGE";
+  const value = Number(activePromo.promotion.discountValue);
+  const text = isPercentage ? `${value}% OFF Commission` : `KES ${value} OFF Commission`;
+
+  return (
+    <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+      <Tag className="h-4 w-4" />
+      <span>{text}</span>
+      <span className="ml-1 text-xs text-green-600 dark:text-green-500">
+        (Expires {format(new Date(activePromo.expiresAt), "MMM d, yyyy")})
+      </span>
+    </div>
+  );
+}
 
 export function VendorDashboardPage() {
   const vendorNavItems = [
@@ -12,6 +40,7 @@ export function VendorDashboardPage() {
   return (
     <BackofficeLayout title="Vendor Portal" navItems={vendorNavItems}>
       <div className="p-6">
+        <VendorPromotionBadge />
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">
             Vendor Dashboard

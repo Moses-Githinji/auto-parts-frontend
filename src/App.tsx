@@ -45,6 +45,7 @@ import { PaymentStatusPage } from "./pages/PaymentStatusPage";
 import { VendorEarningsPage } from "./pages/vendor/VendorEarningsPage";
 import { AdminCommissionsPage } from "./pages/admin/AdminCommissionsPage";
 import { AdminFinancesPage } from "./pages/admin/AdminFinancesPage";
+import { AdminPromotionsPage } from "./pages/admin/AdminPromotionsPage";
 import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
 
 const queryClient = new QueryClient();
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
       { path: "admin/earnings", element: <AdminEarningsPage /> },
       { path: "admin/commissions", element: <AdminCommissionsPage /> },
       { path: "admin/finances", element: <AdminFinancesPage /> },
+      { path: "admin/promotions", element: <AdminPromotionsPage /> },
       { path: "admin/delivery-reports", element: <AdminDeliveryReportsPage /> },
       { path: "admin/blogs", element: <AdminBlogsPage /> },
       // Commission Settings route

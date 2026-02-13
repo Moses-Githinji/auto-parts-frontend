@@ -23,6 +23,31 @@ export interface Vendor {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  promotions?: VendorPromotion[];
+}
+
+export interface CommissionPromotion {
+  id: string;
+  name: string;
+  description?: string;
+  discountType: "PERCENTAGE" | "FIXED_AMOUNT";
+  discountValue: number; // Changed to number to match usual API responses, though user said string "20.00" in one place and number in another. generic number is safer.
+  startDate: string;
+  endDate?: string;
+  maxVendors?: number;
+  isActive: boolean;
+  _count?: {
+    vendorPromotions: number;
+  };
+}
+
+export interface VendorPromotion {
+  id: string;
+  vendorId: string;
+  promotionId: string;
+  startedAt: string;
+  expiresAt: string;
+  promotion: CommissionPromotion;
 }
 
 export interface VendorProfile {
