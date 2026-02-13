@@ -254,7 +254,7 @@ export function HomePage() {
               See more
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 min-[321px]:grid-cols-2 gap-4 md:grid-cols-4">
             {featuredProducts
               .slice(0, 8)
               // Deduplicate by product ID to prevent duplicates
@@ -532,7 +532,7 @@ export function HomePage() {
               View all
             </Button>
           </div>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <div className="grid grid-cols-1 min-[321px]:grid-cols-2 gap-4 md:grid-cols-4">
             {categories.slice(0, 8).map((category) => (
               <button
                 key={category.name}
