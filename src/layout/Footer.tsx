@@ -43,7 +43,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="hidden md:block">
+    <footer className="mb-16 md:mb-0">
       {/* Back to top */}
       <button
         type="button"
