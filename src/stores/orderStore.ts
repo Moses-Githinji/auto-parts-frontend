@@ -33,6 +33,7 @@ interface OrderState {
     data: UpdatePaymentStatusRequest
   ) => Promise<Order>;
   cancelOrder: (orderId: string) => Promise<Order>;
+  deleteOrder: (orderId: string) => Promise<void>;
   updateOrderStatus: (
     orderId: string,
     status: OrderStatus,
@@ -148,21 +149,22 @@ export const useOrderStore = create<OrderState>()(
       updatePaymentStatus: async (orderId, data) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await apiClient.put<{ order: Order }>(
+          const response = await apiClient.put<any>(
             `/api/orders/${orderId}/payment`,
             data
           );
+          const updatedOrder = response.order || response;
           set((state) => ({
             orders: state.orders.map((o) =>
-              o.id === orderId ? response.order : o
+              o.id === orderId ? updatedOrder : o
             ),
             currentOrder:
               state.currentOrder?.id === orderId
-                ? response.order
+                ? updatedOrder
                 : state.currentOrder,
             isLoading: false,
           }));
-          return response.order;
+          return updatedOrder;
         } catch (error) {
           set({
             error:
@@ -178,20 +180,21 @@ export const useOrderStore = create<OrderState>()(
       cancelOrder: async (orderId) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await apiClient.put<{ order: Order }>(
+          const response = await apiClient.put<any>(
             `/api/orders/${orderId}/cancel`
           );
+          const updatedOrder = response.order || response;
           set((state) => ({
             orders: state.orders.map((o) =>
-              o.id === orderId ? response.order : o
+              o.id === orderId ? updatedOrder : o
             ),
             currentOrder:
               state.currentOrder?.id === orderId
-                ? response.order
+                ? updatedOrder
                 : state.currentOrder,
             isLoading: false,
           }));
-          return response.order;
+          return updatedOrder;
         } catch (error) {
           set({
             error:
@@ -205,21 +208,22 @@ export const useOrderStore = create<OrderState>()(
       updateOrderStatus: async (orderId, status, data) => {
         set({ isLoading: true, error: null });
         try {
-          const response = await apiClient.put<{ order: Order }>(
+          const response = await apiClient.put<any>(
             `/api/orders/${orderId}/status`,
             { status, ...data }
           );
+          const updatedOrder = response.order || response;
           set((state) => ({
             orders: state.orders.map((o) =>
-              o.id === orderId ? response.order : o
+              o.id === orderId ? updatedOrder : o
             ),
             currentOrder:
               state.currentOrder?.id === orderId
-                ? response.order
+                ? updatedOrder
                 : state.currentOrder,
             isLoading: false,
           }));
-          return response.order;
+          return updatedOrder;
         } catch (error) {
           set({
             error:
@@ -269,6 +273,26 @@ export const useOrderStore = create<OrderState>()(
               error instanceof Error
                 ? error.message
                 : "Failed to fetch analytics",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      deleteOrder: async (orderId) => {
+        set({ isLoading: true, error: null });
+        try {
+          await apiClient.delete(`/api/orders/${orderId}`);
+          set((state) => ({
+            orders: state.orders.filter((o) => o.id !== orderId),
+            currentOrder:
+              state.currentOrder?.id === orderId ? null : state.currentOrder,
+            isLoading: false,
+          }));
+        } catch (error) {
+          set({
+            error:
+              error instanceof Error ? error.message : "Failed to delete order",
             isLoading: false,
           });
           throw error;

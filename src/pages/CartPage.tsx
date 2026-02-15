@@ -39,6 +39,19 @@ export function CartPage() {
     }
   };
 
+  const [quantityError, setQuantityError] = useState<{id: string, message: string} | null>(null);
+
+  const handleUpdateQuantity = async (itemId: string, newQuantity: number) => {
+    setQuantityError(null);
+    try {
+      await updateQuantity(itemId, newQuantity);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to update quantity";
+      setQuantityError({ id: itemId, message });
+      setTimeout(() => setQuantityError(null), 3000);
+    }
+  };
+
   if (items.length === 0) {
     return (
       <div className="space-y-4">
@@ -130,7 +143,7 @@ export function CartPage() {
                         type="button"
                         className="h-7 w-7 rounded-l text-slate-600 hover:bg-slate-200"
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
+                          handleUpdateQuantity(item.id, item.quantity - 1)
                         }
                         aria-label="Decrease quantity"
                       >
@@ -143,13 +156,18 @@ export function CartPage() {
                         type="button"
                         className="h-7 w-7 rounded-r text-slate-600 hover:bg-slate-200"
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
+                          handleUpdateQuantity(item.id, item.quantity + 1)
                         }
                         aria-label="Increase quantity"
                       >
                         +
                       </button>
                     </div>
+                    {quantityError?.id === item.id && (
+                      <p className="absolute mt-10 text-[10px] text-red-600 whitespace-nowrap bg-white p-1 rounded border border-red-200 shadow-sm z-10">
+                        {quantityError.message}
+                      </p>
+                    )}
                     <p className="text-xs font-semibold text-slate-900 dark:text-dark-text">
                       {currency}{" "}
                       {(item.price * item.quantity).toLocaleString(undefined, {

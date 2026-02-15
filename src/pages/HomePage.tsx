@@ -21,6 +21,8 @@ import { useProductStore } from "../stores/productStore";
 import { useBlogStore } from "../stores/blogStore";
 import API_CONFIG from "../config/api";
 import { format } from "date-fns";
+import { usePromotionStore } from "../stores/promotionStore";
+import { PromotionBanner } from "../components/promotions/PromotionBanner";
 
 const DEFAULT_VENDOR = {
   vendorId: "nairobi-genuine",
@@ -48,6 +50,8 @@ export function HomePage() {
     isLoadingPosts: isLoadingBlogPosts 
   } = useBlogStore();
 
+  const fetchPromotions = usePromotionStore(s => s.fetchPromotions);
+
   const [selectedMake, setSelectedMake] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
@@ -68,7 +72,8 @@ export function HomePage() {
     fetchBrands();
     fetchVehicleMakes();
     fetchBlogPosts("", 1); // Fetch page 1 of blog posts
-  }, [fetchFeaturedProducts, fetchCategories, fetchBrands, fetchBlogPosts, clearError]);
+    fetchPromotions();
+  }, [fetchFeaturedProducts, fetchCategories, fetchBrands, fetchBlogPosts, clearError, fetchPromotions]);
 
   // Fetch vehicle makes on initial load
   const fetchVehicleMakes = async () => {
@@ -160,19 +165,28 @@ export function HomePage() {
     id: string;
     name: string;
     price: number;
+    vendorId?: string;
+    brand?: string;
+    images?: string[];
+    stock: number;
   }) {
     addItem({
       productId: product.id,
       name: product.name,
       price: product.price,
       quantity: 1,
-      vendorId: DEFAULT_VENDOR.vendorId,
-      vendorName: DEFAULT_VENDOR.vendorName,
+      vendorId: product.vendorId || DEFAULT_VENDOR.vendorId,
+      vendorName: product.brand || DEFAULT_VENDOR.vendorName,
+      image: product.images?.[0],
+      inStock: product.stock > 0,
+      stock: product.stock,
     });
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4">
+      {/* Dynamic Promotion Banner */}
+      <PromotionBanner className="mt-2" />
       {/* Error State */}
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-6 text-center text-red-800">
@@ -237,7 +251,7 @@ export function HomePage() {
       </section>
 
       {/* Featured Products from Backend */}
-      {featuredProducts.length > 0 && (
+      {featuredProducts?.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -518,7 +532,7 @@ export function HomePage() {
       </section>
 
       {/* Categories from Backend */}
-      {categories.length > 0 && (
+      {categories?.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -559,7 +573,7 @@ export function HomePage() {
       )}
 
       {/* Brands from Backend */}
-      {brands.length > 0 && (
+      {brands?.length > 0 && (
         <section>
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -716,7 +730,7 @@ export function HomePage() {
               </div>
             ))}
           </div>
-        ) : blogPosts.length > 0 ? (
+        ) : blogPosts?.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-3">
             {blogPosts.slice(0, 3).map((post) => (
               <article 

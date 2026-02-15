@@ -9,6 +9,7 @@ export interface CartItem {
   vendorId: string;
   vendorName: string;
   inStock?: boolean;
+  stock?: number;
   fitmentVehicle?: string;
   currency?: string;
   addedAt?: string;
@@ -27,6 +28,7 @@ export interface AddToCartRequest {
   vendorId: string;
   vendorName: string;
   inStock?: boolean;
+  stock?: number;
 }
 
 export interface UpdateCartItemRequest {

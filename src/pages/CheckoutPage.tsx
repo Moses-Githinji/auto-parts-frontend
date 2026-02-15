@@ -66,7 +66,13 @@ export function CheckoutPage() {
     }
   }, [user, navigate]);
 
-  const handleCreateOrder = async () => {
+  const handleContinueToPayment = () => {
+    if (isAddressValid(shippingAddress)) {
+      setStep("payment");
+    }
+  };
+
+  const handlePlaceOrder = async (selectedPaymentMethod: "mpesa" | "stripe") => {
     try {
       setIsCreatingOrder(true);
       setError(null);
@@ -79,12 +85,20 @@ export function CheckoutPage() {
         })),
         shippingAddress,
         billingAddress: useSameAddress ? shippingAddress : billingAddress,
+        paymentMethod: selectedPaymentMethod,
       });
 
       setOrderGroup(response.orderGroup);
-      setStep("payment");
+      
+      // Redirect to payment status page immediately only for M-Pesa (C2B flow)
+      // For Stripe, we stay on the page to show the Card Element
+      if (selectedPaymentMethod === "mpesa") {
+        // Clear cart immediately for M-Pesa
+        clearCart();
+        navigate(`/payment/status/${response.orderGroup.id}`);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.error || "Failed to create order");
+      setError(err.response?.data?.error || "Failed to place order");
     } finally {
       setIsCreatingOrder(false);
     }
@@ -264,27 +278,19 @@ export function CheckoutPage() {
 
               <Button
                 className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
-                onClick={handleCreateOrder}
+                onClick={handleContinueToPayment}
                 disabled={
                   !isAddressValid(shippingAddress) ||
-                  (!useSameAddress && !isAddressValid(billingAddress)) ||
-                  isCreatingOrder
+                  (!useSameAddress && !isAddressValid(billingAddress))
                 }
               >
-                {isCreatingOrder ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating Order...
-                  </>
-                ) : (
-                  "Continue to Payment"
-                )}
+                Continue to Payment
               </Button>
             </div>
           )}
 
           {/* Payment Step */}
-          {step === "payment" && orderGroup && (
+          {step === "payment" && (
             <div className="space-y-6">
               <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
                 <div className="mb-4 flex items-center gap-2">
@@ -325,29 +331,62 @@ export function CheckoutPage() {
                     </p>
                   </button>
                 </div>
+
+                {paymentMethod && (
+                  <div className="mt-8 rounded-lg border border-[#FF9900]/20 bg-[#FF9900]/5 p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <h4 className="font-semibold text-slate-900 dark:text-dark-text mb-2">Order Review</h4>
+                    <div className="space-y-1 text-sm text-slate-600 dark:text-dark-textMuted">
+                      <div className="flex justify-between">
+                        <span>Items:</span>
+                        <span className="font-medium">{items.length} product(s)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Payment Method:</span>
+                        <span className="font-medium capitalize text-[#FF9900]">{paymentMethod}</span>
+                      </div>
+                      <div className="flex justify-between border-t border-slate-200 dark:border-dark-border mt-2 pt-2 text-slate-900 dark:text-dark-text font-bold">
+                        <span>Total to Pay:</span>
+                        <span>KES {total.toLocaleString()}</span>
+                      </div>
+                    </div>
+                    {paymentMethod === "mpesa" && (
+                      <p className="mt-4 text-xs bg-white dark:bg-dark-bgLight p-2 rounded border border-slate-200 dark:border-dark-border">
+                        <span className="font-bold text-green-600">Note:</span> After clicking below, you'll be shown manual Paybill instructions to complete your payment.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                <div className="mt-6">
+                  <Button
+                    className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90 h-12 text-lg font-bold shadow-md"
+                    onClick={() => paymentMethod && handlePlaceOrder(paymentMethod)}
+                    disabled={!paymentMethod || isCreatingOrder}
+                  >
+                    {isCreatingOrder ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Placing Order...
+                      </>
+                    ) : (
+                      `Place Order & Pay KES ${total.toLocaleString()}`
+                    )}
+                  </Button>
+                </div>
+
+                {/* Stripe Payment Element (Shown after order creation) */}
+                {orderGroup && paymentMethod === "stripe" && (
+                  <div className="mt-8 pt-8 border-t border-slate-200 dark:border-dark-border">
+                    <StripePayment
+                      orderGroupId={orderGroup.id}
+                      amount={orderGroup.totalAmount}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </div>
+                )}
               </div>
 
-              {paymentMethod === "mpesa" && (
-                <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
-                  <MpesaPayment
-                    orderGroupId={orderGroup.id}
-                    amount={orderGroup.totalAmount}
-                    onSuccess={handlePaymentSuccess}
-                    onError={handlePaymentError}
-                  />
-                </div>
-              )}
-
-              {paymentMethod === "stripe" && (
-                <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
-                  <StripePayment
-                    orderGroupId={orderGroup.id}
-                    amount={orderGroup.totalAmount}
-                    onSuccess={handlePaymentSuccess}
-                    onError={handlePaymentError}
-                  />
-                </div>
-              )}
 
               {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">

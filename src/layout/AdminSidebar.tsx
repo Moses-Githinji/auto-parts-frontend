@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "../lib/cn";
 import { useAuthStore } from "../stores/authStore";
-import { ThemeSwitcher } from "../components/ThemeSwitcher";
 
 export interface MenuItem {
   title: string;
@@ -174,7 +173,7 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-2">
         <div className="flex flex-col gap-0.5">
-          {menuItems.map((item) => (
+          {(menuItems || []).map((item) => (
             <SidebarItem key={item.path || item.title} item={item} />
           ))}
         </div>
@@ -182,7 +181,6 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
 
       {/* Footer: Theme Switcher and Logout */}
       <div className="border-t border-[#c8c8c8] dark:border-dark-border p-2 space-y-1">
-        <ThemeSwitcher />
         <button
           onClick={handleLogout}
           className="flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"

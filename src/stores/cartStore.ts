@@ -30,18 +30,26 @@ export const useCartStore = create<CartState>()(
       addItem: async (item) => {
         set({ isLoading: true, error: null });
         try {
-          // Simulate a small delay for UX consistency
-          await new Promise((resolve) => setTimeout(resolve, 100));
+          // Check if item is in stock
+          if (item.stock !== undefined && item.stock <= 0) {
+            throw new Error("Item is out of stock");
+          }
 
-          const existingItemIndex = get().items.findIndex(
-            (i) =>
-              i.productId === item.productId && i.vendorId === item.vendorId,
+          const existingItem = get().items.find(
+            (i) => i.productId === item.productId && i.vendorId === item.vendorId
           );
 
-          if (existingItemIndex >= 0) {
-            // Update quantity if item already exists
-            const updatedItems = [...get().items];
-            updatedItems[existingItemIndex].quantity += item.quantity;
+          if (existingItem) {
+            // Check if adding more exceeds stock
+            if (item.stock !== undefined && existingItem.quantity + item.quantity > item.stock) {
+              throw new Error(`Only ${item.stock} items available in stock`);
+            }
+            
+            const updatedItems = get().items.map((i) =>
+              i.productId === item.productId && i.vendorId === item.vendorId
+                ? { ...i, quantity: i.quantity + item.quantity }
+                : i
+            );
             set({ items: updatedItems, isLoading: false });
           } else {
             // Add new item
@@ -49,13 +57,14 @@ export const useCartStore = create<CartState>()(
               id: generateCartItemId(),
               productId: item.productId,
               name: item.name,
-              partNumber: item.productId, // Use productId as partNumber if not provided
+              partNumber: item.productId,
               price: item.price,
               quantity: item.quantity,
               image: item.image,
               vendorId: item.vendorId,
               vendorName: item.vendorName,
-              inStock: item.inStock ?? true,
+              inStock: true,
+              stock: item.stock, // Store stock for validation during updates
               currency: "KES",
               addedAt: new Date().toISOString(),
             };
@@ -86,6 +95,11 @@ export const useCartStore = create<CartState>()(
               isLoading: false,
             }));
           } else {
+            const item = get().items.find((i) => i.id === itemId);
+            if (item && item.stock !== undefined && quantity > item.stock) {
+              throw new Error(`Only ${item.stock} items available in stock`);
+            }
+
             set((state) => ({
               items: state.items.map((item) =>
                 item.id === itemId ? { ...item, quantity } : item,

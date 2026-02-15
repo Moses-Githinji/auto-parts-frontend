@@ -77,6 +77,7 @@ export function SearchPage() {
         quantity: 1,
         vendorId: product.vendorId || "unknown-vendor",
         vendorName: product.brand || "Auto Parts Store",
+        stock: product.stock,
       });
       setCartMessage({
         type: "success",
@@ -230,10 +231,12 @@ export function SearchPage() {
                     <Button
                       size="sm"
                       onClick={() => handleAddToCart(product)}
-                      disabled={addingProductId === product.id}
+                      disabled={addingProductId === product.id || product.stock <= 0}
                     >
                       {addingProductId === product.id
                         ? "Adding..."
+                        : product.stock <= 0
+                        ? "Out of Stock"
                         : "Add to cart"}
                     </Button>
                   </div>

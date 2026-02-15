@@ -16,10 +16,20 @@
     font-family: system-ui, ui-sans-serif, sans-serif;
     background-color: rgb(241 245 249);
     color: rgb(15 23 42);
+    
+    /* Native-like behavior */
+    overscroll-behavior-y: none; /* Prevent pull-to-refresh / bounce effect */
+    -webkit-tap-highlight-color: transparent; /* Remove grey tap highlight */
+    -webkit-touch-callout: none; /* Disable callout menu */
   }
+}
 
-  .dark body {
-    background-color: #0f1419;
-    color: #e2e8f0;
+/* Utilities for safe areas */
+@layer utilities {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
   }
 }

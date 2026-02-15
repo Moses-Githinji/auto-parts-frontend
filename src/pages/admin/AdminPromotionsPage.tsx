@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Plus, Edit, Trash2, Tag, Users, Percent, DollarSign } from "lucide-react";
 import { format } from "date-fns";
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
+import { ADMIN_MENU_ITEMS } from "../../layout/adminMenuConfig";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import {
@@ -13,7 +14,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "../../components/ui/dialog";
-import apiClient from "../../lib/apiClient";
+import { apiClient } from "../../lib/apiClient";
 import type { CommissionPromotion } from "../../types/vendor";
 
 type PromotionFormData = Omit<CommissionPromotion, "id" | "_count">;
@@ -100,7 +101,7 @@ export function AdminPromotionsPage() {
   };
 
   return (
-    <BackofficeLayout title="Commission Promotions">
+    <BackofficeLayout title="Commission Promotions" menuItems={ADMIN_MENU_ITEMS}>
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -195,7 +196,7 @@ export function AdminPromotionsPage() {
         <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm">
           {isLoading ? (
              <div className="p-8 text-center text-slate-500">Loading promotions...</div>
-          ) : promotions.length === 0 ? (
+          ) : promotions?.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-12 text-center text-slate-500">
               <Tag className="mb-2 h-10 w-10 opacity-20" />
               <p>No promotions found</p>
@@ -215,7 +216,7 @@ export function AdminPromotionsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-dark-border">
-                  {promotions.map((promo) => (
+                  {promotions?.map((promo) => (
                     <tr key={promo.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg/50">
                       <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                         {promo.name}
@@ -250,11 +251,11 @@ export function AdminPromotionsPage() {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex items-center justify-end gap-2">
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleEdit(promo)}>
-                            <Edit className="h-4 w-4 text-slate-500 hover:text-blue-600" />
+                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 group" onClick={() => handleEdit(promo)}>
+                            <Edit className="h-4.5 w-4.5 text-slate-500 group-hover:text-blue-600 transition-colors" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={() => handleDelete(promo.id)}>
-                            <Trash2 className="h-4 w-4 text-slate-500 hover:text-red-600" />
+                          <Button variant="outline" size="sm" className="h-9 w-9 p-0 border-slate-200 hover:border-red-300 hover:bg-red-50/50 group" onClick={() => handleDelete(promo.id)}>
+                            <Trash2 className="h-4.5 w-4.5 text-slate-500 group-hover:text-red-600 transition-colors" />
                           </Button>
                         </div>
                       </td>

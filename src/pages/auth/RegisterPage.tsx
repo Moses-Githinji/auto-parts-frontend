@@ -3,6 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/authStore";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
+import { usePromotionStore } from "../../stores/promotionStore";
+import { useEffect } from "react";
+import { motion } from "framer-motion";
+import { Sparkles, Tag } from "lucide-react";
 
 export function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,6 +19,13 @@ export function RegisterPage() {
   });
   const { register, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
+
+  const fetchPromotions = usePromotionStore((s) => s.fetchPromotions);
+  const activePromo = usePromotionStore((s) => s.getActivePromotion());
+
+  useEffect(() => {
+    fetchPromotions();
+  }, [fetchPromotions]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -52,13 +63,41 @@ export function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-dark-bg py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          {/* Marketing Banner */}
-          <div className="mb-6 rounded-md bg-gradient-to-r from-indigo-600 to-purple-600 p-4 text-center text-white shadow-lg">
-            <p className="font-bold text-lg">Special Offer 🎉</p>
-            <p className="text-sm mt-1">
-              The first 100 vendors get <span className="font-extrabold text-yellow-300">20% off</span> commission fees for 30 days!
-            </p>
-          </div>
+          {/* Dynamic Marketing Banner */}
+          {activePromo ? (
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="mb-6 rounded-lg bg-gradient-to-r from-[#ff0080] to-[#7928ca] p-5 text-center text-white shadow-xl ring-2 ring-yellow-400/50"
+            >
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Sparkles className="h-5 w-5 text-yellow-300 animate-pulse" />
+                <p className="font-black text-xl tracking-tight italic uppercase">
+                  {activePromo.name}
+                </p>
+                <Sparkles className="h-5 w-5 text-yellow-300 animate-pulse" />
+              </div>
+              <p className="text-sm font-medium text-white mb-2">
+                {activePromo.description || "Special limited time offer for new vendors!"}
+              </p>
+              <div className="inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-1.5 backdrop-blur-sm border border-white/30">
+                <Tag className="h-4 w-4 text-yellow-300 fill-yellow-300" />
+                <span className="font-bold text-yellow-300 text-lg">
+                  {activePromo.discountType === "PERCENTAGE" 
+                    ? `${activePromo.discountValue}% OFF` 
+                    : `KES ${activePromo.discountValue} OFF`}
+                </span>
+                <span className="text-xs text-white/80 font-semibold tracking-wide">
+                  COMMISSION FEES
+                </span>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="mb-6 rounded-md bg-indigo-50 p-4 text-center border border-indigo-100">
+              <p className="text-indigo-900 font-semibold">Join Kenya's #1 Auto Parts Marketplace</p>
+              <p className="text-xs text-indigo-700 mt-1 italic">Empowering genuine vendors nationwide</p>
+            </div>
+          )}
 
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-dark-text">
             Create your account

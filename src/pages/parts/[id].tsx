@@ -100,6 +100,7 @@ export default function ProductDetailPage() {
       vendorName: "Vendor Store", // This could be enhanced with vendor store name
       image: currentProduct.images?.[0],
       inStock: currentProduct.stock > 0,
+      stock: currentProduct.stock,
     });
   }
 

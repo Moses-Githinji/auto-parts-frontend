@@ -289,9 +289,9 @@ export const useCommissionStore = create<CommissionState>((set) => ({
       }>(`/api/admin/commissions?dateRange=${dateRange}`);
 
       set({
-        totalCommissions: response.totalCommissions,
-        commissionsByVendor: response.commissionsByVendor,
-        recentCommissions: response.recentCommissions,
+        totalCommissions: response.totalCommissions || 0,
+        commissionsByVendor: response.commissionsByVendor || [],
+        recentCommissions: response.recentCommissions || [],
         isLoadingConfigs: false,
       });
     } catch (error) {

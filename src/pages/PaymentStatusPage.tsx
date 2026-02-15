@@ -1,53 +1,75 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { usePaymentStore } from "../stores/paymentStore";
 import { Button } from "../components/ui/button";
 import { Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { apiClient } from "../lib/apiClient";
 
 export function PaymentStatusPage() {
-  const { transactionId } = useParams<{ transactionId: string }>();
+  const { transactionId, orderId } = useParams<{ transactionId?: string; orderId?: string }>();
+  const [searchParams] = useSearchParams();
+  const groupId = searchParams.get("groupId");
+  const id = transactionId || orderId || groupId;
   const navigate = useNavigate();
-  const { paymentStatus, startPolling, stopPolling, isPolling } = usePaymentStore();
+  const { paymentStatus, startPolling, stopPolling, isPolling, error: storeError } = usePaymentStore();
   const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
-    if (!transactionId) {
+    if (!id) {
       navigate("/");
       return;
     }
 
-    // Start polling for payment status
-    startPolling(transactionId, (status) => {
+    // Start polling for payment status using the ID from URL
+    // We treat it as an Order ID for C2B flow
+    startPolling(id, (status) => {
       // Polling complete callback
       if (status.status === "PAID") {
         // Payment successful
         setTimeout(() => {
-          navigate(`/orders/${status.orderGroup?.id}`);
+          // Redirect to the specific order page
+          const finalOrderId = status.orderGroup?.id || id;
+          navigate(`/orders/${finalOrderId}`);
         }, 3000);
       } else if (status.status === "FAILED") {
         // Payment failed
         setTimeoutReached(true);
       }
-    });
+    }, true); // isOrderId = true
 
     // Cleanup on unmount
     return () => {
       stopPolling();
     };
-  }, [transactionId]);
+  }, [id]);
 
   if (!paymentStatus && isPolling) {
     return (
       <div className="mx-auto max-w-2xl p-4">
         <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8">
           <div className="flex flex-col items-center text-center">
-            <Loader2 className="h-16 w-16 animate-spin text-[#FF9900] mb-4" />
-            <h2 className="text-xl font-semibold text-slate-900 dark:text-dark-text mb-2">
-              Loading Payment Status...
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
-              Please wait while we check your payment status
-            </p>
+            {storeError ? (
+              <>
+                <XCircle className="h-16 w-16 text-red-600 mb-4" />
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-dark-text mb-2">
+                  Failed to Load Status
+                </h2>
+                <p className="text-sm text-slate-600 dark:text-dark-textMuted mb-4">
+                  {storeError}
+                </p>
+                <Button onClick={() => navigate("/")}>Return Home</Button>
+              </>
+            ) : (
+              <>
+                <Loader2 className="h-16 w-16 animate-spin text-[#FF9900] mb-4" />
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-dark-text mb-2">
+                  Loading Payment Status...
+                </h2>
+                <p className="text-sm text-slate-600 dark:text-dark-textMuted">
+                  Please wait while we check your payment status
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -87,14 +109,54 @@ export function PaymentStatusPage() {
             </div>
             <h2 className="text-xl font-semibold text-slate-900 dark:text-dark-text mb-2">
               {paymentStatus.provider === "mpesa" 
-                ? "Check Your Phone" 
+                ? "Pay with M-Pesa Paybill" 
                 : "Processing Payment"}
             </h2>
-            <p className="text-sm text-slate-600 dark:text-dark-textMuted mb-6">
-              {paymentStatus.provider === "mpesa"
-                ? "Please enter your M-Pesa PIN to complete the payment"
-                : "Your payment is being processed. Please wait..."}
-            </p>
+            <div className="text-sm text-slate-600 dark:text-dark-textMuted mb-6">
+              <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20 rounded-lg text-left">
+                <p className="font-semibold text-amber-900 dark:text-amber-200 mb-1">Order received!</p>
+                <p className="text-sm text-amber-800 dark:text-amber-300/90 leading-relaxed font-medium">
+                  We've sent an 'Awaiting Payment' email with your order details. Please complete the {paymentStatus.provider === "mpesa" ? "M-Pesa" : "Stripe"} payment below to finalize your purchase.
+                </p>
+              </div>
+
+              {paymentStatus.provider === "mpesa" ? (
+                <div className="space-y-4 text-left bg-slate-50 dark:bg-dark-bg p-4 rounded-lg border border-slate-200 dark:border-dark-border shadow-inner">
+                  <p className="font-bold text-center text-slate-900 dark:text-dark-text tracking-tight uppercase text-xs">M-Pesa Payment Instructions:</p>
+                  <ol className="list-decimal list-inside space-y-2.5 text-sm">
+                    <li>Go to M-Pesa menu</li>
+                    <li>Select <strong>Lipa na M-Pesa</strong> &rarr; <strong>Paybill</strong></li>
+                    <li>Enter Business No: <strong>174379</strong></li>
+                    <li>Enter Account No: <strong className="text-blue-600 font-mono tracking-wider">{paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber}</strong></li>
+                    <li>Enter Amount: <strong>KES {paymentStatus.amount.toLocaleString()}</strong></li>
+                    <li>Enter PIN and Send</li>
+                  </ol>
+                  <p className="text-[10px] text-slate-500 italic mt-4 text-center border-t border-slate-200 dark:border-dark-border pt-2 uppercase font-bold tracking-widest">Page will update automatically</p>
+                  
+                  <div className="mt-4 flex justify-center">
+                    <Button 
+                      onClick={() => id && startPolling(id, () => {}, true)}
+                      disabled={isPolling && !!paymentStatus}
+                      variant="outline"
+                      size="sm"
+                      className="text-xs font-bold uppercase tracking-wider border-blue-200 text-blue-700 bg-blue-50/50 hover:bg-blue-100/50"
+                    >
+                      {isPolling ? (
+                        <>
+                          <Loader2 className="h-3 w-3 animate-spin mr-2" />
+                          Checking Status...
+                        </>
+                      ) : "Verify Payment"}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center py-4">
+                  <Loader2 className="h-8 w-8 animate-spin text-blue-600 mb-2" />
+                  <p>Your payment is being processed. Please wait...</p>
+                </div>
+              )}
+            </div>
 
             <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 mb-4">
               <div className="flex justify-between text-sm mb-2">
@@ -117,10 +179,44 @@ export function PaymentStatusPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-dark-textMuted">
+            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-dark-textMuted mb-4">
               <Loader2 className="h-3 w-3 animate-spin" />
               Waiting for payment confirmation...
             </div>
+
+            {/* Dev Simulation Button */}
+            {import.meta.env.DEV && paymentStatus.provider === "mpesa" && (
+              <div className="mt-4 pt-4 border-t border-blue-200 w-full text-center">
+                <p className="text-[10px] text-blue-500 uppercase font-bold mb-2 tracking-wider">Developer Tools</p>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  disabled={isPolling}
+                  className="w-full border-blue-300 text-blue-600 hover:bg-blue-50 gap-2 h-8 text-xs"
+                  onClick={async (e) => {
+                    const btn = e.currentTarget;
+                    btn.disabled = true;
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = 'Simulating...';
+                    try {
+                      await apiClient.post('/api/payments/mpesa/simulate', {
+                        amount: paymentStatus.amount,
+                        phone: '254700000000',
+                        orderNumber: paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber,
+                        mock: true
+                      });
+                    } catch (err) {
+                      console.error('Simulation failed', err);
+                      btn.innerHTML = 'Failed';
+                      setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
+                    }
+                  }}
+                >
+                  Simulate Successful Payment
+                </Button>
+                <p className="mt-1 text-[10px] text-slate-400">Triggers backend callback simulation</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -186,8 +282,8 @@ export function PaymentStatusPage() {
               </Button>
             </div>
 
-            <p className="mt-4 text-xs text-slate-500 dark:text-dark-textMuted">
-              A confirmation email has been sent to your registered email address
+            <p className="mt-4 text-sm font-bold text-green-600 dark:text-green-500">
+              Payment Successful! Your official order confirmation email (receipt) has been sent.
             </p>
           </div>
         </div>

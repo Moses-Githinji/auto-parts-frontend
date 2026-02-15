@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   barcodeText: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: "bold",
     letterSpacing: 4,
   },
@@ -190,11 +190,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   qrCodeImage: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
   },
   trackingId: {
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: "bold",
     marginTop: 8,
     letterSpacing: 2,
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     color: "#1e293b",
   },
   addressValueBold: {
-    fontSize: 8,
+    fontSize: 7,
     fontWeight: "bold",
     color: "#1e293b",
   },

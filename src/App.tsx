@@ -68,9 +68,10 @@ const router = createBrowserRouter([
       { path: "search", element: <SearchPage /> },
       { path: "parts/:id", element: <ProductDetailPage /> },
       { path: "cart", element: <CartPage /> },
-      { path: "checkout", element: <CheckoutPage /> },
+      { path: "checkout/payment", element: <PaymentStatusPage /> },
       { path: "payment/status/:transactionId", element: <PaymentStatusPage /> },
       { path: "orders", element: <OrdersPage /> },
+      { path: "orders/:orderId", element: <PaymentStatusPage /> },
       { path: "orders/:orderId/confirm", element: <OrderConfirmationPage /> },
       { path: "account/*", element: <AccountPage /> },
       // Blog routes

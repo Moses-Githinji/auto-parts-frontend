@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import { useCartStore } from "../stores/cartStore";
 import { useAuthStore } from "../stores/authStore";
-import { useThemeStore } from "../stores/themeStore";
 import { Input } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { Footer } from "./Footer";
@@ -94,6 +93,7 @@ export function AppShell({ children }: AppShellProps) {
 
 function StorefrontShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const itemCount = useCartStore((s) => s.itemCount());
   const { isAuthenticated, user, fetchProfile, initializeAuth } =
     useAuthStore();
@@ -101,7 +101,6 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const { theme, toggleTheme } = useThemeStore();
 
   useEffect(() => {
     initializeAuth();
@@ -124,7 +123,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
       {/* Amazon-style Header */}
-      <header className="bg-[#131921] dark:bg-dark-primary text-slate-50 sticky top-0 z-50">
+      <header className="bg-[#131921] dark:bg-dark-primary text-slate-50 sticky top-0 z-50 pt-safe">
         {/* Top row: Logo, Search, Account, Orders, Cart */}
         <div className="flex items-center gap-2 px-2 py-1.5 md:px-4 md:py-2">
           {/* Logo */}
@@ -223,7 +222,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by part number, part name, or vehicle..."
-              className="h-9 flex-1 rounded-none border-none bg-white text-[13px] text-slate-900 placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-[#FF9900]"
+              className="h-9 flex-1 rounded-none border-none bg-white text-base md:text-[13px] text-slate-900 placeholder:text-slate-500 focus-visible:ring-2 focus-visible:ring-[#FF9900]"
             />
 
             {/* Search Button */}
@@ -237,24 +236,6 @@ function StorefrontShell({ children }: { children: ReactNode }) {
 
           {/* Right Side Icons */}
           <div className="flex items-center gap-1">
-            {/* Theme Toggle */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="flex items-center rounded-sm px-2 py-1.5 hover:outline hover:outline-1 hover:outline-slate-400"
-              aria-label="Toggle theme"
-            >
-              {theme === "light" ? (
-                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              ) : (
-                <svg className="h-4 w-4 text-[#F7CA00]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              )}
-            </button>
-
             {/* Account & Lists */}
             <button
               type="button"
@@ -443,39 +424,44 @@ function StorefrontShell({ children }: { children: ReactNode }) {
       <Footer />
 
       {/* Mobile Bottom Tab Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-dark-border bg-white/95 backdrop-blur-md dark:bg-dark-bgLight/95 md:hidden pb-safe support-backdrop-blur">
         <div className="grid grid-cols-5 divide-x divide-slate-100 dark:divide-dark-border">
           <TabBarButton
             icon={Home}
             label="Home"
             onClick={() => navigate("/")}
+            isActive={pathname === "/"}
           />
           <TabBarButton
             icon={Search}
             label="Search"
             onClick={() => navigate("/search")}
+            isActive={pathname.startsWith("/search")}
           />
           <TabBarButton
             icon={Clock}
             label="Orders"
             onClick={() => navigate("/account/orders")}
+            isActive={pathname.startsWith("/account/orders")}
           />
           <TabBarButton
             icon={Truck}
             label="Garage"
             onClick={() => navigate("/account/garage")}
+            isActive={pathname.startsWith("/account/garage")}
           />
           <TabBarButton
             icon={User}
             label="Account"
             onClick={() => navigate("/account")}
             badge={itemCount > 0 ? itemCount : undefined}
+            isActive={pathname === "/account" || pathname.startsWith("/account/profile") || pathname.startsWith("/account/addresses")}
           />
         </div>
       </div>
 
       {/* Spacer for mobile bottom bar */}
-      <div className="h-14 md:hidden" />
+      <div className="h-[calc(3.5rem+env(safe-area-inset-bottom))] md:hidden" />
     </div>
   );
 }
@@ -485,25 +471,35 @@ function TabBarButton({
   label,
   onClick,
   badge,
+  isActive,
 }: {
   icon: React.ElementType;
   label: string;
   onClick: () => void;
   badge?: number;
+  isActive: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="relative flex flex-col items-center justify-center py-2 text-[11px] text-slate-600 dark:text-dark-textMuted hover:text-[#131921] dark:hover:text-dark-text"
+      className={`relative flex flex-col items-center justify-center py-2 transition-colors ${
+        isActive 
+          ? "text-[#131921] dark:text-[#F7CA00]" 
+          : "text-slate-500 dark:text-dark-textMuted hover:text-slate-700 dark:hover:text-dark-text"
+      }`}
     >
-      <Icon className="h-5 w-5" />
-      <span className="mt-0.5">{label}</span>
-      {badge !== undefined && badge > 0 && (
-        <span className="absolute right-2 top-1 h-3 w-3 rounded-full bg-[#F7CA00] text-[9px] font-bold text-[#131921] flex items-center justify-center">
-          {badge}
-        </span>
-      )}
+      <div className="relative">
+        <Icon className={`h-6 w-6 ${isActive ? "fill-current" : ""}`} strokeWidth={isActive ? 2.5 : 2} />
+        {badge !== undefined && badge > 0 && (
+          <span className="absolute -right-2 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#CC0c39] text-[10px] font-bold text-white shadow-sm">
+            {badge}
+          </span>
+        )}
+      </div>
+      <span className={`mt-1 text-[10px] font-medium leading-none ${isActive ? "font-bold" : ""}`}>
+        {label}
+      </span>
     </button>
   );
 }
@@ -517,7 +513,7 @@ function BackofficeShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
-      <header className="border-b border-slate-200 dark:border-dark-border bg-[#131921] text-slate-50">
+      <header className="border-b border-slate-200 dark:border-dark-border bg-[#131921] text-slate-50 pt-safe">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2">
             <button

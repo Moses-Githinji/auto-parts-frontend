@@ -24,6 +24,7 @@ export interface PaymentStatus {
   orderGroup?: {
     id: string;
     orderNumber: string;
+    paymentReference?: string;
     paymentStatus: string;
   };
 }
@@ -42,7 +43,9 @@ interface PaymentStore {
   
   checkPaymentStatus: (transactionId: string) => Promise<PaymentStatus>;
   
-  startPolling: (transactionId: string, onComplete: (status: PaymentStatus) => void) => void;
+  checkOrderStatus: (orderId: string) => Promise<PaymentStatus>;
+  
+  startPolling: (transactionId: string, onComplete: (status: PaymentStatus) => void, isOrderId?: boolean) => void;
   stopPolling: () => void;
   
   clearError: () => void;
@@ -99,7 +102,61 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     }
   },
 
-  startPolling: (transactionId, onComplete) => {
+  checkOrderStatus: async (orderId) => {
+    try {
+      // In C2B, we check the order itself
+      // Handle both wrapped { order: ... } and direct responses
+      let response;
+      try {
+        response = await apiClient.get<any>(`/api/orders/${orderId}`);
+      } catch (err: any) {
+        // Fallback to public endpoint if 401 or session-less
+        if (err.response?.status === 401) {
+          console.log("Unauthorized, trying public guest endpoint...");
+          response = await apiClient.get<any>(`/api/orders/group/${orderId}`);
+        } else {
+          throw err;
+        }
+      }
+
+      const order = response.order || response.orderGroup || response;
+      
+      if (!order) {
+        throw new Error("Order not found");
+      }
+
+      // Map order status to PaymentStatus format
+      const status: PaymentStatus = {
+        transactionId: orderId,
+        status: order.paymentStatus === "PAID" ? "PAID" : "PENDING",
+        provider: "mpesa", // C2B is always M-Pesa for this context
+        amount: Number(order.totalAmount || order.total || 0),
+        createdAt: order.createdAt,
+        orderGroup: {
+          id: order.id,
+          orderNumber: order.orderNumber,
+          paymentReference: order.paymentReference || order.orderGroup?.paymentReference,
+          paymentStatus: order.paymentStatus,
+        }
+      };
+      
+      set({ paymentStatus: status, error: null });
+      return status;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.error || err.message || "Failed to check order status";
+      set({ error: errorMessage });
+      // Don't throw here to avoid unhandled rejections in polling
+      return {
+        transactionId: orderId,
+        status: "PENDING",
+        provider: "mpesa",
+        amount: 0,
+        createdAt: new Date().toISOString(),
+      } as PaymentStatus;
+    }
+  },
+
+  startPolling: (transactionId, onComplete, isOrderId = false) => {
     // Clear any existing polling
     if (pollingInterval) {
       clearInterval(pollingInterval);
@@ -108,17 +165,19 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     set({ isPolling: true });
 
     // Poll immediately
-    get().checkPaymentStatus(transactionId).then((status) => {
+    const checkStatus = isOrderId ? get().checkOrderStatus : get().checkPaymentStatus;
+    
+    checkStatus(transactionId).then((status) => {
       if (status.status === "PAID" || status.status === "FAILED") {
         get().stopPolling();
         onComplete(status);
       }
     });
 
-    // Then poll every 3 seconds
+    // Then poll every 5 seconds (as per backend guidelines)
     pollingInterval = setInterval(async () => {
       try {
-        const status = await get().checkPaymentStatus(transactionId);
+        const status = await checkStatus(transactionId);
         
         if (status.status === "PAID" || status.status === "FAILED") {
           get().stopPolling();
@@ -127,7 +186,7 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
       } catch (error) {
         console.error("Polling error:", error);
       }
-    }, 3000);
+    }, 5000);
 
     // Stop polling after 5 minutes (timeout)
     setTimeout(() => {

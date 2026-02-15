@@ -306,12 +306,13 @@ export function OrderDetailsDrawer({
           {(() => {
             const commissionRate = 0.08;
             const vatRate = 0.16;
-            const marketplaceFee = order.total * commissionRate;
+            const commissionBase = Number(order.subtotal);
+            const marketplaceFee = commissionBase * commissionRate;
             const vatAmount = marketplaceFee * vatRate;
-            const vendorPayout = order.total - marketplaceFee - vatAmount;
+            const vendorPayout = commissionBase - marketplaceFee - vatAmount;
             return (
               <VendorEarningsDisplay
-                orderAmount={order.total}
+                orderAmount={commissionBase}
                 marketplaceFee={marketplaceFee}
                 vatAmount={vatAmount}
                 vendorPayout={vendorPayout}
