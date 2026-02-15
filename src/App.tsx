@@ -9,7 +9,6 @@ import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
 import ProductDetailPage from "./pages/parts/[id]";
 import { CartPage } from "./pages/CartPage";
-import { CheckoutPage } from "./pages/CheckoutPage";
 import { OrdersPage } from "./pages/OrdersPage";
 import { AccountPage } from "./pages/account/AccountPage";
 import { VendorDashboardPage } from "./pages/vendor/VendorDashboardPage";

@@ -4,7 +4,6 @@ import { useCartStore } from "../stores/cartStore";
 import { useAuthStore } from "../stores/authStore";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { MpesaPayment } from "../components/payment/MpesaPayment";
 import { StripePayment } from "../components/payment/StripePayment";
 import { apiClient } from "../lib/apiClient";
 import { Loader2, ShoppingCart, MapPin, CreditCard } from "lucide-react";

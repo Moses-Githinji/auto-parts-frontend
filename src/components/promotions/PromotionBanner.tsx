@@ -12,8 +12,6 @@ export function PromotionBanner({ className }: PromotionBannerProps) {
   const navigate = useNavigate();
   // Fixed: Subscribe to the result of getActivePromotion to ensure re-renders
   const activePromo = usePromotionStore((s) => s.getActivePromotion());
-  const isLoading = usePromotionStore((s) => s.isLoading);
-  const error = usePromotionStore((s) => s.error);
 
   if (!activePromo) {
     return null;
