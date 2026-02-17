@@ -3,8 +3,8 @@ import { BackofficeLayout } from "../../layout/BackofficeLayout";
 import { useAuthStore } from "../../stores/authStore";
 import { useOrderStore } from "../../stores/orderStore";
 import { format } from "date-fns";
-import { Tag, TrendingUp, TrendingDown, Package, Loader2 } from "lucide-react";
-import type { OrderAnalytics, Order } from "../../types/order";
+import { Tag, TrendingUp, Package, Loader2 } from "lucide-react";
+import type { OrderAnalytics } from "../../types/order";
 
 function VendorPromotionBadge() {
   const { user } = useAuthStore();

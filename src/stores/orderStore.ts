@@ -25,6 +25,7 @@ interface OrderState {
     page?: number;
     limit?: number;
     status?: string;
+    vendorId?: string;
   }) => Promise<void>;
   fetchOrder: (orderId: string) => Promise<void>;
   createOrder: (data: CreateOrderRequest) => Promise<Order>;
