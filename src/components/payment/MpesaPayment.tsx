@@ -50,7 +50,12 @@ export function MpesaPayment({
 
     try {
       setIsProcessing(true);
-      const response = await initiatePayment(orderGroupId, "mpesa", phoneNumber);
+      const response = await initiatePayment(
+        orderGroupId, 
+        "mpesa", 
+        phoneNumber, 
+        import.meta.env.DEV
+      );
       
       // Navigate to payment status page
       onSuccess(response.transactionId);

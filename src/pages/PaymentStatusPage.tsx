@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { usePaymentStore } from "../stores/paymentStore";
 import { Button } from "../components/ui/button";
-import { Loader2, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { Loader2, CheckCircle2, XCircle, Clock, Smartphone } from "lucide-react";
 import { apiClient } from "../lib/apiClient";
 
 export function PaymentStatusPage() {
@@ -112,21 +112,36 @@ export function PaymentStatusPage() {
               </div>
 
               {paymentStatus.provider === "mpesa" ? (
-                <div className="space-y-4 text-left bg-slate-50 dark:bg-dark-bg p-4 rounded-lg border border-slate-200 dark:border-dark-border shadow-inner">
-                  <p className="font-bold text-center text-slate-900 dark:text-dark-text tracking-tight uppercase text-xs">M-Pesa Payment Instructions:</p>
-                  <ol className="list-decimal list-inside space-y-2.5 text-sm">
-                    <li>Go to M-Pesa menu</li>
-                    <li>Select <strong>Lipa na M-Pesa</strong> &rarr; <strong>Paybill</strong></li>
-                    <li>Enter Business No: <strong>174379</strong></li>
-                    <li>Enter Account No: <strong className="text-blue-600 font-mono tracking-wider">{paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber}</strong></li>
-                    <li>Enter Amount: <strong>KES {paymentStatus.amount.toLocaleString()}</strong></li>
-                    <li>Enter PIN and Send</li>
-                  </ol>
-                  {isSimulating && (
-                    <p className="text-[10px] text-slate-500 italic mt-4 text-center border-t border-slate-200 dark:border-dark-border pt-2 uppercase font-bold tracking-widest animate-pulse">
-                      Page will update automatically
+                <div className="space-y-4 text-left">
+                  <div className="bg-green-50 dark:bg-green-900/10 border-2 border-green-200 dark:border-green-900/30 p-6 rounded-xl text-center shadow-lg transform transition-all animate-in zoom-in-95 duration-500">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
+                      <Smartphone className="h-8 w-8 text-green-600 dark:text-green-500 animate-bounce" />
+                    </div>
+                    <h3 className="text-lg font-bold text-green-900 dark:text-green-200 mb-2">
+                      Please Check Your Phone!
+                    </h3>
+                    <p className="text-sm text-green-800 dark:text-green-300 mb-4 leading-relaxed font-medium">
+                      An M-Pesa payment prompt (STK Push) has been sent to your phone. Please enter your PIN to complete the payment.
                     </p>
-                  )}
+                    <div className="flex items-center justify-center gap-2 text-xs font-bold text-green-700 dark:text-green-400 bg-white/50 dark:bg-black/20 py-2 rounded-lg">
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      Waiting for your confirmation...
+                    </div>
+                  </div>
+
+                  <div className="mt-6 pt-6 border-t border-slate-200 dark:border-dark-border">
+                    <p className="font-bold text-center text-slate-900 dark:text-dark-text tracking-tight uppercase text-[10px] mb-3 opacity-60">
+                      Alternative: Manual Paybill Instructions
+                    </p>
+                    <div className="bg-slate-50 dark:bg-dark-bg p-4 rounded-lg border border-slate-200 dark:border-dark-border">
+                      <ol className="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-dark-textMuted">
+                        <li>Go to M-Pesa menu &rarr; <strong>Lipa na M-Pesa</strong> &rarr; <strong>Paybill</strong></li>
+                        <li>Enter Business No: <strong>174379</strong></li>
+                        <li>Enter Account No: <strong className="text-blue-600 font-mono tracking-wider">{paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber}</strong></li>
+                        <li>Enter Amount: <strong>KES {paymentStatus.amount.toLocaleString()}</strong></li>
+                      </ol>
+                    </div>
+                  </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center py-4">

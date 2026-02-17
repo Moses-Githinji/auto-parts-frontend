@@ -42,7 +42,8 @@ interface PaymentStore {
   initiatePayment: (
     orderGroupId: string,
     paymentMethod: "mpesa" | "stripe" | "paystack",
-    phoneNumber?: string
+    phoneNumber?: string,
+    mock?: boolean
   ) => Promise<PaymentResponse>;
   
   verifyPaystackPayment: (reference: string) => Promise<{ success: boolean; message: string }>;
@@ -66,13 +67,14 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
   isPolling: false,
   error: null,
 
-  initiatePayment: async (orderGroupId, paymentMethod, phoneNumber) => {
+  initiatePayment: async (orderGroupId, paymentMethod, phoneNumber, mock) => {
     try {
       set({ error: null });
       
       const payload: any = {
         orderGroupId,
         paymentMethod,
+        mock: !!mock,
       };
 
       if (paymentMethod === "mpesa" && phoneNumber) {
