@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Badge } from "../../components/ui/badge";
 import { Button } from "../../components/ui/button";
 import { useOrderStore } from "../../stores/orderStore";
@@ -42,6 +42,7 @@ type FilterTab = "ALL" | "PENDING" | "PAID" | "SHIPPED" | "CANCELLED";
 
 export function AccountOrders() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { orders, fetchOrders, cancelOrder, deleteOrder, isLoading, error } = useOrderStore();
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
@@ -50,6 +51,20 @@ export function AccountOrders() {
   useEffect(() => {
     fetchOrders();
   }, [fetchOrders]);
+
+  // Handle auto-opening order from query param
+  useEffect(() => {
+    if (!isLoading && orders.length > 0) {
+      const params = new URLSearchParams(location.search);
+      const orderId = params.get("id") || params.get("open");
+      if (orderId) {
+        const order = orders.find(o => o.id === orderId);
+        if (order) {
+          setSelectedOrder(order);
+        }
+      }
+    }
+  }, [isLoading, orders, location.search]);
 
   const handleCancelOrder = async (orderId: string, e?: React.MouseEvent) => {
     e?.stopPropagation();

@@ -3,12 +3,16 @@ import { apiClient } from "../lib/apiClient";
 
 export interface PaymentResponse {
   success: boolean;
-  provider: "mpesa" | "stripe";
+  provider: "mpesa" | "stripe" | "paystack";
   transactionId: string;
+  reference?: string;
+  email?: string;
+  amount?: number;
   message?: string;
   checkoutRequestId?: string;
   clientSecret?: string;
   publishableKey?: string;
+  publicKey?: string;
   pollUrl: string;
 }
 
@@ -37,9 +41,11 @@ interface PaymentStore {
   
   initiatePayment: (
     orderGroupId: string,
-    paymentMethod: "mpesa" | "stripe",
+    paymentMethod: "mpesa" | "stripe" | "paystack",
     phoneNumber?: string
   ) => Promise<PaymentResponse>;
+  
+  verifyPaystackPayment: (reference: string) => Promise<{ success: boolean; message: string }>;
   
   checkPaymentStatus: (transactionId: string) => Promise<PaymentStatus>;
   
@@ -83,6 +89,18 @@ export const usePaymentStore = create<PaymentStore>((set, get) => ({
     } catch (err: any) {
       const errorMessage = err.response?.data?.error || "Failed to initiate payment";
       set({ error: errorMessage });
+      throw new Error(errorMessage);
+    }
+  },
+
+  verifyPaystackPayment: async (reference) => {
+    try {
+      const response = await apiClient.get<{ success: boolean; message: string }>(
+        `/api/payments/paystack/verify/${reference}`
+      );
+      return response;
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.error || "Verification failed";
       throw new Error(errorMessage);
     }
   },

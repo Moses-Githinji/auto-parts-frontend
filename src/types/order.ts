@@ -109,14 +109,22 @@ export interface OrderAnalytics {
   analytics: {
     totalOrders: number;
     totalRevenue: number;
+    averageOrderValue: number;
     ordersByStatus: Array<{
       status: OrderStatus;
       count: number;
     }>;
     topProducts: Array<{
       productId: string;
-      name: string;
-      ordersCount: number;
+      productType?: string;
+      sales?: number;
+      revenue?: number;
+      _sum?: { quantity: number };
+      product?: any;
+    }>;
+    salesOverTime: Array<{
+      date: string;
+      amount: number;
     }>;
   };
 }

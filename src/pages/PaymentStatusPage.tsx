@@ -13,6 +13,7 @@ export function PaymentStatusPage() {
   const navigate = useNavigate();
   const { paymentStatus, startPolling, stopPolling, isPolling, error: storeError } = usePaymentStore();
   const [timeoutReached, setTimeoutReached] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -25,12 +26,7 @@ export function PaymentStatusPage() {
     startPolling(id, (status) => {
       // Polling complete callback
       if (status.status === "PAID") {
-        // Payment successful
-        setTimeout(() => {
-          // Redirect to the specific order page
-          const finalOrderId = status.orderGroup?.id || id;
-          navigate(`/orders/${finalOrderId}`);
-        }, 3000);
+        // Payment successful - no auto redirect
       } else if (status.status === "FAILED") {
         // Payment failed
         setTimeoutReached(true);
@@ -61,13 +57,8 @@ export function PaymentStatusPage() {
               </>
             ) : (
               <>
-                <Loader2 className="h-16 w-16 animate-spin text-[#FF9900] mb-4" />
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-dark-text mb-2">
-                  Loading Payment Status...
-                </h2>
-                <p className="text-sm text-slate-600 dark:text-dark-textMuted">
-                  Please wait while we check your payment status
-                </p>
+                <div className="h-10 w-10 border-4 border-slate-200 border-t-[#FF9900] rounded-full animate-spin mb-4" />
+                <p className="text-sm text-slate-500 font-medium">Loading payment details...</p>
               </>
             )}
           </div>
@@ -131,24 +122,11 @@ export function PaymentStatusPage() {
                     <li>Enter Amount: <strong>KES {paymentStatus.amount.toLocaleString()}</strong></li>
                     <li>Enter PIN and Send</li>
                   </ol>
-                  <p className="text-[10px] text-slate-500 italic mt-4 text-center border-t border-slate-200 dark:border-dark-border pt-2 uppercase font-bold tracking-widest">Page will update automatically</p>
-                  
-                  <div className="mt-4 flex justify-center">
-                    <Button 
-                      onClick={() => id && startPolling(id, () => {}, true)}
-                      disabled={isPolling && !!paymentStatus}
-                      variant="outline"
-                      size="sm"
-                      className="text-xs font-bold uppercase tracking-wider border-blue-200 text-blue-700 bg-blue-50/50 hover:bg-blue-100/50"
-                    >
-                      {isPolling ? (
-                        <>
-                          <Loader2 className="h-3 w-3 animate-spin mr-2" />
-                          Checking Status...
-                        </>
-                      ) : "Verify Payment"}
-                    </Button>
-                  </div>
+                  {isSimulating && (
+                    <p className="text-[10px] text-slate-500 italic mt-4 text-center border-t border-slate-200 dark:border-dark-border pt-2 uppercase font-bold tracking-widest animate-pulse">
+                      Page will update automatically
+                    </p>
+                  )}
                 </div>
               ) : (
                 <div className="flex flex-col items-center py-4">
@@ -179,41 +157,76 @@ export function PaymentStatusPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-dark-textMuted mb-4">
-              <Loader2 className="h-3 w-3 animate-spin" />
-              Waiting for payment confirmation...
-            </div>
-
-            {/* Dev Simulation Button */}
-            {import.meta.env.DEV && paymentStatus.provider === "mpesa" && (
-              <div className="mt-4 pt-4 border-t border-blue-200 w-full text-center">
-                <p className="text-[10px] text-blue-500 uppercase font-bold mb-2 tracking-wider">Developer Tools</p>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  disabled={isPolling}
-                  className="w-full border-blue-300 text-blue-600 hover:bg-blue-50 gap-2 h-8 text-xs"
-                  onClick={async (e) => {
-                    const btn = e.currentTarget;
-                    btn.disabled = true;
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = 'Simulating...';
-                    try {
-                      await apiClient.post('/api/payments/mpesa/simulate', {
-                        amount: paymentStatus.amount,
-                        phone: '254700000000',
-                        orderNumber: paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber,
-                        mock: true
-                      });
-                    } catch (err) {
-                      console.error('Simulation failed', err);
-                      btn.innerHTML = 'Failed';
-                      setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
-                    }
-                  }}
-                >
-                  Simulate Successful Payment
-                </Button>
+             {/* Polling feedback text - only show when simulating */}
+            {isSimulating && (
+              <div className="flex items-center justify-center gap-2 text-xs text-slate-500 dark:text-dark-textMuted mb-4 animate-in fade-in duration-300">
+                <Loader2 className="h-3 w-3 animate-spin text-blue-500" />
+                Waiting for payment confirmation...
+              </div>
+            )}
+ 
+             {/* Dev Simulation Button */}
+             {import.meta.env.DEV && paymentStatus.provider === "mpesa" && (
+               <div className="mt-4 pt-4 border-t border-blue-200 w-full text-center">
+                 <p className="text-[10px] text-blue-500 uppercase font-bold mb-2 tracking-wider">Developer Tools</p>
+                 <Button 
+                   variant="outline" 
+                   size="sm"
+                   className="w-full border-blue-300 text-blue-600 hover:bg-blue-50 gap-2 h-8 text-xs disabled:opacity-50"
+                   onClick={async (e) => {
+                     if (!id) return;
+                     const btn = e.currentTarget;
+                     if (btn.disabled) return;
+                     
+                     btn.disabled = true;
+                     setIsSimulating(true);
+                     const originalText = btn.innerHTML;
+                     btn.innerHTML = '<span class="flex items-center gap-1"><svg class="animate-spin h-3 w-3 text-blue-600" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Simulating...</span>';
+                     
+                     try {
+                       await apiClient.post('/api/payments/mpesa/simulate', {
+                         amount: paymentStatus.amount,
+                         phone: '254700000000',
+                         orderNumber: paymentStatus.orderGroup?.paymentReference || paymentStatus.orderGroup?.orderNumber,
+                         mock: true
+                       });
+                       
+                       btn.innerHTML = 'Sent! Awaiting confirmation...';
+                       
+                       // Polling for simulation success (backend mock takes ~2s)
+                       let checks = 0;
+                       const checkInterval = setInterval(async () => {
+                         checks++;
+                         try {
+                           const { checkOrderStatus } = usePaymentStore.getState();
+                           const status = await checkOrderStatus(id);
+                           if (status.status === 'PAID') {
+                             clearInterval(checkInterval);
+                             btn.innerHTML = 'Success!';
+                             // Component will re-render automatically because store updated
+                           } else if (checks > 10) { // Timeout after 10 checks (10s)
+                             clearInterval(checkInterval);
+                             btn.innerHTML = 'Still pending...';
+                             setTimeout(() => { 
+                               btn.innerHTML = originalText; 
+                               btn.disabled = false;
+                               setIsSimulating(false);
+                             }, 2000);
+                           }
+                         } catch (err) {
+                           console.error('Check failed', err);
+                         }
+                       }, 1000);
+                     } catch (err) {
+                       console.error('Simulation failed', err);
+                       btn.innerHTML = 'Failed';
+                       setIsSimulating(false);
+                       setTimeout(() => { btn.innerHTML = originalText; btn.disabled = false; }, 2000);
+                     }
+                   }}
+                 >
+                   Simulate Successful Payment
+                 </Button>
                 <p className="mt-1 text-[10px] text-slate-400">Triggers backend callback simulation</p>
               </div>
             )}
@@ -269,7 +282,7 @@ export function PaymentStatusPage() {
             <div className="space-y-2 w-full">
               <Button
                 className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
-                onClick={() => navigate(`/orders/${paymentStatus.orderGroup?.id}`)}
+                onClick={() => navigate(`/account/orders?id=${paymentStatus.orderGroup?.id}`)}
               >
                 View Order Details
               </Button>

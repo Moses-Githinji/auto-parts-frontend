@@ -4,7 +4,9 @@ import { useCartStore } from "../stores/cartStore";
 import { useAuthStore } from "../stores/authStore";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
+import { MpesaPayment } from "../components/payment/MpesaPayment";
 import { StripePayment } from "../components/payment/StripePayment";
+import { PaystackPayment } from "../components/payment/PaystackPayment";
 import { apiClient } from "../lib/apiClient";
 import { Loader2, ShoppingCart, MapPin, CreditCard } from "lucide-react";
 
@@ -30,7 +32,7 @@ export function CheckoutPage() {
   const { user } = useAuthStore();
 
   const [step, setStep] = useState<"address" | "payment">("address");
-  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "stripe" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "stripe" | "paystack" | null>(null);
   const [orderGroup, setOrderGroup] = useState<OrderGroup | null>(null);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,11 +54,12 @@ export function CheckoutPage() {
   const [useSameAddress, setUseSameAddress] = useState(true);
 
   useEffect(() => {
-    // Redirect if cart is empty
-    if (items.length === 0) {
+    // Redirect if cart is empty, but ONLY if we haven't started an order yet
+    if (items.length === 0 && !orderGroup && step === "address") {
+      console.log("Empty cart redirect in CheckoutPage");
       navigate("/cart");
     }
-  }, [items, navigate]);
+  }, [items.length, orderGroup, step, navigate]);
 
   useEffect(() => {
     // Redirect if not logged in
@@ -71,7 +74,7 @@ export function CheckoutPage() {
     }
   };
 
-  const handlePlaceOrder = async (selectedPaymentMethod: "mpesa" | "stripe") => {
+  const handlePlaceOrder = async (selectedPaymentMethod: "mpesa" | "stripe" | "paystack") => {
     try {
       setIsCreatingOrder(true);
       setError(null);
@@ -104,6 +107,7 @@ export function CheckoutPage() {
   };
 
   const handlePaymentSuccess = (transactionId: string) => {
+    console.log("Payment success handled in CheckoutPage for ID:", transactionId);
     clearCart();
     navigate(`/payment/status/${transactionId}`);
   };
@@ -114,6 +118,15 @@ export function CheckoutPage() {
 
   const isAddressValid = (address: Address): boolean => {
     return !!(address.street && address.city && address.state && address.zipCode);
+  };
+
+  const getMissingFields = (address: Address): string[] => {
+    const missing = [];
+    if (!address.street) missing.push("Street Address");
+    if (!address.city) missing.push("City");
+    if (!address.state) missing.push("County/State");
+    if (!address.zipCode) missing.push("Postal Code");
+    return missing;
   };
 
   if (items.length === 0) {
@@ -163,7 +176,7 @@ export function CheckoutPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                      Street Address
+                      Street Address <span className="text-red-500">*</span>
                     </label>
                     <Input
                       value={shippingAddress.street}
@@ -173,7 +186,7 @@ export function CheckoutPage() {
                   </div>
                   <div>
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                      City
+                      City <span className="text-red-500">*</span>
                     </label>
                     <Input
                       value={shippingAddress.city}
@@ -183,7 +196,7 @@ export function CheckoutPage() {
                   </div>
                   <div>
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                      County/State
+                      County/State <span className="text-red-500">*</span>
                     </label>
                     <Input
                       value={shippingAddress.state}
@@ -193,7 +206,7 @@ export function CheckoutPage() {
                   </div>
                   <div className="md:col-span-2">
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                      Postal Code
+                      Postal Code <span className="text-red-500">*</span>
                     </label>
                     <Input
                       value={shippingAddress.zipCode}
@@ -227,7 +240,7 @@ export function CheckoutPage() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="md:col-span-2">
                       <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                        Street Address
+                        Street Address <span className="text-red-500">*</span>
                       </label>
                       <Input
                         value={billingAddress.street}
@@ -237,7 +250,7 @@ export function CheckoutPage() {
                     </div>
                     <div>
                       <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                        City
+                        City <span className="text-red-500">*</span>
                       </label>
                       <Input
                         value={billingAddress.city}
@@ -247,7 +260,7 @@ export function CheckoutPage() {
                     </div>
                     <div>
                       <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                        County/State
+                        County/State <span className="text-red-500">*</span>
                       </label>
                       <Input
                         value={billingAddress.state}
@@ -257,7 +270,7 @@ export function CheckoutPage() {
                     </div>
                     <div className="md:col-span-2">
                       <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
-                        Postal Code
+                        Postal Code <span className="text-red-500">*</span>
                       </label>
                       <Input
                         value={billingAddress.zipCode}
@@ -275,16 +288,25 @@ export function CheckoutPage() {
                 </div>
               )}
 
-              <Button
-                className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
-                onClick={handleContinueToPayment}
-                disabled={
-                  !isAddressValid(shippingAddress) ||
-                  (!useSameAddress && !isAddressValid(billingAddress))
-                }
-              >
-                Continue to Payment
-              </Button>
+              <div className="space-y-2">
+                <Button
+                  className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
+                  onClick={handleContinueToPayment}
+                  disabled={
+                    !isAddressValid(shippingAddress) ||
+                    (!useSameAddress && !isAddressValid(billingAddress))
+                  }
+                >
+                  Continue to Payment
+                </Button>
+
+                {(!isAddressValid(shippingAddress) || (!useSameAddress && !isAddressValid(billingAddress))) && (
+                  <p className="text-xs text-slate-500 italic text-center">
+                    Please provide {getMissingFields(shippingAddress).join(", ")}
+                    {!useSameAddress && isAddressValid(shippingAddress) && ` for billing: ${getMissingFields(billingAddress).join(", ")}`}
+                  </p>
+                )}
+              </div>
             </div>
           )}
 
@@ -299,85 +321,129 @@ export function CheckoutPage() {
                   </h2>
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <button
-                    onClick={() => setPaymentMethod("mpesa")}
-                    className={`rounded-lg border-2 p-4 text-left transition-all ${
-                      paymentMethod === "mpesa"
-                        ? "border-green-600 bg-green-50 dark:bg-green-900/20"
-                        : "border-slate-200 dark:border-dark-border hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="mb-2 text-2xl">📱</div>
-                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">M-Pesa</h3>
-                    <p className="text-xs text-slate-600 dark:text-dark-textMuted">
-                      Pay with your Safaricom number
-                    </p>
-                  </button>
+                {!orderGroup && (
+                  <>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <button
+                        onClick={() => setPaymentMethod("mpesa")}
+                        className={`rounded-lg border-2 p-4 text-left transition-all ${
+                          paymentMethod === "mpesa"
+                            ? "border-green-600 bg-green-50 dark:bg-green-900/20"
+                            : "border-slate-200 dark:border-dark-border hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="mb-2 text-2xl">📱</div>
+                        <h3 className="font-semibold text-slate-900 dark:text-dark-text">M-Pesa</h3>
+                        <p className="text-xs text-slate-600 dark:text-dark-textMuted">
+                          Pay with your Safaricom number
+                        </p>
+                      </button>
 
-                  <button
-                    onClick={() => setPaymentMethod("stripe")}
-                    className={`rounded-lg border-2 p-4 text-left transition-all ${
-                      paymentMethod === "stripe"
-                        ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
-                        : "border-slate-200 dark:border-dark-border hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="mb-2 text-2xl">💳</div>
-                    <h3 className="font-semibold text-slate-900 dark:text-dark-text">Card Payment</h3>
-                    <p className="text-xs text-slate-600 dark:text-dark-textMuted">
-                      Visa, Mastercard, Amex
-                    </p>
-                  </button>
-                </div>
+                      <button
+                        onClick={() => setPaymentMethod("stripe")}
+                        className={`rounded-lg border-2 p-4 text-left transition-all ${
+                          paymentMethod === "stripe"
+                            ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
+                            : "border-slate-200 dark:border-dark-border hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="mb-2 text-2xl">💳</div>
+                        <h3 className="font-semibold text-slate-900 dark:text-dark-text">Card Payment</h3>
+                        <p className="text-xs text-slate-600 dark:text-dark-textMuted">
+                          Visa, Mastercard, Amex
+                        </p>
+                      </button>
 
-                {paymentMethod && (
-                  <div className="mt-8 rounded-lg border border-[#FF9900]/20 bg-[#FF9900]/5 p-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                    <h4 className="font-semibold text-slate-900 dark:text-dark-text mb-2">Order Review</h4>
-                    <div className="space-y-1 text-sm text-slate-600 dark:text-dark-textMuted">
-                      <div className="flex justify-between">
-                        <span>Items:</span>
-                        <span className="font-medium">{items.length} product(s)</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Payment Method:</span>
-                        <span className="font-medium capitalize text-[#FF9900]">{paymentMethod}</span>
-                      </div>
-                      <div className="flex justify-between border-t border-slate-200 dark:border-dark-border mt-2 pt-2 text-slate-900 dark:text-dark-text font-bold">
-                        <span>Total to Pay:</span>
-                        <span>KES {total.toLocaleString()}</span>
-                      </div>
+                      <button
+                        onClick={() => setPaymentMethod("paystack")}
+                        className={`rounded-lg border-2 p-4 text-left transition-all ${
+                          paymentMethod === "paystack"
+                            ? "border-teal-600 bg-teal-50 dark:bg-teal-900/20"
+                            : "border-slate-200 dark:border-dark-border hover:border-slate-300"
+                        }`}
+                      >
+                        <div className="mb-2 text-2xl">⚡</div>
+                        <h3 className="font-semibold text-slate-900 dark:text-dark-text">Paystack</h3>
+                        <p className="text-xs text-slate-600 dark:text-dark-textMuted">
+                          Secure Card / Mobile Payment
+                        </p>
+                      </button>
                     </div>
-                    {paymentMethod === "mpesa" && (
-                      <p className="mt-4 text-xs bg-white dark:bg-dark-bgLight p-2 rounded border border-slate-200 dark:border-dark-border">
-                        <span className="font-bold text-green-600">Note:</span> After clicking below, you'll be shown manual Paybill instructions to complete your payment.
-                      </p>
-                    )}
-                  </div>
-                )}
 
-                <div className="mt-6">
-                  <Button
-                    className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90 h-12 text-lg font-bold shadow-md"
-                    onClick={() => paymentMethod && handlePlaceOrder(paymentMethod)}
-                    disabled={!paymentMethod || isCreatingOrder}
-                  >
-                    {isCreatingOrder ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Placing Order...
-                      </>
-                    ) : (
-                      `Place Order & Pay KES ${total.toLocaleString()}`
+                    {paymentMethod && (
+                      <div className="mt-8 rounded-lg border border-[#FF9900]/20 bg-[#FF9900]/5 p-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <h4 className="font-semibold text-slate-900 dark:text-dark-text mb-2">Order Review</h4>
+                        <div className="space-y-1 text-sm text-slate-600 dark:text-dark-textMuted">
+                          <div className="flex justify-between">
+                            <span>Items:</span>
+                            <span className="font-medium">{items.length} product(s)</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Payment Method:</span>
+                            <span className="font-medium capitalize text-[#FF9900]">{paymentMethod}</span>
+                          </div>
+                          <div className="flex justify-between border-t border-slate-200 dark:border-dark-border mt-2 pt-2 text-slate-900 dark:text-dark-text font-bold">
+                            <span>Total to Pay:</span>
+                            <span>KES {total.toLocaleString()}</span>
+                          </div>
+                        </div>
+                        {paymentMethod === "mpesa" && (
+                          <p className="mt-4 text-xs bg-white dark:bg-dark-bgLight p-2 rounded border border-slate-200 dark:border-dark-border">
+                            <span className="font-bold text-green-600">Note:</span> After clicking below, you'll be shown manual Paybill instructions to complete your payment.
+                          </p>
+                        )}
+                      </div>
                     )}
-                  </Button>
-                </div>
+
+                    <div className="mt-6">
+                      <Button
+                        className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90 h-12 text-lg font-bold shadow-md"
+                        onClick={() => paymentMethod && handlePlaceOrder(paymentMethod)}
+                        disabled={!paymentMethod || isCreatingOrder}
+                      >
+                        {isCreatingOrder ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Placing Order...
+                          </>
+                        ) : (
+                          `Place Order & Pay KES ${total.toLocaleString()}`
+                        )}
+                      </Button>
+                    </div>
+                  </>
+                )}
 
                 {/* Stripe Payment Element (Shown after order creation) */}
                 {orderGroup && paymentMethod === "stripe" && (
                   <div className="mt-8 pt-8 border-t border-slate-200 dark:border-dark-border">
                     <StripePayment
                       orderGroupId={orderGroup.id}
+                      amount={orderGroup.totalAmount}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </div>
+                )}
+
+                {/* Mpesa Payment Element (Shown after order creation) */}
+                {orderGroup && paymentMethod === "mpesa" && (
+                  <div className="mt-8 pt-8 border-t border-slate-200 dark:border-dark-border">
+                    <MpesaPayment
+                      orderGroupId={orderGroup.id}
+                      amount={orderGroup.totalAmount}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </div>
+                )}
+
+                {/* Paystack Payment Element (Shown after order creation) */}
+                {orderGroup && paymentMethod === "paystack" && (
+                  <div className="mt-8 pt-8 border-t border-slate-200 dark:border-dark-border">
+                    <PaystackPayment
+                      orderGroupId={orderGroup.id}
+                      orderNumber={orderGroup.orderNumber}
                       amount={orderGroup.totalAmount}
                       onSuccess={handlePaymentSuccess}
                       onError={handlePaymentError}
@@ -397,7 +463,7 @@ export function CheckoutPage() {
         </div>
 
         {/* Order Summary Sidebar */}
-        <div className="lg:col-span-1">
+        <div className={`lg:col-span-1 transition-all duration-500 ${orderGroup ? "opacity-0 invisible pointer-events-none" : "opacity-100 visible"}`}>
           <div className="sticky top-4 rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
             <div className="mb-4 flex items-center gap-2">
               <ShoppingCart className="h-5 w-5 text-[#FF9900]" />

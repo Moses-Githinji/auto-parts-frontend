@@ -45,8 +45,11 @@ interface OrderState {
   ) => Promise<void>;
   fetchOrderAnalytics: (
     vendorId: string,
-    startDate?: string,
-    endDate?: string
+    filters?: {
+      duration?: string;
+      startDate?: string;
+      endDate?: string;
+    }
   ) => Promise<OrderAnalytics>;
   clearError: () => void;
 }
@@ -255,12 +258,13 @@ export const useOrderStore = create<OrderState>()(
         }
       },
 
-      fetchOrderAnalytics: async (vendorId, startDate, endDate) => {
+      fetchOrderAnalytics: async (vendorId, filters = {}) => {
         set({ isLoading: true, error: null });
         try {
           const params = new URLSearchParams();
-          if (startDate) params.append("startDate", startDate);
-          if (endDate) params.append("endDate", endDate);
+          if (filters.duration) params.append("duration", filters.duration);
+          if (filters.startDate) params.append("startDate", filters.startDate);
+          if (filters.endDate) params.append("endDate", filters.endDate);
 
           const response = await apiClient.get<OrderAnalytics>(
             `/api/orders/analytics/vendor/${vendorId}?${params.toString()}`

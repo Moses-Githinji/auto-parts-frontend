@@ -9,7 +9,9 @@ import { HomePage } from "./pages/HomePage";
 import { SearchPage } from "./pages/SearchPage";
 import ProductDetailPage from "./pages/parts/[id]";
 import { CartPage } from "./pages/CartPage";
+import { CheckoutPage } from "./pages/CheckoutPage";
 import { OrdersPage } from "./pages/OrdersPage";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AccountPage } from "./pages/account/AccountPage";
 import { VendorDashboardPage } from "./pages/vendor/VendorDashboardPage";
 import { VendorOrdersPage } from "./pages/vendor/VendorOrdersPage";
@@ -27,7 +29,6 @@ import { AdminWebhooksPage } from "./pages/admin/AdminWebhooksPage";
 import { AdminBlogsPage } from "./pages/admin/AdminBlogsPage";
 import { AdminCommissionConfigPage } from "./pages/admin/AdminCommissionConfigPage";
 import { AdminRidersPage } from "./pages/admin/AdminRidersPage";
-import { SpeedInsights } from "@vercel/speed-insights/react"
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
 import { EmailVerificationPage } from "./pages/auth/EmailVerificationPage";
@@ -67,10 +68,10 @@ const router = createBrowserRouter([
       { path: "search", element: <SearchPage /> },
       { path: "parts/:id", element: <ProductDetailPage /> },
       { path: "cart", element: <CartPage /> },
+      { path: "checkout", element: <CheckoutPage /> },
       { path: "checkout/payment", element: <PaymentStatusPage /> },
       { path: "payment/status/:transactionId", element: <PaymentStatusPage /> },
       { path: "orders", element: <OrdersPage /> },
-      { path: "orders/:orderId", element: <PaymentStatusPage /> },
       { path: "orders/:orderId/confirm", element: <OrderConfirmationPage /> },
       { path: "account/*", element: <AccountPage /> },
       // Blog routes

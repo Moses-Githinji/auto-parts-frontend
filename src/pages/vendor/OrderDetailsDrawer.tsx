@@ -32,7 +32,7 @@ export function OrderDetailsDrawer({
       case "PENDING":
         return "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400";
       case "CONFIRMED":
-        return "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400";
+        return "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400";
       case "PROCESSING":
         return "bg-purple-100 text-purple-700";
       case "SHIPPED":
@@ -148,20 +148,23 @@ export function OrderDetailsDrawer({
             </h3>
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-sm text-slate-900 font-medium">
-                {order.shippingAddress.firstName}{" "}
-                {order.shippingAddress.lastName}
+                {order.shippingAddress.firstName || order.customerName}{" "}
+                {order.shippingAddress.lastName || ""}
               </p>
               <p className="text-sm text-slate-600 mt-1">
                 {order.shippingAddress.street}
               </p>
-              <p className="text-sm text-slate-600 dark:text-dark-textMuted">
+              <p className="text-sm text-slate-600 dark:text-dark-textMuted mt-1">
                 {order.shippingAddress.city}, {order.shippingAddress.state}{" "}
                 {order.shippingAddress.zipCode}
+              </p>
+              <p className="text-sm font-medium text-slate-700 dark:text-dark-text mt-1">
+                Phone: {order.customerPhone || order.shippingAddress.phone || "N/A"}
               </p>
               <button
                 onClick={() =>
                   copyToClipboard(
-                    `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}\n${order.shippingAddress.street}\n${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}`,
+                    `${order.customerName}\nPhone: ${order.customerPhone || order.shippingAddress.phone || "N/A"}\n${order.shippingAddress.street}\n${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.zipCode}`,
                     "address"
                   )
                 }
