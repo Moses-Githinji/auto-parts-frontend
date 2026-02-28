@@ -151,10 +151,10 @@ export function AdminCommissionsPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+              <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Vendor</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Total Sales</th>
@@ -172,7 +172,7 @@ export function AdminCommissionsPage() {
                   </tr>
                 ) : (
                   filteredVendors.map((vendor) => (
-                    <tr key={vendor.vendorId} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                    <tr key={vendor.vendorId} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                       <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                         {vendor.vendorName}
                       </td>
@@ -203,10 +203,10 @@ export function AdminCommissionsPage() {
           Recent Commissions
         </h2>
 
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+              <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Order</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Vendor</th>
@@ -225,7 +225,7 @@ export function AdminCommissionsPage() {
                   </tr>
                 ) : (
                   recentCommissions.map((commission) => (
-                    <tr key={commission.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                    <tr key={commission.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                       <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
                         {commission.orderNumber}
                       </td>

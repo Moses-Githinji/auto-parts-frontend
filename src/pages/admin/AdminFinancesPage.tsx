@@ -205,7 +205,7 @@ export function AdminFinancesPage() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <div className="flex items-center gap-2 mb-2">
               <TrendingDown className="h-5 w-5 text-yellow-600" />
               <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
@@ -220,7 +220,7 @@ export function AdminFinancesPage() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <div className="flex items-center gap-2 mb-2">
               <DollarSign className="h-5 w-5 text-slate-600" />
               <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
@@ -235,7 +235,7 @@ export function AdminFinancesPage() {
             </p>
           </div>
 
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <div className="flex items-center gap-2 mb-4">
               <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
                 Payment Method Breakdown
@@ -270,7 +270,7 @@ export function AdminFinancesPage() {
       )}
 
       {/* Financial Flow Diagram */}
-      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
         <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text mb-4">
           Financial Flow
         </h2>
@@ -328,10 +328,10 @@ export function AdminFinancesPage() {
 
       {/* Transactions Tab */}
       {activeTab === "transactions" && (
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+              <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Order</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Vendor</th>
@@ -351,7 +351,7 @@ export function AdminFinancesPage() {
                   </tr>
                 ) : (
                   transactions.map((transaction) => (
-                    <tr key={transaction.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                    <tr key={transaction.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                       <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
                         {transaction.orderNumber}
                       </td>
@@ -386,10 +386,10 @@ export function AdminFinancesPage() {
 
       {/* Payouts Tab */}
       {activeTab === "payouts" && (
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+              <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Vendor</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Amount</th>
@@ -409,7 +409,7 @@ export function AdminFinancesPage() {
                   </tr>
                 ) : (
                   vendorPayouts.map((payout) => (
-                    <tr key={payout.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                    <tr key={payout.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                       <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                         {payout.vendorName}
                       </td>

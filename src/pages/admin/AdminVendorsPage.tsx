@@ -316,7 +316,7 @@ export function AdminVendorsPage() {
           </select>
           <button
             onClick={fetchVendors}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base"
           >
             Refresh
           </button>
@@ -345,7 +345,7 @@ export function AdminVendorsPage() {
             {/* Vendors Table */}
             <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
               <table className="w-full text-xs">
-                <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+                <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                   <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                     <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                       Vendor
@@ -371,11 +371,11 @@ export function AdminVendorsPage() {
                   {filteredVendors.map((vendor) => (
                     <tr
                       key={vendor.id}
-                      className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                      className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                     >
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bgLight text-sm font-semibold text-slate-700 dark:text-dark-text">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-surface text-sm font-semibold text-slate-700 dark:text-dark-text">
                             {vendor.companyName.charAt(0)}
                           </div>
                           <div>
@@ -428,21 +428,21 @@ export function AdminVendorsPage() {
                           {vendor.status === "PENDING" ? (
                             <button
                               onClick={() => handleReviewVendor(vendor.id)}
-                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-base"
                             >
                               Review
                             </button>
                           ) : (
                             <button
                               onClick={() => handleViewVendor(vendor.id)}
-                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-base"
                             >
                               View
                             </button>
                           )}
                           <button
                             onClick={() => handleEditVendor(vendor.id)}
-                            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-base"
                           >
                             Edit
                           </button>
@@ -460,10 +460,10 @@ export function AdminVendorsPage() {
                 Showing 1-{filteredVendors.length} of {vendors.length} vendors
               </span>
               <div className="flex gap-1">
-                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base">
                   Previous
                 </button>
-                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base">
                   Next
                 </button>
               </div>
@@ -474,7 +474,7 @@ export function AdminVendorsPage() {
         {/* Add Vendor Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Add New Vendor
@@ -672,7 +672,7 @@ export function AdminVendorsPage() {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
                     disabled={submitting}
                   >
                     Cancel
@@ -693,7 +693,7 @@ export function AdminVendorsPage() {
         {/* View Vendor Modal */}
         {viewModalOpen && selectedVendor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Vendor Details
@@ -842,7 +842,7 @@ export function AdminVendorsPage() {
                       setViewModalOpen(false);
                       setSelectedVendor(null);
                     }}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
                   >
                     Close
                   </button>
@@ -864,7 +864,7 @@ export function AdminVendorsPage() {
         {/* Edit Vendor Modal */}
         {editModalOpen && selectedVendor && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Edit Vendor
@@ -1051,7 +1051,7 @@ export function AdminVendorsPage() {
                       setEditModalOpen(false);
                       setSelectedVendor(null);
                     }}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
                     disabled={submitting}
                   >
                     Cancel

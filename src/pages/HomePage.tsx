@@ -279,7 +279,7 @@ export function HomePage() {
               .map((product) => (
                 <div
                   key={product.id}
-                  className="group cursor-pointer rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
+                  className="group cursor-pointer rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 transition-all hover:border-[#FF9900] hover:shadow-lg"
                   onClick={() => navigate(`/parts/${product.id}`)}
                 >
                   <div className="mb-2 flex h-48 items-center justify-center rounded-md bg-slate-100 overflow-hidden">
@@ -333,7 +333,11 @@ export function HomePage() {
                   </div>
                   <Button
                     size="sm"
-                    className="w-full bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
+                    className={`w-full disabled:cursor-not-allowed disabled:opacity-80 ${
+                      product.stock > 0
+                        ? "bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
+                        : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-100"
+                    }`}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAddToCart(product);
@@ -349,7 +353,7 @@ export function HomePage() {
       )}
 
       {/* Promotional Banners */}
-      <div className="dark:bg-dark-bgLight">
+      <div className="dark:bg-dark-surface">
         <p className="text-center text-xl font-semibold dark:text-dark-text">Hot Deals</p>
       </div>
       <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -370,7 +374,7 @@ export function HomePage() {
       </section>
 
       {/* Vehicle Selector Widget */}
-      <section className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 shadow-sm">
+      <section className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
         <div className="mb-4 flex items-center gap-2">
           <Car className="h-5 w-5 text-[#FF9900]" />
           <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -390,7 +394,7 @@ export function HomePage() {
                   setSelectedMake(e.target.value);
                   setCustomMake(""); // Clear custom input when selecting from dropdown
                 }}
-                className="h-10 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 text-sm dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20 pr-8"
+                className="h-10 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-3 text-sm dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20 pr-8"
               >
                 <option value="">Select or type make</option>
                 {vehicleMakes.map((make) => (
@@ -422,7 +426,7 @@ export function HomePage() {
                   setSelectedMake(""); // Clear dropdown when typing custom
                 }}
                 placeholder="Not among the options, type it here..."
-                className="mt-1 h-8 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-2 text-xs dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
+                className="mt-1 h-8 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-2 text-xs dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
               />
             )}
           </div>
@@ -442,7 +446,7 @@ export function HomePage() {
                 disabled={Boolean(
                   !effectiveMake || isLoadingModels || !!customMake
                 )}
-                className="h-10 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 text-sm dark:text-dark-text disabled:bg-slate-100 dark:disabled:bg-dark-bg disabled:text-slate-400 dark:disabled:text-dark-textMuted focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20 pr-8"
+                className="h-10 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-3 text-sm dark:text-dark-text disabled:bg-slate-100 dark:disabled:bg-dark-base disabled:text-slate-400 dark:disabled:text-dark-textMuted focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20 pr-8"
               >
                 <option value="">
                   {isLoadingModels
@@ -480,7 +484,7 @@ export function HomePage() {
                   setSelectedModel(""); // Clear dropdown when typing custom
                 }}
                 placeholder="Not among the options, type it here..."
-                className="mt-1 h-8 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-2 text-xs dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
+                className="mt-1 h-8 w-full rounded-sm border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-2 text-xs dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-1 focus:ring-[#FF9900]"
               />
             )}
           </div>
@@ -555,7 +559,7 @@ export function HomePage() {
                     `/search?category=${encodeURIComponent(category.name)}`
                   )
                 }
-                className="group rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 text-left transition-all hover:border-[#FF9900] hover:shadow-md"
+                className="group rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 text-left transition-all hover:border-[#FF9900] hover:shadow-md"
               >
                 <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 text-blue-800">
                   <Wrench className="h-6 w-6" />
@@ -594,9 +598,9 @@ export function HomePage() {
                 onClick={() =>
                   navigate(`/search?brand=${encodeURIComponent(brand.name)}`)
                 }
-                className="group flex flex-col items-center rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 text-center transition hover:border-[#FF9900] hover:shadow-md"
+                className="group flex flex-col items-center rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 text-center transition hover:border-[#FF9900] hover:shadow-md"
               >
-                <div className="mb-2 h-16 w-16 rounded-full bg-slate-100 dark:bg-dark-bg text-3xl flex items-center justify-center dark:text-dark-text">
+                <div className="mb-2 h-16 w-16 rounded-full bg-slate-100 dark:bg-dark-base text-3xl flex items-center justify-center dark:text-dark-text">
                   {brand.name.charAt(0)}
                 </div>
                 <h3 className="text-sm font-semibold dark:text-dark-text">{brand.name}</h3>
@@ -614,7 +618,7 @@ export function HomePage() {
           return (
             <div
               key={deal.title}
-              className="flex items-start gap-3 rounded-lg border border-slate-200 dark:border-dark-border bg-gradient-to-br from-white to-slate-50 dark:from-dark-bgLight dark:to-dark-bg p-4"
+              className="flex items-start gap-3 rounded-lg border border-slate-200 dark:border-dark-border bg-gradient-to-br from-white to-slate-50 dark:from-dark-surface dark:to-dark-base p-4"
             >
               <div className="rounded-full bg-[#F7CA00]/20 p-2">
                 <Icon className="h-5 w-5 text-[#FF9900]" />
@@ -629,7 +633,7 @@ export function HomePage() {
       </section>
 
       {/* Trust & Security */}
-      <section className="rounded-lg border border-slate-200 dark:border-dark-border bg-[#EAEDED] dark:bg-dark-bgLight p-6">
+      <section className="rounded-lg border border-slate-200 dark:border-dark-border bg-[#EAEDED] dark:bg-dark-surface p-6">
         <div className="mb-4 flex items-center gap-2">
           <Shield className="h-5 w-5 text-emerald-600" />
           <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -701,7 +705,7 @@ export function HomePage() {
             <button
               key={term}
               onClick={() => navigate(`/search?q=${encodeURIComponent(term)}`)}
-              className="rounded-full border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1 text-xs text-slate-700 dark:text-dark-text transition-colors hover:border-[#FF9900] hover:bg-slate-50 dark:hover:bg-dark-bg hover:text-[#131921] dark:hover:text-[#FF9900]"
+              className="rounded-full border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1 text-xs text-slate-700 dark:text-dark-text transition-colors hover:border-[#FF9900] hover:bg-slate-50 dark:hover:bg-dark-base hover:text-[#131921] dark:hover:text-[#FF9900]"
             >
               {term}
             </button>
@@ -721,11 +725,11 @@ export function HomePage() {
         {isLoadingBlogPosts ? (
           <div className="grid gap-6 md:grid-cols-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
-                <div className="h-48 w-full animate-pulse bg-slate-200 dark:bg-dark-bg"></div>
+              <div key={i} className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+                <div className="h-48 w-full animate-pulse bg-slate-200 dark:bg-dark-base"></div>
                 <div className="p-6 space-y-3">
-                  <div className="h-4 w-1/3 animate-pulse rounded bg-slate-200 dark:bg-dark-bg"></div>
-                  <div className="h-6 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-dark-bg"></div>
+                  <div className="h-4 w-1/3 animate-pulse rounded bg-slate-200 dark:bg-dark-base"></div>
+                  <div className="h-6 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-dark-base"></div>
                 </div>
               </div>
             ))}
@@ -735,9 +739,9 @@ export function HomePage() {
             {blogPosts.slice(0, 3).map((post) => (
               <article 
                 key={post.id} 
-                className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden transition-shadow hover:shadow-md"
+                className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden transition-shadow hover:shadow-md"
               >
-                <Link to={`/blog/${post.slug}`} state={{ id: post.id }} className="group relative block h-48 overflow-hidden bg-slate-100 dark:bg-dark-bg">
+                <Link to={`/blog/${post.slug}`} state={{ id: post.id }} className="group relative block h-48 overflow-hidden bg-slate-100 dark:bg-dark-base">
                   {post.featuredImage ? (
                     <img 
                       src={post.featuredImage} 
@@ -782,7 +786,7 @@ export function HomePage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8 text-center">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-8 text-center">
             <p className="text-sm text-slate-600 dark:text-dark-textMuted">No blog posts currently.</p>
           </div>
         )}

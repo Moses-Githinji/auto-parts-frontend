@@ -71,7 +71,7 @@ const SidebarItem = ({
             "flex w-full items-center justify-between rounded-sm px-3 py-1.5 text-xs transition-colors",
             hasActiveChild || isActive
               ? "bg-[#2b579a] dark:bg-dark-primary text-white"
-              : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
+              : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-surface"
           )}
         >
           <div className="flex items-center gap-2">
@@ -93,7 +93,7 @@ const SidebarItem = ({
               "flex items-center gap-2 rounded-sm px-3 py-1.5 text-xs transition-colors",
               isActive
                 ? "bg-[#2b579a] dark:bg-dark-primary text-white"
-                : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
+                : "text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-surface"
             )
           }
           end={item.path === "/"}
@@ -134,9 +134,9 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
   };
 
   return (
-    <div className="flex h-full flex-col bg-[#f3f3f3] dark:bg-dark-bg">
+    <div className="flex h-full flex-col bg-[#f3f3f3] dark:bg-dark-base">
       {/* Logo area */}
-      <div className="flex h-12 items-center gap-2 border-b border-[#c8c8c8] dark:border-dark-border bg-[#e8e8e8] dark:bg-dark-bgLight px-3">
+      <div className="flex h-12 items-center gap-2 border-b border-[#c8c8c8] dark:border-dark-border bg-[#e8e8e8] dark:bg-dark-surface px-3">
         <div className="flex h-6 w-6 items-center justify-center rounded-sm bg-gradient-to-br from-blue-500 to-blue-700 text-white text-xs font-bold">
           W
         </div>
@@ -153,7 +153,7 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
               className="h-8 w-8 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-300 dark:bg-dark-bgLight text-sm font-semibold text-slate-700 dark:text-dark-text">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-300 dark:bg-dark-surface text-sm font-semibold text-slate-700 dark:text-dark-text">
               {user?.firstName?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || "U"}
             </div>
           )}
@@ -183,7 +183,7 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
       <div className="border-t border-[#c8c8c8] dark:border-dark-border p-2 space-y-1">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-bgLight"
+          className="flex w-full items-center gap-2 rounded-sm px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#e8e8e8] dark:hover:bg-dark-surface"
         >
           <svg
             className="h-4 w-4"

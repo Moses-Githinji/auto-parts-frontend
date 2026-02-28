@@ -185,7 +185,7 @@ export function AccountOrders() {
             placeholder="Search by order # or product name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/10 dark:border-dark-border dark:bg-dark-bgLight dark:text-dark-text transition-shadow"
+            className="w-full rounded-lg border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/10 dark:border-dark-border dark:bg-dark-surface dark:text-dark-text transition-shadow"
           />
         </div>
       </div>
@@ -204,7 +204,7 @@ export function AccountOrders() {
       {/* Orders List */}
       <div className="space-y-4">
         {filteredOrders.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-dark-border py-12 text-center bg-slate-50/50 dark:bg-dark-bg/50">
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-dark-border py-12 text-center bg-slate-50/50 dark:bg-dark-base/50">
             <ShoppingBag size={48} className="text-slate-300 mb-4" />
             <p className="text-base font-semibold text-slate-900 dark:text-dark-text">No orders found</p>
             <p className="mt-1 text-sm text-slate-500 max-w-xs px-4">
@@ -222,7 +222,7 @@ export function AccountOrders() {
             <div
               key={order.id}
               onClick={() => setSelectedOrder(order)}
-              className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-[#FF9900]/30 hover:shadow-md dark:border-dark-border dark:bg-dark-bgLight"
+              className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-[#FF9900]/30 hover:shadow-md dark:border-dark-border dark:bg-dark-surface"
             >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-2">
@@ -278,7 +278,7 @@ export function AccountOrders() {
               <div className="mt-4 flex flex-col gap-3 pt-4 border-t border-slate-50 dark:border-dark-border">
                 {order.items?.slice(0, 2).map((item) => (
                   <div key={item.id} className="flex items-center gap-3">
-                    <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded bg-slate-100 dark:bg-dark-bg text-slate-400 overflow-hidden">
+                    <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded bg-slate-100 dark:bg-dark-base text-slate-400 overflow-hidden">
                       {item.product?.images?.[0] ? (
                         <img src={item.product.images[0]} alt={item.product.name} className="h-full w-full object-cover" />
                       ) : (
@@ -309,9 +309,9 @@ export function AccountOrders() {
       {/* Modern Order Detail Modal */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-dark-bgLight shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+          <div className="w-full max-w-2xl rounded-2xl bg-white dark:bg-dark-surface shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 dark:border-dark-border flex items-center justify-between bg-slate-50/50 dark:bg-dark-bg/50">
+            <div className="p-4 border-b border-slate-100 dark:border-dark-border flex items-center justify-between bg-slate-50/50 dark:bg-dark-base/50">
               <div>
                 <h2 className="text-lg font-bold text-slate-900 dark:text-dark-text">
                   Order Summary
@@ -322,7 +322,7 @@ export function AccountOrders() {
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="h-8 w-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:hover:bg-dark-bg transition-colors"
+                className="h-8 w-8 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200 dark:hover:bg-dark-base transition-colors"
               >
                 <XCircle size={20} />
               </button>
@@ -330,7 +330,7 @@ export function AccountOrders() {
 
             <div className="flex-1 overflow-y-auto p-4 space-y-6">
               {/* Order Info Bar */}
-              <div className="grid grid-cols-3 gap-2 text-center bg-slate-50 dark:bg-dark-bg rounded-xl p-3">
+              <div className="grid grid-cols-3 gap-2 text-center bg-slate-50 dark:bg-dark-base rounded-xl p-3">
                 <div className="space-y-1">
                   <p className="text-[10px] uppercase text-slate-500 font-bold">Status</p>
                   <p className={`text-xs font-bold ${statusColors[selectedOrder.status]} bg-transparent`}>
@@ -361,9 +361,9 @@ export function AccountOrders() {
                   {selectedOrder.items?.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-start gap-4 p-3 rounded-xl border border-slate-100 dark:border-dark-border bg-white dark:bg-dark-bg/30"
+                      className="flex items-start gap-4 p-3 rounded-xl border border-slate-100 dark:border-dark-border bg-white dark:bg-dark-base/30"
                     >
-                      <div className="h-16 w-16 flex-shrink-0 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-dark-bg overflow-hidden">
+                      <div className="h-16 w-16 flex-shrink-0 flex items-center justify-center rounded-lg bg-slate-50 dark:bg-dark-base overflow-hidden">
                         {item.product?.images?.[0] ? (
                           <img src={item.product.images[0]} alt={item.product?.name} className="h-full w-full object-cover" />
                         ) : (
@@ -393,7 +393,7 @@ export function AccountOrders() {
 
               {/* Details & Summaries */}
               <div className="grid gap-4 sm:grid-cols-2">
-                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-dark-bg space-y-2">
+                 <div className="p-4 rounded-xl bg-slate-50 dark:bg-dark-base space-y-2">
                     <h4 className="flex items-center gap-2 text-xs font-bold uppercase text-slate-500 tracking-wider">
                       <Truck size={14} />
                       Delivery Address
@@ -430,7 +430,7 @@ export function AccountOrders() {
             </div>
 
             {/* Footer Actions */}
-            <div className="p-4 bg-slate-50 dark:bg-dark-bg flex flex-col sm:flex-row gap-2">
+            <div className="p-4 bg-slate-50 dark:bg-dark-base flex flex-col sm:flex-row gap-2">
               {(selectedOrder.status === "PENDING" || selectedOrder.status === "CONFIRMED") && (
                 <Button
                   variant="outline"

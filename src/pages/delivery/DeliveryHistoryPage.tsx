@@ -81,15 +81,15 @@ export function DeliveryHistoryPage() {
 
         {/* Stats */}
         <section className="mb-6 grid gap-4 md:grid-cols-3">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Delivered</p>
             <p className="mt-1 text-2xl font-semibold text-green-600">{deliveredCount}</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Failed</p>
             <p className="mt-1 text-2xl font-semibold text-red-600">{failedCount}</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Earnings</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               KSh {totalEarnings.toLocaleString()}
@@ -102,13 +102,13 @@ export function DeliveryHistoryPage() {
           <select
             value={periodFilter}
             onChange={(e) => setPeriodFilter(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
           >
             <option value="this_week">This Week</option>
             <option value="last_week">Last Week</option>
             <option value="this_month">This Month</option>
           </select>
-          <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg">
+          <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base">
             Refresh
           </button>
         </div>
@@ -116,7 +116,7 @@ export function DeliveryHistoryPage() {
         {/* History Table */}
         <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
           <table className="w-full text-xs">
-            <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+            <thead className="bg-[#f3f3f3] dark:bg-dark-base">
               <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                 <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-textMuted">
                   Tracking ID
@@ -142,7 +142,7 @@ export function DeliveryHistoryPage() {
               {history.map((item) => (
                 <tr
                   key={item.id}
-                  className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                  className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                 >
                   <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                     {item.trackingId}

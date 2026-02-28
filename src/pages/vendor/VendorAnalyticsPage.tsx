@@ -16,7 +16,9 @@ export function VendorAnalyticsPage() {
     { label: "Orders", to: "/vendor/orders" },
     { label: "Catalog", to: "/vendor/catalog" },
     { label: "Analytics", to: "/vendor/analytics" },
+    { label: "Earnings", to: "/vendor/earnings" },
     { label: "Settings", to: "/vendor/settings" },
+    { label: "Suggestions", to: "/vendor/suggestions" },
   ];
 
   useEffect(() => {
@@ -94,7 +96,7 @@ export function VendorAnalyticsPage() {
           <select 
             value={timeRange}
             onChange={(e) => setTimeRange(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none bg-white dark:bg-dark-bg"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none bg-white dark:bg-dark-base"
           >
             <option>Last 7 days</option>
             <option>Last 30 days</option>
@@ -116,7 +118,7 @@ export function VendorAnalyticsPage() {
             {/* Key Metrics */}
             <section className="mb-6 grid gap-4 md:grid-cols-4">
               {stats?.map((stat, i) => (
-                <div key={i} className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+                <div key={i} className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs text-slate-600 dark:text-dark-textMuted">{stat.label}</p>
                     <stat.icon size={16} className="text-slate-400" />
@@ -136,7 +138,7 @@ export function VendorAnalyticsPage() {
 
             {/* Charts Section */}
             <section className="mb-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Sales Trends
                 </h3>
@@ -147,7 +149,7 @@ export function VendorAnalyticsPage() {
                         <span className="w-16 text-[10px] text-slate-600 dark:text-dark-textMuted font-mono">
                           {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </span>
-                        <div className="flex-1 rounded-full bg-slate-100 dark:bg-dark-bg h-4 overflow-hidden">
+                        <div className="flex-1 rounded-full bg-slate-100 dark:bg-dark-base h-4 overflow-hidden">
                           <div
                             className="h-full bg-[#2b579a] dark:bg-dark-primary transition-all duration-500"
                             style={{ width: `${Math.min(100, (entry.amount / (analyticsData.analytics.totalRevenue || 1)) * 300)}%` }}
@@ -164,7 +166,7 @@ export function VendorAnalyticsPage() {
                 </div>
               </div>
 
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Top Selling Products
                 </h3>
@@ -173,7 +175,7 @@ export function VendorAnalyticsPage() {
                     analyticsData.analytics.topProducts.map((item, index) => (
                       <div key={index} className="flex items-center justify-between border-b border-slate-50 dark:border-dark-border pb-2 last:border-0 last:pb-0">
                         <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded bg-slate-50 dark:bg-dark-bg flex items-center justify-center text-slate-400">
+                          <div className="h-8 w-8 rounded bg-slate-50 dark:bg-dark-base flex items-center justify-center text-slate-400">
                             <Package size={14} />
                           </div>
                           <div>
@@ -198,19 +200,19 @@ export function VendorAnalyticsPage() {
             </section>
 
             {/* Performance Metrics */}
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
                 Performance Dashboard
               </h3>
               <div className="grid gap-4 md:grid-cols-3">
-                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-bg/30">
+                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-base/30">
                   <p className="text-xs text-slate-600 dark:text-dark-textMuted">On-time Delivery Rate</p>
                   <p className="mt-2 text-2xl font-semibold text-green-600">98%</p>
                   <p className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">
                     Target: 95% | Status: Excellent
                   </p>
                 </div>
-                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-bg/30">
+                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-base/30">
                   <p className="text-xs text-slate-600 dark:text-dark-textMuted">Customer Rating</p>
                   <p className="mt-2 text-2xl font-semibold text-amber-500">
                     4.8 ★
@@ -219,7 +221,7 @@ export function VendorAnalyticsPage() {
                     Based on recent performance data
                   </p>
                 </div>
-                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-bg/30">
+                <div className="rounded-sm border border-[#e8e8e8] dark:border-dark-border p-4 bg-slate-50/50 dark:bg-dark-base/30">
                   <p className="text-xs text-slate-600 dark:text-dark-textMuted">Order Accuracy</p>
                   <p className="mt-2 text-2xl font-semibold text-[#2b579a]">99.2%</p>
                   <p className="mt-1 text-[10px] text-slate-500 dark:text-dark-textMuted">

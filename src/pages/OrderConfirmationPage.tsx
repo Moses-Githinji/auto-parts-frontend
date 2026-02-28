@@ -163,7 +163,7 @@ export function OrderConfirmationPage() {
       </div>
 
       {/* Order Summary */}
-      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 mb-6">
+      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6 mb-6">
         <div className="flex items-center gap-2 mb-4">
           <Package className="h-5 w-5 text-[#FF9900]" />
           <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -238,7 +238,7 @@ export function OrderConfirmationPage() {
       {/* Action Section */}
       {!showIssueForm ? (
         <div className="space-y-4">
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <h3 className="font-semibold text-slate-900 dark:text-dark-text mb-3">
               Did you receive your order in good condition?
             </h3>
@@ -283,7 +283,7 @@ export function OrderConfirmationPage() {
           </div>
         </div>
       ) : (
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
           <h3 className="font-semibold text-slate-900 dark:text-dark-text mb-3">
             Report an Issue
           </h3>
@@ -299,7 +299,7 @@ export function OrderConfirmationPage() {
             <textarea
               value={issueDescription}
               onChange={(e) => setIssueDescription(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bg p-3 text-sm text-slate-900 dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20"
+              className="w-full rounded-lg border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-base p-3 text-sm text-slate-900 dark:text-dark-text focus:border-[#FF9900] focus:outline-none focus:ring-2 focus:ring-[#FF9900]/20"
               rows={5}
               placeholder="Describe the issue (e.g., missing items, damaged products, wrong items received...)"
             />
@@ -336,7 +336,7 @@ export function OrderConfirmationPage() {
       )}
 
       {/* Important Notice */}
-      <div className="mt-6 rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+      <div className="mt-6 rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-4">
         <h4 className="text-sm font-semibold text-slate-900 dark:text-dark-text mb-2">
           Important Information
         </h4>

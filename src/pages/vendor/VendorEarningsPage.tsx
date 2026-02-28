@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import { useEarningsStore } from "../../stores/earningsStore";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
-import { Loader2, DollarSign, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { AlertCircle, CheckCircle2, Clock, DollarSign, Loader2 } from "lucide-react";
+import { BackofficeLayout } from "../../layout/BackofficeLayout";
+
+// Define vendorNavItems as a separate constant
+const vendorNavItems = [
+  { label: "Analytics", to: "/vendor/analytics" },
+  { label: "Earnings", to: "/vendor/earnings" },
+  { label: "Settings", to: "/vendor/settings" },
+  { label: "Suggestions", to: "/vendor/suggestions" },
+];
 
 export function VendorEarningsPage() {
   const {
@@ -57,56 +66,57 @@ export function VendorEarningsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-dark-text">My Earnings</h1>
-        <p className="text-sm text-slate-600 dark:text-dark-textMuted">
-          Track your earnings from confirmed deliveries
-        </p>
-      </div>
-
-      {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
-          <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
-        </div>
-      )}
-
-      {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="h-5 w-5 text-green-600" />
-            <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
-              Total Earnings
-            </span>
-          </div>
-          <p className="text-2xl font-bold text-slate-900 dark:text-dark-text">
-            KES {totalEarnings.toLocaleString()}
+    <BackofficeLayout title="Vendor Portal" navItems={vendorNavItems}>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-dark-text">My Earnings</h1>
+          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
+            Track your earnings from confirmed deliveries
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock className="h-5 w-5 text-yellow-600" />
-            <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
-              Pending
-            </span>
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
+            <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
           </div>
-          <p className="text-2xl font-bold text-yellow-600">
-            KES {pendingEarnings.toLocaleString()}
-          </p>
-          <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
-            Awaiting delivery confirmation
-          </p>
-        </div>
+        )}
 
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <CheckCircle2 className="h-5 w-5 text-blue-600" />
-            <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
-              Confirmed
-            </span>
+        {/* Summary Cards */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <DollarSign className="h-5 w-5 text-green-600" />
+              <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
+                Total Earnings
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-slate-900 dark:text-dark-text">
+              KES {totalEarnings.toLocaleString()}
+            </p>
           </div>
+
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Clock className="h-5 w-5 text-yellow-600" />
+              <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
+                Pending
+              </span>
+            </div>
+            <p className="text-2xl font-bold text-yellow-600">
+              KES {pendingEarnings.toLocaleString()}
+            </p>
+            <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
+              Awaiting delivery confirmation
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <CheckCircle2 className="h-5 w-5 text-blue-600" />
+              <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
+                Confirmed
+              </span>
+            </div>
           <p className="text-2xl font-bold text-blue-600">
             KES {confirmedEarnings.toLocaleString()}
           </p>
@@ -115,7 +125,7 @@ export function VendorEarningsPage() {
           </p>
         </div>
 
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle2 className="h-5 w-5 text-green-600" />
             <span className="text-sm font-medium text-slate-600 dark:text-dark-textMuted">
@@ -213,10 +223,10 @@ export function VendorEarningsPage() {
           </div>
 
           {/* Earnings Table */}
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+                <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Order</th>
                     <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Customer</th>
@@ -237,7 +247,7 @@ export function VendorEarningsPage() {
                     </tr>
                   ) : (
                     filteredEarnings.map((earning) => (
-                      <tr key={earning.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                      <tr key={earning.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                         <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
                           {earning.orderNumber}
                         </td>
@@ -282,10 +292,10 @@ export function VendorEarningsPage() {
       {/* Payouts Tab */}
       {activeTab === "payouts" && (
         <div className="space-y-4">
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border">
+                <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border">
                   <tr>
                     <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Reference</th>
                     <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Amount</th>
@@ -305,7 +315,7 @@ export function VendorEarningsPage() {
                     </tr>
                   ) : (
                     payoutHistory.map((payout) => (
-                      <tr key={payout.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg">
+                      <tr key={payout.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
                         <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
                           {payout.referenceNumber}
                         </td>
@@ -337,5 +347,6 @@ export function VendorEarningsPage() {
         </div>
       )}
     </div>
+    </BackofficeLayout>
   );
 }

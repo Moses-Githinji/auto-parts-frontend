@@ -225,12 +225,12 @@ export function AdminBlogsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyPress={handleKeyPress}
-            className="flex-1 rounded border border-slate-300 dark:border-dark-border px-4 py-2 text-sm focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:bg-dark-bgLight dark:text-dark-text"
+            className="flex-1 rounded border border-slate-300 dark:border-dark-border px-4 py-2 text-sm focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:bg-dark-surface dark:text-dark-text"
           />
           <Button
             variant="outline"
             onClick={handleSearch}
-            className="border-slate-300 dark:border-dark-border dark:text-gray-500 dark:bg-dark-bgLight dark:hover:bg-dark-bgLight dark:hover:text-dark-text "
+            className="border-slate-300 dark:border-dark-border dark:text-gray-500 dark:bg-dark-surface dark:hover:bg-dark-surface dark:hover:text-dark-text "
           >
             Search
           </Button>
@@ -241,7 +241,7 @@ export function AdminBlogsPage() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#2b579a] border-t-transparent"></div>
           </div>
         ) : posts.length === 0 ? (
-          <div className="rounded-lg border border-slate-200 bg-white dark:bg-dark-bgLight p-8 text-center">
+          <div className="rounded-lg border border-slate-200 bg-white dark:bg-dark-surface p-8 text-center">
             <p className="text-sm text-slate-600 dark:text-dark-textMuted">No blog posts found.</p>
             <Button
               className="mt-4 bg-[#2b579a] text-white hover:bg-[#2b579a]/90"
@@ -251,9 +251,9 @@ export function AdminBlogsPage() {
             </Button>
           </div>
         ) : (
-          <div className="rounded-sm border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight">
+          <div className="rounded-sm border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 dark:bg-dark-bg">
+              <thead className="bg-slate-50 dark:bg-dark-base">
                 <tr>
                   <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Title
@@ -341,7 +341,7 @@ export function AdminBlogsPage() {
                     onClick={() =>
                       fetchPosts(searchQuery, postsPagination.page - 1)
                     }
-                    className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
+                    className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-base"
                   >
                     Previous
                   </Button>
@@ -366,7 +366,7 @@ export function AdminBlogsPage() {
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white dark:bg-dark-bgLight p-6 shadow-lg">
+          <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white dark:bg-dark-surface p-6 shadow-lg">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {editingPost ? "Edit Post" : "Create New Post"}
@@ -409,7 +409,7 @@ export function AdminBlogsPage() {
                     value={formData.title}
                     onChange={handleInputChange}
                     required
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-base dark:border-dark-border dark:text-dark-text"
                     placeholder="Enter post title"
                   />
                 </div>
@@ -423,7 +423,7 @@ export function AdminBlogsPage() {
                     name="slug"
                     value={formData.slug}
                     onChange={handleInputChange}
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-base dark:border-dark-border dark:text-dark-text"
                     placeholder="Auto-generated from title if empty"
                   />
                 </div>
@@ -437,7 +437,7 @@ export function AdminBlogsPage() {
                     value={formData.excerpt}
                     onChange={handleInputChange}
                     rows={2}
-                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+                    className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-base dark:border-dark-border dark:text-dark-text"
                     placeholder="Brief description of the post"
                   />
                 </div>
@@ -465,7 +465,7 @@ export function AdminBlogsPage() {
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-base dark:border-dark-border dark:text-dark-text"
                     >
                       <option value="">Select category</option>
                       {categories.map((cat) => (
@@ -485,7 +485,7 @@ export function AdminBlogsPage() {
                       name="tags"
                       value={formData.tags}
                       onChange={handleInputChange}
-                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-bg dark:border-dark-border dark:text-dark-text"
+                      className="w-full rounded border border-slate-300 px-3 py-2 text-sm focus:border-[#2b579a] dark:focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-[#2b579a] dark:focus:ring-blue-500 dark:bg-dark-base dark:border-dark-border dark:text-dark-text"
                       placeholder="tag1, tag2, tag3"
                     />
                   </div>
@@ -525,7 +525,7 @@ export function AdminBlogsPage() {
                   type="button"
                   variant="outline"
                   onClick={handleCloseModal}
-                  className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
+                  className="border-slate-300 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-base"
                 >
                   Cancel
                 </Button>

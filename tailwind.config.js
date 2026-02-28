@@ -26,8 +26,8 @@ export default {
         // Dark mode palette
         dark: {
           primary: "#1a3d6b", // Darker shade of #2b579a
-          bg: "#0f1419",
-          bgLight: "#1a1f2e",
+          base: "#0f1419",
+          surface: "#1a1f2e",
           border: "#2d3748",
           text: "#e2e8f0",
           textMuted: "#a0aec0",

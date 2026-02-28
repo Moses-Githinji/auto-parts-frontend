@@ -98,7 +98,7 @@ export function QRScannerPage() {
 
         {!scannedId && (
           <div className="space-y-6">
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <div id="reader" className="w-full"></div>
               <p className="text-center text-xs text-slate-500 dark:text-dark-textMuted mt-2">
                 Point camera at the QR code on the shipping label
@@ -110,7 +110,7 @@ export function QRScannerPage() {
                 <div className="w-full border-t border-[#c8c8c8] dark:border-dark-border"></div>
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-dark-bgLight text-slate-500 dark:text-dark-textMuted">Or enter manually</span>
+                <span className="px-2 bg-white dark:bg-dark-surface text-slate-500 dark:text-dark-textMuted">Or enter manually</span>
               </div>
             </div>
 
@@ -119,7 +119,7 @@ export function QRScannerPage() {
                 name="manualId"
                 type="text"
                 placeholder="Enter Tracking ID (e.g. TRK-123...)"
-                className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none placeholder:text-slate-400 dark:placeholder:text-dark-textMuted"
+                className="flex-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none placeholder:text-slate-400 dark:placeholder:text-dark-textMuted"
               />
               <button
                 type="submit"

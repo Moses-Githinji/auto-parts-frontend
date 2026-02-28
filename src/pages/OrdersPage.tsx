@@ -74,7 +74,7 @@ export function OrdersPage() {
     return (
       <div className="space-y-4">
         <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">My Orders</h1>
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
           <p className="mb-4">You haven't placed any orders yet.</p>
           <Link to="/" className="text-blue-600 hover:underline">
             Continue shopping
@@ -102,7 +102,7 @@ export function OrdersPage() {
         return (
           <section
             key={`${order.id}-${index}`}
-            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4"
+            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-4"
           >
             <header className="flex items-center justify-between">
               <div>
@@ -157,7 +157,7 @@ export function OrdersPage() {
                 return (
                   <div
                     key={vendorId}
-                    className="space-y-2 rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-3 text-xs"
+                    className="space-y-2 rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-3 text-xs"
                   >
                     <h4 className="font-semibold text-slate-900 dark:text-dark-text">
                       {vendorName}
@@ -200,7 +200,7 @@ export function OrdersPage() {
                 );
               })
             ) : (
-              <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-3 text-xs">
+              <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-3 text-xs">
                 <p className="mb-2 text-slate-600 italic">
                   Order details not available
                 </p>

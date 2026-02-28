@@ -36,6 +36,7 @@ export function CheckoutPage() {
   const [orderGroup, setOrderGroup] = useState<OrderGroup | null>(null);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [outOfStockItems, setOutOfStockItems] = useState<{ name: string; available: number; requested: number }[]>([]);
 
   const [shippingAddress, setShippingAddress] = useState<Address>({
     street: "",
@@ -101,6 +102,7 @@ export function CheckoutPage() {
       }
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to place order");
+      setOutOfStockItems(err.response?.data?.outOfStockItems || []);
     } finally {
       setIsCreatingOrder(false);
     }
@@ -165,7 +167,7 @@ export function CheckoutPage() {
           {/* Address Step */}
           {step === "address" && (
             <div className="space-y-6">
-              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
                 <div className="mb-4 flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-[#FF9900]" />
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -232,7 +234,7 @@ export function CheckoutPage() {
               </div>
 
               {!useSameAddress && (
-                <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+                <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
                   <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-dark-text">
                     Billing Address
                   </h2>
@@ -284,7 +286,21 @@ export function CheckoutPage() {
 
               {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
-                  <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+                  <p className="text-sm font-semibold text-red-700 dark:text-red-400">{error}</p>
+                  {outOfStockItems.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {outOfStockItems.map((item, idx) => (
+                        <li key={idx} className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                          <span className="font-medium">{item.name}</span>
+                          {item.available === 0
+                            ? " — currently out of stock"
+                            : ` — only ${item.available} in stock (you requested ${item.requested})`
+                          }
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
 
@@ -313,7 +329,7 @@ export function CheckoutPage() {
           {/* Payment Step */}
           {step === "payment" && (
             <div className="space-y-6">
-              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
                 <div className="mb-4 flex items-center gap-2">
                   <CreditCard className="h-5 w-5 text-[#FF9900]" />
                   <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
@@ -388,7 +404,7 @@ export function CheckoutPage() {
                           </div>
                         </div>
                         {paymentMethod === "mpesa" && (
-                          <p className="mt-4 text-xs bg-white dark:bg-dark-bgLight p-2 rounded border border-slate-200 dark:border-dark-border">
+                          <p className="mt-4 text-xs bg-white dark:bg-dark-surface p-2 rounded border border-slate-200 dark:border-dark-border">
                             <span className="font-bold text-green-600">Note:</span> After clicking below, you'll be shown manual Paybill instructions to complete your payment.
                           </p>
                         )}
@@ -455,7 +471,21 @@ export function CheckoutPage() {
 
               {error && (
                 <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
-                  <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+                  <p className="text-sm font-semibold text-red-700 dark:text-red-400">{error}</p>
+                  {outOfStockItems.length > 0 && (
+                    <ul className="mt-2 space-y-1">
+                      {outOfStockItems.map((item, idx) => (
+                        <li key={idx} className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+                          <span className="font-medium">{item.name}</span>
+                          {item.available === 0
+                            ? " — currently out of stock"
+                            : ` — only ${item.available} in stock (you requested ${item.requested})`
+                          }
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               )}
             </div>
@@ -464,7 +494,7 @@ export function CheckoutPage() {
 
         {/* Order Summary Sidebar */}
         <div className={`lg:col-span-1 transition-all duration-500 ${orderGroup ? "opacity-0 invisible pointer-events-none" : "opacity-100 visible"}`}>
-          <div className="sticky top-4 rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="sticky top-4 rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <div className="mb-4 flex items-center gap-2">
               <ShoppingCart className="h-5 w-5 text-[#FF9900]" />
               <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">

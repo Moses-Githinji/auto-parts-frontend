@@ -155,7 +155,7 @@ function SideNavButton({
       size="sm"
       className={`w-full justify-start rounded-sm px-2 text-[11px] font-normal ${
         isActive
-          ? "bg-[#FF9900]/10 text-[#FF9900] dark:bg-dark-bgLight dark:text-amber-400 hover:bg-[#FF9900]/20 dark:hover:bg-dark-bgLight"
+          ? "bg-[#FF9900]/10 text-[#FF9900] dark:bg-dark-surface dark:text-amber-400 hover:bg-[#FF9900]/20 dark:hover:bg-dark-surface"
           : "text-slate-600 dark:text-gray-400 hover:bg-slate-100 dark:hover:bg-white/5"
       }`}
       onClick={onClick}
@@ -194,7 +194,7 @@ function AccountOverview({
       <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">Account overview</h1>
 
       {user ? (
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FF9900] text-lg font-bold text-white">
               {(user as { firstName?: string }).firstName?.charAt(0) ||
@@ -213,19 +213,19 @@ function AccountOverview({
           </div>
 
           <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Orders</p>
               <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.activeOrders}
               </p>
             </div>
-            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Vehicles</p>
               <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.savedVehicles}
               </p>
             </div>
-            <div className="rounded-md bg-slate-50 dark:bg-dark-bg p-3">
+            <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Addresses</p>
               <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {stats.savedAddresses}
@@ -238,7 +238,7 @@ function AccountOverview({
           )}
         </div>
       ) : (
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-4">
           <p className="mb-3 text-sm text-slate-600 dark:text-dark-textMuted">
             Sign in to view your account details, orders, and saved vehicles.
           </p>

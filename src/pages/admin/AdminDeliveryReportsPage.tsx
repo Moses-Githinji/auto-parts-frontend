@@ -22,7 +22,7 @@ export function AdminDeliveryReportsPage() {
               <option>Last 90 days</option>
               <option>This year</option>
             </select>
-            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg">
+            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base">
               Export
             </button>
           </div>
@@ -30,21 +30,21 @@ export function AdminDeliveryReportsPage() {
 
         {/* Key Metrics */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Deliveries</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">12,456</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 18% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">On-Time Delivery Rate</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">94.5%</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 2.3% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Avg Delivery Time</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               2.4 days
@@ -53,7 +53,7 @@ export function AdminDeliveryReportsPage() {
               ↓ 0.3 days vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Failed Deliveries</p>
             <p className="mt-1 text-2xl font-semibold text-amber-600">234</p>
             <p className="mt-1 text-[10px] text-amber-600">
@@ -64,7 +64,7 @@ export function AdminDeliveryReportsPage() {
 
         {/* Delivery Status Breakdown */}
         <section className="mb-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Deliveries by Status
             </h3>
@@ -98,12 +98,12 @@ export function AdminDeliveryReportsPage() {
             </div>
           </div>
 
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Delivery Partners Performance
             </h3>
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-3 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Partner
@@ -145,12 +145,12 @@ export function AdminDeliveryReportsPage() {
         </section>
 
         {/* Recent Deliveries */}
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
             Recent Delivery Updates
           </h3>
           <table className="w-full text-xs">
-            <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+            <thead className="bg-[#f3f3f3] dark:bg-dark-base">
               <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                 <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Order ID

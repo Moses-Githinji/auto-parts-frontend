@@ -121,7 +121,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
+    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-base">
       {/* Amazon-style Header */}
       <header className="bg-[#131921] dark:bg-dark-primary text-slate-50 sticky top-0 z-50 pt-safe">
         {/* Top row: Logo, Search, Account, Orders, Cart */}
@@ -284,7 +284,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Second row: Departments, Menu button, Navigation links */}
-        <div className="flex items-center gap-1 bg-[#232F3E] dark:bg-dark-bgLight px-2 py-1.5 text-xs text-slate-100">
+        <div className="flex items-center gap-1 bg-[#232F3E] dark:bg-dark-surface px-2 py-1.5 text-xs text-slate-100">
           {/* Departments Hamburger */}
           <button
             type="button"
@@ -414,7 +414,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
           transition={{ duration: 0.15 }}
           className="mx-auto max-w-7xl"
         >
-          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm md:rounded-md">
+          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface shadow-sm md:rounded-md">
             {children}
           </div>
         </motion.div>
@@ -424,7 +424,7 @@ function StorefrontShell({ children }: { children: ReactNode }) {
       <Footer />
 
       {/* Mobile Bottom Tab Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-dark-border bg-white/95 backdrop-blur-md dark:bg-dark-bgLight/95 md:hidden pb-safe support-backdrop-blur">
+      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 dark:border-dark-border bg-white/95 backdrop-blur-md dark:bg-dark-surface/95 md:hidden pb-safe support-backdrop-blur">
         <div className="grid grid-cols-5 divide-x divide-slate-100 dark:divide-dark-border">
           <TabBarButton
             icon={Home}
@@ -512,7 +512,7 @@ function BackofficeShell({ children }: { children: ReactNode }) {
   const isDeliveryContext = location.pathname.startsWith("/delivery");
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-bg">
+    <div className="flex min-h-screen flex-col bg-[#EAEDED] dark:bg-dark-base">
       <header className="border-b border-slate-200 dark:border-dark-border bg-[#131921] text-slate-50 pt-safe">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-2">
@@ -552,7 +552,7 @@ function BackofficeShell({ children }: { children: ReactNode }) {
 
       <main className="flex-1 px-4 py-4">
         <div className="mx-auto max-w-7xl">
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             {children}
           </div>
         </div>

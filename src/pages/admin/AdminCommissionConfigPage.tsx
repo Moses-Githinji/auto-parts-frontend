@@ -266,7 +266,7 @@ export function AdminCommissionConfigPage() {
           <div className="flex gap-2">
             <button
               onClick={() => setShowLegend(!showLegend)}
-              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
             >
               {showLegend ? "Hide Rules" : "Show Rules"}
             </button>
@@ -321,7 +321,7 @@ export function AdminCommissionConfigPage() {
             </div>
           ) : (
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Category
@@ -350,7 +350,7 @@ export function AdminCommissionConfigPage() {
                 {filteredConfigs.map((config) => (
                   <tr
                     key={config.id}
-                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                   >
                     <td className="px-4 py-3">
                       <div>
@@ -500,7 +500,7 @@ export function AdminCommissionConfigPage() {
                             </button>
                             <button
                               onClick={handleCancel}
-                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-2 py-0.5 text-[10px] text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-2 py-0.5 text-[10px] text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
                             >
                               Cancel
                             </button>
@@ -509,7 +509,7 @@ export function AdminCommissionConfigPage() {
                           <>
                             <button
                               onClick={() => handleEdit(config)}
-                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-base"
                             >
                               Edit
                             </button>
@@ -533,7 +533,7 @@ export function AdminCommissionConfigPage() {
         {/* Add Config Modal */}
         {showAddModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg max-h-[90vh] overflow-y-auto">
+            <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg max-h-[90vh] overflow-y-auto">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                   Add New Commission Config
@@ -686,7 +686,7 @@ export function AdminCommissionConfigPage() {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
                   >
                     Cancel
                   </button>

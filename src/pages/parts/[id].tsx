@@ -213,7 +213,7 @@ export default function ProductDetailPage() {
   if (!currentProduct) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-16">
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8 text-center">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-8 text-center">
           <Package className="mx-auto mb-4 h-16 w-16 text-slate-300" />
           <h2 className="mb-2 text-xl font-semibold text-slate-900 dark:text-dark-text">
             Product Not Found
@@ -440,7 +440,7 @@ export default function ProductDetailPage() {
           {/* Technical Specifications */}
           {currentProduct.specifications &&
             Object.keys(currentProduct.specifications).length > 0 && (
-              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+              <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
                 <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Technical Specifications
                 </h3>
@@ -481,7 +481,7 @@ export default function ProductDetailPage() {
             )}
 
           {/* Product Info */}
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-4">
             <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Product Information
             </h3>
@@ -512,7 +512,7 @@ export default function ProductDetailPage() {
         <div className="space-y-4">
           <div className="sticky top-4 space-y-4">
             {/* Purchase Card */}
-            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-5 shadow-sm">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-5 shadow-sm">
               {/* Price */}
               <div className="mb-4">
                 <span className="text-3xl font-bold text-slate-900 dark:text-dark-text">
@@ -575,11 +575,15 @@ export default function ProductDetailPage() {
 
               {/* Add to Cart Button */}
               <Button
-                className="mb-3 h-12 w-full rounded-md bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className={`mb-3 h-12 w-full rounded-md disabled:cursor-not-allowed disabled:opacity-80 ${
+                  inStock
+                    ? "bg-[#F7CA00] text-[#131921] hover:bg-[#F7CA00]/90"
+                    : "bg-red-100 text-red-700 border border-red-300 hover:bg-red-100"
+                }`}
                 onClick={handleAddToCart}
                 disabled={!inStock}
               >
-                Add to Cart
+                {inStock ? "Add to Cart" : "Out of Stock"}
               </Button>
 
               {/* Buy Now Button */}
@@ -674,7 +678,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Vendor Card */}
-            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-5 shadow-sm">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-5 shadow-sm">
               <h3 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                 Sold by
               </h3>
@@ -705,7 +709,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Return Policy */}
-            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
               <div className="flex items-start gap-3">
                 <div className="rounded-full bg-green-100 p-1.5">
                   <Check className="h-4 w-4 text-green-600" />
@@ -722,7 +726,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Warranty */}
-            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+            <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
               <div className="flex items-start gap-3">
                 <div className="rounded-full bg-blue-100 p-1.5">
                   <Shield className="h-4 w-4 text-blue-600" />
@@ -745,7 +749,7 @@ export default function ProductDetailPage() {
 
 
       {/* Mobile Sticky Buy Box - only visible until large screens */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] lg:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] lg:hidden">
         <div className="flex items-center justify-between gap-4">
           {inStock ? (
             <>

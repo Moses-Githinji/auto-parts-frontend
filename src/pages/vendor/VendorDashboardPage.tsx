@@ -38,7 +38,9 @@ export function VendorDashboardPage() {
     { label: "Orders", to: "/vendor/orders" },
     { label: "Catalog", to: "/vendor/catalog" },
     { label: "Analytics", to: "/vendor/analytics" },
+    { label: "Earnings", to: "/vendor/earnings" },
     { label: "Settings", to: "/vendor/settings" },
+    { label: "Suggestions", to: "/vendor/suggestions" },
   ];
 
   useEffect(() => {
@@ -82,19 +84,19 @@ export function VendorDashboardPage() {
         ) : (
           <>
             <section className="grid gap-4 md:grid-cols-3">
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Revenue (30d)</p>
                 <p className="mt-2 text-2xl font-semibold text-slate-900 dark:text-dark-text">
                   KSh {(a?.totalRevenue || 0).toLocaleString()}
                 </p>
               </div>
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Orders (30d)</p>
                 <p className="mt-2 text-2xl font-semibold text-emerald-600">
                   {a?.totalOrders || 0}
                 </p>
               </div>
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <p className="text-xs text-slate-600 dark:text-dark-textMuted">Average Order Value</p>
                 <p className="mt-2 text-2xl font-semibold text-[#2b579a]">
                   KSh {(a?.averageOrderValue || 0).toLocaleString()}
@@ -103,7 +105,7 @@ export function VendorDashboardPage() {
             </section>
 
             <section className="mt-6 grid gap-4 md:grid-cols-2">
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <h2 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Recent Orders
                 </h2>
@@ -127,7 +129,7 @@ export function VendorDashboardPage() {
                 </div>
               </div>
 
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <h2 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Sales Trends (Last 7 Days)
                 </h2>
@@ -138,7 +140,7 @@ export function VendorDashboardPage() {
                         <span className="w-12 text-[10px] text-slate-500 font-mono">
                           {new Date(entry.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                         </span>
-                        <div className="flex-1 h-3 bg-slate-100 dark:bg-dark-bg rounded-full overflow-hidden">
+                        <div className="flex-1 h-3 bg-slate-100 dark:bg-dark-base rounded-full overflow-hidden">
                           <div 
                             className="h-full bg-[#2b579a]" 
                             style={{ width: `${Math.min(100, (entry.amount / (a.totalRevenue || 1)) * 500)}%` }}
@@ -157,7 +159,7 @@ export function VendorDashboardPage() {
             </section>
 
             <section className="mt-6">
-              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+              <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
                 <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Performance Summary
                 </h3>

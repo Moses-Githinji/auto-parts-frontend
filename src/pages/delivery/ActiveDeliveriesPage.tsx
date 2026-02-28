@@ -125,7 +125,7 @@ export function ActiveDeliveriesPage() {
         {tasks.length > 0 ? (
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-textMuted">
                     Task ID
@@ -154,7 +154,7 @@ export function ActiveDeliveriesPage() {
                 {tasks.map((task) => (
                   <tr
                     key={task.id}
-                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                   >
                     <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                       {task.id}
@@ -186,7 +186,7 @@ export function ActiveDeliveriesPage() {
                       <div className="flex gap-1.5">
                         <a
                           href={`tel:${task.customerPhone}`}
-                          className="flex items-center gap-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg"
+                          className="flex items-center gap-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base"
                           title="Call"
                         >
                           <PhoneIcon />
@@ -194,7 +194,7 @@ export function ActiveDeliveriesPage() {
                         </a>
                         <button
                           onClick={() => openMaps(task.lat, task.lng)}
-                          className="flex items-center gap-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg"
+                          className="flex items-center gap-1 rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base"
                           title="Navigate"
                         >
                           <MapIcon />
@@ -216,8 +216,8 @@ export function ActiveDeliveriesPage() {
             </table>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-slate-300 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-12">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bgLight">
+          <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-slate-300 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-12">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-surface">
               <svg className="h-8 w-8 text-slate-400 dark:text-dark-textMuted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>

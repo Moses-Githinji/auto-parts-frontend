@@ -183,12 +183,12 @@ export function AdminRidersPage() {
             placeholder="Search riders..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none placeholder:text-slate-400"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none placeholder:text-slate-400"
           />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none text-slate-900 dark:text-dark-text"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none text-slate-900 dark:text-dark-text"
           >
             <option value="">All Status</option>
             <option value="ACTIVE">Active</option>
@@ -197,7 +197,7 @@ export function AdminRidersPage() {
           </select>
           <button
             onClick={fetchRiders}
-            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg"
+            className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base"
           >
             Refresh
           </button>
@@ -209,8 +209,8 @@ export function AdminRidersPage() {
           </div>
         ) : riders.length === 0 ? (
           /* Empty State */
-          <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-slate-300 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-12">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bgLight">
+          <div className="flex flex-col items-center justify-center rounded-sm border border-dashed border-slate-300 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-12">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-surface">
               <svg className="h-8 w-8 text-slate-400 dark:text-dark-textMuted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -229,7 +229,7 @@ export function AdminRidersPage() {
         ) : (
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-textMuted">
                     Rider
@@ -255,11 +255,11 @@ export function AdminRidersPage() {
                 {filteredRiders.map((rider) => (
                   <tr
                     key={rider.id}
-                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                   >
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-s-sm font-semiboldlate-200 text text-slate-700 dark:bg-dark-bgLight dark:text-dark-text">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-s-sm font-semiboldlate-200 text text-slate-700 dark:bg-dark-surface dark:text-dark-text">
                           {rider.firstName.charAt(0)}
                         </div>
                         <div>
@@ -297,12 +297,12 @@ export function AdminRidersPage() {
                     <td className="px-4 py-3">
                       <div className="flex gap-2">
                         <button
-                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base"
                         >
                           View
                         </button>
                         <button
-                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bg"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-base"
                         >
                           Edit
                         </button>
@@ -325,7 +325,7 @@ export function AdminRidersPage() {
         {/* Add Rider Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg border border-transparent dark:border-dark-border">
+            <div className="w-full max-w-lg rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg border border-transparent dark:border-dark-border">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
                   Add New Rider
@@ -350,7 +350,7 @@ export function AdminRidersPage() {
                         setNewRider({ ...newRider, firstName: e.target.value })
                         }
                         required
-                        className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                        className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                     </div>
                     <div>
@@ -364,7 +364,7 @@ export function AdminRidersPage() {
                         setNewRider({ ...newRider, lastName: e.target.value })
                         }
                         required
-                        className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                        className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     />
                     </div>
                 </div>
@@ -380,7 +380,7 @@ export function AdminRidersPage() {
                       setNewRider({ ...newRider, email: e.target.value })
                     }
                     required
-                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                   />
                 </div>
                 <div>
@@ -394,7 +394,7 @@ export function AdminRidersPage() {
                       setNewRider({ ...newRider, phone: e.target.value })
                     }
                     required
-                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                   />
                 </div>
 
@@ -406,7 +406,7 @@ export function AdminRidersPage() {
                         <select
                             value={newRider.vehicleType}
                             onChange={(e) => setNewRider({ ...newRider, vehicleType: e.target.value })}
-                            className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                            className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                         >
                             <option value="Motorbike">Motorbike</option>
                             <option value="Van">Van</option>
@@ -422,7 +422,7 @@ export function AdminRidersPage() {
                             type="text"
                             value={newRider.plateNumber}
                             onChange={(e) => setNewRider({ ...newRider, plateNumber: e.target.value })}
-                            className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                            className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                         />
                     </div>
                 </div>
@@ -439,7 +439,7 @@ export function AdminRidersPage() {
                         status: e.target.value as UserStatus,
                       })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-900 dark:text-dark-text focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                   >
                     <option value="ACTIVE">Active</option>
                     <option value="INACTIVE">Inactive</option>
@@ -472,7 +472,7 @@ export function AdminRidersPage() {
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bg px-4 py-1.5 text-xs font-medium text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-bgLight"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-4 py-1.5 text-xs font-medium text-slate-700 dark:text-dark-text hover:bg-[#f3f3f3] dark:hover:bg-dark-surface"
                     disabled={submitting}
                   >
                     Cancel

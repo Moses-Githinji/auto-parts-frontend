@@ -42,7 +42,7 @@ export function PaymentStatusPage() {
   if (!paymentStatus && isPolling) {
     return (
       <div className="mx-auto max-w-2xl p-4">
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-8">
           <div className="flex flex-col items-center text-center">
             {storeError ? (
               <>
@@ -133,7 +133,7 @@ export function PaymentStatusPage() {
                     <p className="font-bold text-center text-slate-900 dark:text-dark-text tracking-tight uppercase text-[10px] mb-3 opacity-60">
                       Alternative: Manual Paybill Instructions
                     </p>
-                    <div className="bg-slate-50 dark:bg-dark-bg p-4 rounded-lg border border-slate-200 dark:border-dark-border">
+                    <div className="bg-slate-50 dark:bg-dark-base p-4 rounded-lg border border-slate-200 dark:border-dark-border">
                       <ol className="list-decimal list-inside space-y-2 text-xs text-slate-700 dark:text-dark-textMuted">
                         <li>Go to M-Pesa menu &rarr; <strong>Lipa na M-Pesa</strong> &rarr; <strong>Paybill</strong></li>
                         <li>Enter Business No: <strong>174379</strong></li>
@@ -151,7 +151,7 @@ export function PaymentStatusPage() {
               )}
             </div>
 
-            <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 mb-4">
+            <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 mb-4">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-slate-600 dark:text-dark-textMuted">Transaction ID</span>
                 <span className="font-mono text-slate-900 dark:text-dark-text">
@@ -265,7 +265,7 @@ export function PaymentStatusPage() {
               Your order has been confirmed and is being processed
             </p>
 
-            <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 mb-6">
+            <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 mb-6">
               <div className="flex justify-between text-sm mb-2">
                 <span className="text-slate-600 dark:text-dark-textMuted">Order Number</span>
                 <span className="font-mono font-semibold text-slate-900 dark:text-dark-text">
@@ -332,7 +332,7 @@ export function PaymentStatusPage() {
             {paymentStatus.failureReason || "We couldn't process your payment. Please try again."}
           </p>
 
-          <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 mb-6">
+          <div className="w-full rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 mb-6">
             <div className="flex justify-between text-sm mb-2">
               <span className="text-slate-600 dark:text-dark-textMuted">Transaction ID</span>
               <span className="font-mono text-slate-900 dark:text-dark-text">

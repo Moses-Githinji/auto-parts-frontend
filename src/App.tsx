@@ -47,6 +47,8 @@ import { AdminCommissionsPage } from "./pages/admin/AdminCommissionsPage";
 import { AdminFinancesPage } from "./pages/admin/AdminFinancesPage";
 import { AdminPromotionsPage } from "./pages/admin/AdminPromotionsPage";
 import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
+import { VendorSuggestionsPage } from "./pages/vendor/VendorSuggestionsPage";
+import { AdminSuggestionsPage } from "./pages/admin/AdminSuggestionsPage";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +86,7 @@ const router = createBrowserRouter([
       { path: "vendor/analytics", element: <VendorAnalyticsPage /> },
       { path: "vendor/earnings", element: <VendorEarningsPage /> },
       { path: "vendor/settings", element: <VendorSettingsPage /> },
+      { path: "vendor/suggestions", element: <VendorSuggestionsPage /> },
       // Admin routes
       { path: "admin", element: <AdminDashboardPage /> },
       { path: "admin/vendors", element: <AdminVendorsPage /> },
@@ -96,6 +99,7 @@ const router = createBrowserRouter([
       { path: "admin/promotions", element: <AdminPromotionsPage /> },
       { path: "admin/delivery-reports", element: <AdminDeliveryReportsPage /> },
       { path: "admin/blogs", element: <AdminBlogsPage /> },
+      { path: "admin/suggestions", element: <AdminSuggestionsPage /> },
       // Commission Settings route
       {
         path: "admin/commission-config",

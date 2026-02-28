@@ -19,19 +19,19 @@ export function AdminDisputesPage() {
 
         {/* Stats */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Open Disputes</p>
             <p className="mt-1 text-2xl font-semibold text-amber-600">3</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Under Review</p>
             <p className="mt-1 text-2xl font-semibold text-blue-600">2</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Resolved (This Week)</p>
             <p className="mt-1 text-2xl font-semibold text-green-600">5</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Avg. Resolution Time</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               2.5 days
@@ -63,7 +63,7 @@ export function AdminDisputesPage() {
         {/* Disputes List */}
         <div className="space-y-4">
           {/* Dispute 1 */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 text-sm font-semibold text-red-700">
@@ -94,7 +94,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">
@@ -105,7 +105,7 @@ export function AdminDisputesPage() {
           </div>
 
           {/* Dispute 2 */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-sm font-semibold text-amber-700">
@@ -136,7 +136,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">
@@ -147,7 +147,7 @@ export function AdminDisputesPage() {
           </div>
 
           {/* Dispute 3 */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <div className="flex items-start justify-between">
               <div className="flex items-start gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-sm font-semibold text-slate-700 dark:text-dark-text">
@@ -177,7 +177,7 @@ export function AdminDisputesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-bg">
+                <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1 text-xs hover:bg-[#f3f3f3] dark:bg-dark-base">
                   View Details
                 </button>
                 <button className="rounded-sm bg-[#2b579a] px-3 py-1 text-xs text-white hover:bg-[#1e3f7a]">

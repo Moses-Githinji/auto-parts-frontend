@@ -136,7 +136,7 @@ export function TrackingPage() {
 
   if (isLoadingTracking) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-base flex items-center justify-center">
         <div className="text-center">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-dark-textMuted">Loading tracking information...</p>
@@ -147,8 +147,8 @@ export function TrackingPage() {
 
   if (trackingError) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-base flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Tracking Not Found
@@ -183,8 +183,8 @@ export function TrackingPage() {
 
   if (!trackingInfo) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-dark-bg flex items-center justify-center p-4">
-        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-8 max-w-md w-full text-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-dark-base flex items-center justify-center p-4">
+        <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-8 max-w-md w-full text-center">
           <div className="text-6xl mb-4">📦</div>
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
             Track Your Shipment
@@ -213,10 +213,10 @@ export function TrackingPage() {
   const currentStatusConfig = STATUS_CONFIG[trackingInfo.currentStatus];
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-dark-bg py-8 px-4">
+    <div className="min-h-screen bg-gray-50 dark:bg-dark-base py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6 mb-6">
+        <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <p className="text-sm text-gray-500">Tracking ID</p>
@@ -329,7 +329,7 @@ export function TrackingPage() {
           {/* Left Column - Order Summary & Documents */}
           <div className="md:col-span-2 space-y-6">
             {/* Map Placeholder */}
-            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Live Location
               </h2>
@@ -370,7 +370,7 @@ export function TrackingPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Order Summary
               </h2>
@@ -398,7 +398,7 @@ export function TrackingPage() {
                         className="flex items-center justify-between py-2"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gray-50 dark:bg-dark-bg rounded flex items-center justify-center">
+                          <div className="w-10 h-10 bg-gray-50 dark:bg-dark-base rounded flex items-center justify-center">
                             <span className="text-lg">🔩</span>
                           </div>
                           <div>
@@ -421,7 +421,7 @@ export function TrackingPage() {
             </div>
 
             {/* Timeline */}
-            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Tracking History
               </h2>
@@ -487,7 +487,7 @@ export function TrackingPage() {
           <div className="space-y-6">
             {/* Estimated Delivery */}
             {trackingInfo.currentStatus !== "DELIVERED" && (
-              <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+              <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
                 <h3 className="text-sm font-medium text-gray-500 dark:text-dark-textMuted mb-2">
                   Estimated Delivery
                 </h3>
@@ -504,7 +504,7 @@ export function TrackingPage() {
             {orderDetails &&
               trackingInfo.currentStatus === "DELIVERED" &&
               orderDetails.paymentStatus === "PAID" && (
-                <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+                <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Documents
                   </h3>
@@ -580,7 +580,7 @@ export function TrackingPage() {
               )}
 
             {/* Help & Support */}
-            <div className="bg-white dark:bg-dark-bgLight rounded-lg shadow-md p-6">
+            <div className="bg-white dark:bg-dark-surface rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Need Help?
               </h3>

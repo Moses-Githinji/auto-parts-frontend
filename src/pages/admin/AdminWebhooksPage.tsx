@@ -64,19 +64,19 @@ export function AdminWebhooksPage() {
 
       {/* Key Metrics */}
       <section className="mb-6 grid gap-4 md:grid-cols-4">
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Webhooks</p>
           <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
             {webhooks.length}
           </p>
         </div>
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Webhooks</p>
           <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
             {webhooks.filter((w) => w.active).length}
           </p>
         </div>
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <p className="text-xs text-slate-600 dark:text-dark-textMuted">Avg Success Rate</p>
           <p className="mt-1 text-2xl font-semibold text-green-600">
             {(
@@ -86,21 +86,21 @@ export function AdminWebhooksPage() {
             %
           </p>
         </div>
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Requests (24h)</p>
           <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">1,234</p>
         </div>
       </section>
 
       {/* Webhooks List */}
-      <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm">
+      <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface shadow-sm">
         <div className="border-b border-[#c8c8c8] dark:border-dark-border px-4 py-3">
           <h3 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
             Configured Webhooks
           </h3>
         </div>
         <table className="w-full text-sm">
-          <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+          <thead className="bg-[#f3f3f3] dark:bg-dark-base">
             <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
               <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">
                 Name
@@ -189,7 +189,7 @@ export function AdminWebhooksPage() {
       {/* Create Webhook Modal (placeholder) */}
       {isCreating && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-lg rounded-lg bg-white dark:bg-dark-bgLight p-6 shadow-lg">
+          <div className="w-full max-w-lg rounded-lg bg-white dark:bg-dark-surface p-6 shadow-lg">
             <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-dark-text">
               Create New Webhook
             </h2>
@@ -244,12 +244,12 @@ export function AdminWebhooksPage() {
       )}
 
       {/* Recent Deliveries */}
-      <div className="mt-6 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+      <div className="mt-6 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
         <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
           Recent Webhook Deliveries
         </h3>
         <table className="w-full text-xs">
-          <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+          <thead className="bg-[#f3f3f3] dark:bg-dark-base">
             <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
               <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                 Webhook

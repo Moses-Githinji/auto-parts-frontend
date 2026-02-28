@@ -54,7 +54,7 @@ export function Footer() {
       </button>
 
       {/* Main footer links */}
-      <div className="bg-slate-100 dark:bg-dark-bgLight px-6 py-10 border-t border-slate-200 dark:border-dark-border">
+      <div className="bg-slate-100 dark:bg-dark-surface px-6 py-10 border-t border-slate-200 dark:border-dark-border">
         <div className="mx-auto grid max-w-7xl grid-cols-2 gap-8 md:grid-cols-4">
           {footerLinks.map((section) => (
             <div key={section.title}>
@@ -80,7 +80,7 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="bg-white dark:bg-dark-bg px-6 py-6 border-t border-slate-200 dark:border-dark-border">
+      <div className="bg-white dark:bg-dark-base px-6 py-6 border-t border-slate-200 dark:border-dark-border">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 md:flex-row md:justify-between">
           <p className="text-xs text-slate-500 dark:text-dark-textMuted">
             © {new Date().getFullYear()} AutoParts Kenya. All rights reserved.

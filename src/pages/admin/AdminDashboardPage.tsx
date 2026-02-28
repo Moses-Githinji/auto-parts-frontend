@@ -15,24 +15,24 @@ export function AdminDashboardPage() {
         </div>
 
         <section className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Vendors pending KYC</p>
             <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-dark-text">5</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">
               Catalog changes awaiting review
             </p>
             <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-dark-text">12</p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Open disputes</p>
             <p className="mt-2 text-3xl font-semibold text-amber-600">3</p>
           </div>
         </section>
 
         <section className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Recent Activity
             </h2>
@@ -51,7 +51,7 @@ export function AdminDashboardPage() {
               </li>
             </ul>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-semibold text-slate-900 dark:text-dark-text">
               System Health
             </h2>

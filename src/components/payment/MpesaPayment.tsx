@@ -113,7 +113,7 @@ export function MpesaPayment({
           </div>
         )}
 
-        <div className="rounded-lg bg-slate-50 dark:bg-dark-bgLight p-4">
+        <div className="rounded-lg bg-slate-50 dark:bg-dark-surface p-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-slate-600 dark:text-dark-textMuted">
               Amount to Pay
@@ -140,7 +140,7 @@ export function MpesaPayment({
         </Button>
       </form>
 
-      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bgLight p-4">
+      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-surface p-4">
         <h4 className="mb-2 text-sm font-semibold text-slate-900 dark:text-dark-text">
           How it works:
         </h4>

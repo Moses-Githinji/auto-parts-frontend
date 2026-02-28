@@ -113,12 +113,12 @@ export function BlogListPage() {
       <div className="grid gap-8 lg:grid-cols-4">
         {/* Sidebar */}
         <div className="space-y-6 lg:col-span-1">
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-6">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
             <h3 className="mb-4 font-semibold text-slate-900 dark:text-dark-text">Categories</h3>
             {isLoadingCategories ? (
               <div className="space-y-2">
                 {[...Array(5)].map((_, i) => (
-                  <div key={i} className="h-6 w-3/4 animate-pulse rounded bg-slate-100 dark:bg-dark-bg"></div>
+                  <div key={i} className="h-6 w-3/4 animate-pulse rounded bg-slate-100 dark:bg-dark-base"></div>
                 ))}
               </div>
             ) : (
@@ -146,7 +146,7 @@ export function BlogListPage() {
                       }`}
                     >
                       <span>{category.name}</span>
-                      <span className="rounded-full bg-slate-100 dark:bg-dark-bg px-2 py-0.5 text-xs text-slate-500 dark:text-dark-textMuted">
+                      <span className="rounded-full bg-slate-100 dark:bg-dark-base px-2 py-0.5 text-xs text-slate-500 dark:text-dark-textMuted">
                         {category._count?.posts || category.postCount || 0}
                       </span>
                     </button>
@@ -162,12 +162,12 @@ export function BlogListPage() {
           {isLoadingPosts ? (
             <div className="grid gap-6 md:grid-cols-2">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden">
-                  <div className="h-48 w-full animate-pulse bg-slate-200 dark:bg-dark-bg"></div>
+                <div key={i} className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
+                  <div className="h-48 w-full animate-pulse bg-slate-200 dark:bg-dark-base"></div>
                   <div className="p-6 space-y-3">
-                    <div className="h-4 w-1/3 animate-pulse rounded bg-slate-200 dark:bg-dark-bg"></div>
-                    <div className="h-6 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-dark-bg"></div>
-                    <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-dark-bg"></div>
+                    <div className="h-4 w-1/3 animate-pulse rounded bg-slate-200 dark:bg-dark-base"></div>
+                    <div className="h-6 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-dark-base"></div>
+                    <div className="h-4 w-full animate-pulse rounded bg-slate-200 dark:bg-dark-base"></div>
                   </div>
                 </div>
               ))}
@@ -178,9 +178,9 @@ export function BlogListPage() {
                 {posts.map((post) => (
                   <article 
                     key={post.id} 
-                    className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight overflow-hidden transition-shadow hover:shadow-md"
+                    className="flex flex-col rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden transition-shadow hover:shadow-md"
                   >
-                    <Link to={`/blog/${post.slug}`} state={{ id: post.id }} className="group relative block h-48 overflow-hidden bg-slate-100 dark:bg-dark-bg">
+                    <Link to={`/blog/${post.slug}`} state={{ id: post.id }} className="group relative block h-48 overflow-hidden bg-slate-100 dark:bg-dark-base">
                       {post.featuredImage ? (
                         <img 
                           src={post.featuredImage} 
@@ -230,7 +230,7 @@ export function BlogListPage() {
                         {post.tags && post.tags.length > 0 && (
                           <div className="flex gap-1">
                             {post.tags.slice(0, 2).map((tagWrapper) => (
-                              <Badge key={tagWrapper.tag.id} variant="outline" className="text-[10px] bg-slate-100 dark:bg-dark-bg text-slate-600 dark:text-dark-textMuted">
+                              <Badge key={tagWrapper.tag.id} variant="outline" className="text-[10px] bg-slate-100 dark:bg-dark-base text-slate-600 dark:text-dark-textMuted">
                                 {tagWrapper.tag.name}
                               </Badge>
                             ))}
@@ -272,7 +272,7 @@ export function BlogListPage() {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-300 dark:border-dark-border p-12 text-center">
-              <div className="mb-4 rounded-full bg-slate-100 dark:bg-dark-bg p-4">
+              <div className="mb-4 rounded-full bg-slate-100 dark:bg-dark-base p-4">
                 <Search className="h-8 w-8 text-slate-400" />
               </div>
               <h3 className="text-lg font-semibold text-slate-900 dark:text-dark-text">No articles found</h3>

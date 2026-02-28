@@ -44,7 +44,7 @@ export function VendorSettingsPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           {/* Shop Information */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Shop Information
             </h2>
@@ -97,7 +97,7 @@ export function VendorSettingsPage() {
           </div>
 
           {/* Notifications */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Notifications
             </h2>
@@ -154,7 +154,7 @@ export function VendorSettingsPage() {
           </div>
 
           {/* Security */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Security
             </h2>
@@ -189,14 +189,14 @@ export function VendorSettingsPage() {
                   className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                 />
               </div>
-              <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]">
+              <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]">
                 Change Password
               </button>
             </div>
           </div>
 
           {/* Account Status */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-6 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Account Status
             </h2>

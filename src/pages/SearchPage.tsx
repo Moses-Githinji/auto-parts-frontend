@@ -114,7 +114,7 @@ export function SearchPage() {
     <div className="space-y-4">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-2 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 md:flex-row md:items-center"
+        className="flex flex-col gap-2 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-3 md:flex-row md:items-center"
       >
         <Input
           name="q"
@@ -185,7 +185,7 @@ export function SearchPage() {
             {products.map((product) => (
               <article
                 key={product.id}
-                className="grid gap-3 bg-white dark:bg-dark-bgLight p-3 md:grid-cols-[2fr,1.5fr]"
+                className="grid gap-3 bg-white dark:bg-dark-surface p-3 md:grid-cols-[2fr,1.5fr]"
               >
                 <div className="space-y-1">
                   <p className="text-xs font-mono text-slate-500 dark:text-dark-textMuted">
@@ -199,7 +199,11 @@ export function SearchPage() {
                       "No description available"}
                   </p>
                   <div className="flex flex-wrap gap-1 text-[11px] text-slate-600 dark:text-dark-textMuted">
-                    <Badge variant="success">In Stock ({product.stock})</Badge>
+                    {product.stock > 0 ? (
+                      <Badge variant="success">In Stock ({product.stock})</Badge>
+                    ) : (
+                      <Badge className="bg-red-100 text-red-700 border border-red-200">Out of Stock</Badge>
+                    )}
                     {product.brand && (
                       <Badge variant="outline">{product.brand}</Badge>
                     )}
@@ -208,7 +212,7 @@ export function SearchPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col justify-between gap-2 rounded-md bg-slate-50 dark:bg-dark-bg p-3 text-xs">
+                <div className="flex flex-col justify-between gap-2 rounded-md bg-slate-50 dark:bg-dark-base p-3 text-xs">
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-dark-text">
                       KES {product.price.toLocaleString()}
@@ -230,6 +234,11 @@ export function SearchPage() {
                     </Button>
                     <Button
                       size="sm"
+                      className={`disabled:cursor-not-allowed disabled:opacity-80 ${
+                        product.stock <= 0
+                          ? "bg-red-100 text-red-700 border border-red-300 hover:bg-red-100"
+                          : ""
+                      }`}
                       onClick={() => handleAddToCart(product)}
                       disabled={addingProductId === product.id || product.stock <= 0}
                     >
@@ -253,7 +262,7 @@ export function SearchPage() {
           <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
             Search results
           </h2>
-          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
+          <div className="rounded-md border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
             <p className="mb-2">No products found matching your criteria.</p>
             <p>Try adjusting your search or filters.</p>
           </div>

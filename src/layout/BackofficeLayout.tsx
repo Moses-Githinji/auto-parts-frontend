@@ -36,9 +36,9 @@ export function BackofficeLayout({
     menuItems || (navItems ? convertLegacyNavItems(navItems) : []);
 
   return (
-    <div className="flex min-h-screen bg-[#f3f3f3] dark:bg-dark-bg">
+    <div className="flex min-h-screen bg-[#f3f3f3] dark:bg-dark-base">
       {/* Desktop Sidebar */}
-      <aside className="hidden w-56 flex-shrink-0 border-r border-[#c8c8c8] dark:border-dark-border bg-[#f3f3f3] dark:bg-dark-bg md:block">
+      <aside className="hidden w-56 flex-shrink-0 border-r border-[#c8c8c8] dark:border-dark-border bg-[#f3f3f3] dark:bg-dark-base md:block">
         <AdminSidebar title={title} menuItems={displayMenuItems} />
       </aside>
 
@@ -58,7 +58,7 @@ export function BackofficeLayout({
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed left-0 top-0 bottom-0 z-50 w-64 bg-[#f3f3f3] dark:bg-dark-bg shadow-xl md:hidden"
+              className="fixed left-0 top-0 bottom-0 z-50 w-64 bg-[#f3f3f3] dark:bg-dark-base shadow-xl md:hidden"
             >
               <div className="h-full flex flex-col">
                 <div className="flex justify-end p-2">
@@ -81,7 +81,7 @@ export function BackofficeLayout({
       {/* Main content */}
       <div className="flex flex-1 flex-col">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 shadow-sm md:hidden">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 shadow-sm md:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(true)}
             className="p-1 text-slate-500 hover:text-slate-900 dark:text-dark-textMuted dark:hover:text-dark-text"
@@ -93,7 +93,7 @@ export function BackofficeLayout({
 
         {/* Content */}
         <main className="flex-1 p-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm min-h-full">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface shadow-sm min-h-full">
             {children}
           </div>
         </main>

@@ -13,7 +13,9 @@ export function VendorOrdersPage() {
     { label: "Orders", to: "/vendor/orders" },
     { label: "Catalog", to: "/vendor/catalog" },
     { label: "Analytics", to: "/vendor/analytics" },
+    { label: "Earnings", to: "/vendor/earnings" },
     { label: "Settings", to: "/vendor/settings" },
+    { label: "Suggestions", to: "/vendor/suggestions" },
   ];
 
   const {
@@ -147,13 +149,13 @@ export function VendorOrdersPage() {
 
           {/* Stats */}
           <section className="mb-6 grid gap-4 md:grid-cols-4">
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Pending</p>
               <p className="mt-1 text-2xl font-semibold text-amber-600">
                 {orders.filter((o) => o.status === "PENDING").length}
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Processing</p>
               <p className="mt-1 text-2xl font-semibold text-blue-600">
                 {
@@ -163,13 +165,13 @@ export function VendorOrdersPage() {
                 }
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Shipped</p>
               <p className="mt-1 text-2xl font-semibold text-indigo-600">
                 {orders.filter((o) => o.status === "SHIPPED").length}
               </p>
             </div>
-            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+            <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Revenue</p>
               <p className="mt-1 text-2xl font-semibold text-green-600">
                 KSh{" "}
@@ -205,7 +207,7 @@ export function VendorOrdersPage() {
             </select>
             <button
               onClick={() => fetchOrders()}
-              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs hover:bg-[#f3f3f3]"
             >
               Refresh
             </button>
@@ -214,7 +216,7 @@ export function VendorOrdersPage() {
           {/* Orders Table */}
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border">
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Order ID
@@ -243,7 +245,7 @@ export function VendorOrdersPage() {
                 {filteredOrders.map((order) => (
                   <tr
                     key={order.id}
-                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-bg"
+                    className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-[#f8f8f8] dark:hover:bg-dark-base"
                   >
                     <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                       {order.orderNumber}
@@ -271,7 +273,7 @@ export function VendorOrdersPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => openOrderDetails(order)}
-                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-bg"
+                          className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-2 py-0.5 text-[10px] hover:bg-[#f3f3f3] dark:bg-dark-base"
                         >
                           View
                         </button>

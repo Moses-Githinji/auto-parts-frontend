@@ -228,7 +228,7 @@ export function AccountAddresses() {
 
       {/* Addresses Grid */}
       {addresses.length === 0 ? (
-        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight dark:border-dark-border p-6 text-center">
+        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-surface dark:border-dark-border p-6 text-center">
           <p className="text-sm text-slate-600 dark:text-dark-textMuted">No addresses saved yet</p>
           <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
             Add addresses for faster checkout
@@ -245,7 +245,7 @@ export function AccountAddresses() {
           {addresses.map((address) => (
             <div
               key={address.id}
-              className={`rounded-sm border bg-white dark:bg-dark-bgLight p-4 shadow-sm ${
+              className={`rounded-sm border bg-white dark:bg-dark-surface p-4 shadow-sm ${
                 address.isDefault
                   ? "border-[#FF9900] ring-1 ring-[#FF9900] dark:border-[#FF9900] dark:ring-[#FF9900]"
                   : "border-[#c8c8c8] dark:border-dark-border"
@@ -318,7 +318,7 @@ export function AccountAddresses() {
       {/* Add/Edit Address Modal */}
       {isAddingAddress && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg border border-transparent dark:border-dark-border max-h-[90vh] overflow-y-auto">
+          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg border border-transparent dark:border-dark-border max-h-[90vh] overflow-y-auto">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 {editingAddress ? "Edit Address" : "Add New Address"}
@@ -350,7 +350,7 @@ export function AccountAddresses() {
                       className={`flex-1 rounded-sm border px-3 py-2 text-xs transition-colors ${
                         formData.type === type
                           ? "border-[#FF9900] bg-[#FF9900]/10 text-[#FF9900] dark:bg-[#FF9900]/20"
-                          : "border-slate-200 hover:bg-slate-50 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-bg"
+                          : "border-slate-200 hover:bg-slate-50 dark:border-dark-border dark:text-dark-text dark:hover:bg-dark-base"
                       }`}
                     >
                       {typeLabels[type]}
@@ -398,7 +398,7 @@ export function AccountAddresses() {
                     onChange={(e) =>
                       setFormData({ ...formData, state: e.target.value })
                     }
-                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-base dark:text-dark-text"
                   >
                     <option value="">Select County</option>
                     {counties.map((county) => (

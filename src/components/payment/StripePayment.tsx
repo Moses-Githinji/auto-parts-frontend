@@ -76,11 +76,11 @@ function CheckoutForm({
         </div>
       </div>
 
-      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight p-4">
+      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
         <PaymentElement />
       </div>
 
-      <div className="rounded-lg bg-slate-50 dark:bg-dark-bgLight p-4">
+      <div className="rounded-lg bg-slate-50 dark:bg-dark-surface p-4">
         <div className="flex items-center justify-between">
           <span className="text-sm text-slate-600 dark:text-dark-textMuted">
             Amount to Pay

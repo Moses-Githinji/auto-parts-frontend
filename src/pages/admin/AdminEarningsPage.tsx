@@ -19,7 +19,7 @@ export function AdminEarningsPage() {
               <option>Last 90 days</option>
               <option>This year</option>
             </select>
-            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg">
+            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base">
               Export
             </button>
           </div>
@@ -27,7 +27,7 @@ export function AdminEarningsPage() {
 
         {/* Key Metrics */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Commission Earned</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               KSh 842,500
@@ -36,21 +36,21 @@ export function AdminEarningsPage() {
               ↑ 15% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Avg Commission Rate</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">8.5%</p>
             <p className="mt-1 text-[10px] text-slate-600 dark:text-dark-textMuted">
               Variable by product category
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Orders (Commissions)</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">9,912</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 12% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Pending Payouts</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               KSh 125,300
@@ -63,7 +63,7 @@ export function AdminEarningsPage() {
 
         {/* Commission Breakdown */}
         <section className="mb-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Commission by Category
             </h3>
@@ -141,12 +141,12 @@ export function AdminEarningsPage() {
             </div>
           </div>
 
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Commission Rate Tiers
             </h3>
             <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
                 <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                   <th className="px-3 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                     Category
@@ -195,12 +195,12 @@ export function AdminEarningsPage() {
         </section>
 
         {/* Recent Commissions */}
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
             Recent Commission Transactions
           </h3>
           <table className="w-full text-xs">
-            <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+            <thead className="bg-[#f3f3f3] dark:bg-dark-base">
               <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                 <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Order ID

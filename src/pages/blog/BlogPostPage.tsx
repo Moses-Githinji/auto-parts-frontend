@@ -212,7 +212,7 @@ export function BlogPostPage() {
                 className="h-10 w-10 rounded-full object-cover" 
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bg">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-base">
                 <User className="h-5 w-5" />
               </div>
             )}
@@ -247,7 +247,7 @@ export function BlogPostPage() {
 
       {/* Featured Image */}
       {currentPost.featuredImage && (
-        <div className="mb-8 overflow-hidden rounded-xl bg-slate-100 dark:bg-dark-bg aspect-video">
+        <div className="mb-8 overflow-hidden rounded-xl bg-slate-100 dark:bg-dark-base aspect-video">
           <img 
             src={currentPost.featuredImage} 
             alt={currentPost.title} 
@@ -270,7 +270,7 @@ export function BlogPostPage() {
               <TagIcon className="h-4 w-4 text-slate-400" />
               {currentPost.tags.map((wrapper) => (
                 <Link key={wrapper.tag.id} to={`/blog?tag=${wrapper.tag.slug}`}>
-                  <Badge variant="outline" className="hover:bg-slate-100 dark:hover:bg-dark-bg cursor-pointer">
+                  <Badge variant="outline" className="hover:bg-slate-100 dark:hover:bg-dark-base cursor-pointer">
                     {wrapper.tag.name}
                   </Badge>
                 </Link>
@@ -279,7 +279,7 @@ export function BlogPostPage() {
           )}
 
           {/* Interaction Bar */}
-          <div className="mb-12 flex items-center justify-between rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-4">
+          <div className="mb-12 flex items-center justify-between rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-4">
             <div className="flex gap-4">
               <Button 
                 variant="ghost" 
@@ -352,7 +352,7 @@ export function BlogPostPage() {
                 </div>
               </form>
             ) : (
-              <div className="mb-8 rounded-lg bg-slate-50 dark:bg-dark-bg p-6 text-center">
+              <div className="mb-8 rounded-lg bg-slate-50 dark:bg-dark-base p-6 text-center">
                 <p className="mb-4 text-slate-600 dark:text-dark-textMuted">Log in to join the conversation.</p>
                 <Link to="/login" state={{ from: location.pathname }}>
                   <Button variant="outline">Log In / Register</Button>
@@ -373,7 +373,7 @@ export function BlogPostPage() {
                         className="h-10 w-10 rounded-full object-cover" 
                       />
                     ) : (
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-bg text-slate-600 dark:text-dark-text">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-200 dark:bg-dark-base text-slate-600 dark:text-dark-text">
                         {comment.user?.firstName?.charAt(0) || "U"}
                       </div>
                     )}

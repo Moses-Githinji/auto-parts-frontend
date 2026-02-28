@@ -224,7 +224,7 @@ export function AccountGarage() {
 
       {/* Vehicles Grid */}
       {vehicles.length === 0 ? (
-        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-bgLight dark:border-dark-border p-6 text-center">
+        <div className="rounded-sm border border-[#c8c8c8] bg-white dark:bg-dark-surface dark:border-dark-border p-6 text-center">
           <p className="text-sm text-slate-600 dark:text-dark-textMuted">No vehicles saved yet</p>
           <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
             Add your vehicles to see compatible parts
@@ -241,7 +241,7 @@ export function AccountGarage() {
           {vehicles.map((vehicle) => (
             <div
               key={vehicle.id}
-              className={`rounded-sm border bg-white dark:bg-dark-bgLight p-4 shadow-sm ${
+              className={`rounded-sm border bg-white dark:bg-dark-surface p-4 shadow-sm ${
                 vehicle.isDefault
                   ? "border-[#FF9900] ring-1 ring-[#FF9900] dark:border-[#FF9900] dark:ring-[#FF9900]"
                   : "border-[#c8c8c8] dark:border-dark-border"
@@ -310,7 +310,7 @@ export function AccountGarage() {
       {/* Add Vehicle Modal */}
       {isAddingVehicle && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-bgLight p-6 shadow-lg border border-transparent dark:border-dark-border">
+          <div className="w-full max-w-md rounded-sm bg-white dark:bg-dark-surface p-6 shadow-lg border border-transparent dark:border-dark-border">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text">
                 Add Vehicle
@@ -357,7 +357,7 @@ export function AccountGarage() {
                   onChange={(e) =>
                     setNewVehicle({ ...newVehicle, model: e.target.value })
                   }
-                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-base dark:text-dark-text"
                   disabled={!newVehicle.make}
                 >
                   <option value="">Select Model</option>
@@ -381,7 +381,7 @@ export function AccountGarage() {
                       year: parseInt(e.target.value),
                     })
                   }
-                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-base dark:text-dark-text"
                 >
                   {years.map((year) => (
                     <option key={year.id} value={year.year.toString()}>
@@ -402,7 +402,7 @@ export function AccountGarage() {
                     setNewVehicle({ ...newVehicle, engine: e.target.value })
                   }
                   placeholder="e.g., 1.8L 4-Cylinder"
-                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-base dark:text-dark-text"
                 />
               </div>
 
@@ -418,7 +418,7 @@ export function AccountGarage() {
                       transmission: e.target.value,
                     })
                   }
-                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full rounded-sm border border-[#c8c8c8] px-3 py-2 text-xs focus:border-[#FF9900] focus:outline-none dark:border-dark-border dark:bg-dark-base dark:text-dark-text"
                 >
                   <option value="">Select Transmission</option>
                   <option value="Automatic">Automatic</option>

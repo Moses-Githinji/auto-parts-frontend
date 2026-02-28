@@ -193,9 +193,9 @@ export function BlogEditor({
   ];
 
   return (
-    <div className="border border-slate-300 dark:border-dark-border rounded-lg overflow-hidden bg-white dark:bg-dark-bgLight">
+    <div className="border border-slate-300 dark:border-dark-border rounded-lg overflow-hidden bg-white dark:bg-dark-surface">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-1 p-2 bg-slate-100 dark:bg-dark-bg border-b border-slate-300 dark:border-dark-border">
+      <div className="flex flex-wrap items-center gap-1 p-2 bg-slate-100 dark:bg-dark-base border-b border-slate-300 dark:border-dark-border">
         {/* Headings Dropdown */}
         <div className="relative group">
           <button className="px-3 py-1.5 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded flex items-center gap-1">
@@ -214,7 +214,7 @@ export function BlogEditor({
               />
             </svg>
           </button>
-          <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-dark-bgLight border border-slate-300 dark:border-dark-border rounded shadow-lg z-10">
+          <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white dark:bg-dark-surface border border-slate-300 dark:border-dark-border rounded shadow-lg z-10">
             <button
               onClick={() => handleInsertHeading(1)}
               className="block w-full px-4 py-2 text-left hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-sm"
@@ -328,7 +328,7 @@ export function BlogEditor({
           className={`px-3 py-1.5 text-sm rounded transition-colors ${
             isPreview
               ? "bg-[#2b579a] text-white"
-              : "bg-white dark:bg-dark-bg border border-slate-300 dark:border-dark-border text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
+              : "bg-white dark:bg-dark-base border border-slate-300 dark:border-dark-border text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800"
           }`}
         >
           {isPreview ? "Edit" : "Preview"}
@@ -338,7 +338,7 @@ export function BlogEditor({
       {/* Link Dialog */}
       {showLinkDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-dark-bgLight rounded-lg p-4 w-96 shadow-lg border border-slate-200 dark:border-dark-border">
+          <div className="bg-white dark:bg-dark-surface rounded-lg p-4 w-96 shadow-lg border border-slate-200 dark:border-dark-border">
             <h3 className="font-semibold mb-3 text-slate-900 dark:text-dark-text">Insert Link</h3>
             <div className="space-y-3">
               <div>
@@ -348,7 +348,7 @@ export function BlogEditor({
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-base dark:text-dark-text"
                 />
               </div>
               <div>
@@ -360,7 +360,7 @@ export function BlogEditor({
                   value={linkText}
                   onChange={(e) => setLinkText(e.target.value)}
                   placeholder="Link text"
-                  className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-bg dark:text-dark-text"
+                  className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-base dark:text-dark-text"
                 />
               </div>
               <div className="flex justify-end gap-2">
@@ -387,7 +387,7 @@ export function BlogEditor({
       {/* Table Dialog */}
       {showTableDialog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-dark-bgLight rounded-lg p-4 w-80 shadow-lg border border-slate-200 dark:border-dark-border">
+          <div className="bg-white dark:bg-dark-surface rounded-lg p-4 w-80 shadow-lg border border-slate-200 dark:border-dark-border">
             <h3 className="font-semibold mb-3 text-slate-900 dark:text-dark-text">Insert Table</h3>
             <div className="space-y-3">
               <div className="grid grid-cols-2 gap-3">
@@ -403,7 +403,7 @@ export function BlogEditor({
                     onChange={(e) =>
                       setTableRows(parseInt(e.target.value) || 3)
                     }
-                    className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-base dark:text-dark-text"
                   />
                 </div>
                 <div>
@@ -418,7 +418,7 @@ export function BlogEditor({
                     onChange={(e) =>
                       setTableCols(parseInt(e.target.value) || 3)
                     }
-                    className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-bg dark:text-dark-text"
+                    className="w-full border border-slate-300 dark:border-dark-border rounded px-3 py-2 text-sm dark:bg-dark-base dark:text-dark-text"
                   />
                 </div>
               </div>
@@ -459,7 +459,7 @@ export function BlogEditor({
       )}
 
       {/* Status Bar */}
-      <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-dark-bg border-t border-slate-300 dark:border-dark-border text-xs text-slate-600 dark:text-dark-textMuted">
+      <div className="flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-dark-base border-t border-slate-300 dark:border-dark-border text-xs text-slate-600 dark:text-dark-textMuted">
         {alert && (
           <Alert
             type={alert.type}

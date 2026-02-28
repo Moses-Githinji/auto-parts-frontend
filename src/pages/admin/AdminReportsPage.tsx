@@ -19,7 +19,7 @@ export function AdminReportsPage() {
               <option>Last 90 days</option>
               <option>This year</option>
             </select>
-            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-bg">
+            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base">
               Export
             </button>
           </div>
@@ -27,7 +27,7 @@ export function AdminReportsPage() {
 
         {/* Key Metrics */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Revenue</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
               KSh 4.2M
@@ -36,21 +36,21 @@ export function AdminReportsPage() {
               ↑ 12% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Orders</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">1,234</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 8% vs last period
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Vendors</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">45</p>
             <p className="mt-1 text-[10px] text-green-600">
               ↑ 5 new this month
             </p>
           </div>
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Customer Satisfaction</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">4.5/5</p>
             <p className="mt-1 text-[10px] text-green-600">
@@ -61,7 +61,7 @@ export function AdminReportsPage() {
 
         {/* Charts Section */}
         <section className="mb-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Revenue by Category
             </h3>
@@ -117,7 +117,7 @@ export function AdminReportsPage() {
             </div>
           </div>
 
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
             <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
               Orders by Status
             </h3>
@@ -153,12 +153,12 @@ export function AdminReportsPage() {
         </section>
 
         {/* Top Vendors */}
-        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-bgLight p-4 shadow-sm">
+        <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
           <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
             Top Performing Vendors
           </h3>
           <table className="w-full text-xs">
-            <thead className="bg-[#f3f3f3] dark:bg-dark-bg">
+            <thead className="bg-[#f3f3f3] dark:bg-dark-base">
               <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
                 <th className="px-4 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
                   Rank

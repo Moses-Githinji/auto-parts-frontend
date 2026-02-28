@@ -60,7 +60,9 @@ export function VendorCatalogPage() {
     { label: "Orders", to: "/vendor/orders" },
     { label: "Catalog", to: "/vendor/catalog" },
     { label: "Analytics", to: "/vendor/analytics" },
+    { label: "Earnings", to: "/vendor/earnings" },
     { label: "Settings", to: "/vendor/settings" },
+    { label: "Suggestions", to: "/vendor/suggestions" },
   ];
 
   const [products, setProducts] = useState<Product[]>([]);

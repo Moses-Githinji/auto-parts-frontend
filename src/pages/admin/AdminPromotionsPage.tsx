@@ -135,7 +135,7 @@ export function AdminPromotionsPage() {
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">Discount Type</label>
                     <select
                       {...register("discountType")}
-                      className="h-10 w-full rounded-md border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-bgLight px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9900]"
+                      className="h-10 w-full rounded-md border border-slate-300 dark:border-dark-border bg-white dark:bg-dark-surface px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF9900]"
                     >
                       <option value="PERCENTAGE">Percentage (%)</option>
                       <option value="FIXED_AMOUNT">Fixed Amount (KES)</option>
@@ -193,7 +193,7 @@ export function AdminPromotionsPage() {
         </div>
 
         {/* Promotions List */}
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-bgLight shadow-sm">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface shadow-sm">
           {isLoading ? (
              <div className="p-8 text-center text-slate-500">Loading promotions...</div>
           ) : promotions?.length === 0 ? (
@@ -205,7 +205,7 @@ export function AdminPromotionsPage() {
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 dark:bg-dark-bg border-b border-slate-200 dark:border-dark-border text-slate-600 dark:text-dark-textMuted">
+                <thead className="bg-slate-50 dark:bg-dark-base border-b border-slate-200 dark:border-dark-border text-slate-600 dark:text-dark-textMuted">
                   <tr>
                     <th className="px-4 py-3 font-medium">Name</th>
                     <th className="px-4 py-3 font-medium">Discount</th>
@@ -217,13 +217,13 @@ export function AdminPromotionsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-dark-border">
                   {promotions?.map((promo) => (
-                    <tr key={promo.id} className="hover:bg-slate-50 dark:hover:bg-dark-bg/50">
+                    <tr key={promo.id} className="hover:bg-slate-50 dark:hover:bg-dark-base/50">
                       <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
                         {promo.name}
                         {promo.description && <p className="text-xs text-slate-500 font-normal">{promo.description}</p>}
                       </td>
                       <td className="px-4 py-3 text-slate-600 dark:text-dark-textMuted">
-                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-0.5 font-mono text-xs font-bold text-slate-700 dark:bg-dark-bg dark:text-dark-text">
+                        <span className="inline-flex items-center gap-1 rounded bg-slate-100 px-2 py-0.5 font-mono text-xs font-bold text-slate-700 dark:bg-dark-base dark:text-dark-text">
                           {promo.discountType === "PERCENTAGE" ? `${promo.discountValue}%` : `KES ${promo.discountValue}`}
                         </span>
                       </td>
@@ -244,7 +244,7 @@ export function AdminPromotionsPage() {
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                           promo.isActive 
                             ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" 
-                            : "bg-slate-100 text-slate-600 dark:bg-dark-bg dark:text-slate-400"
+                            : "bg-slate-100 text-slate-600 dark:bg-dark-base dark:text-slate-400"
                         }`}>
                           {promo.isActive ? "Active" : "Inactive"}
                         </span>

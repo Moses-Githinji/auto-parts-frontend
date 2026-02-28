@@ -56,7 +56,7 @@ export function CartPage() {
     return (
       <div className="space-y-4">
         <h1 className="text-lg font-semibold text-slate-900 dark:text-dark-text">Cart</h1>
-        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
+        <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-8 text-center text-sm text-slate-600 dark:text-dark-textMuted">
           <p className="mb-4">Your cart is empty.</p>
           <a
             href="/search"
@@ -112,7 +112,7 @@ export function CartPage() {
         return (
           <section
             key={vendorId}
-            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 text-xs"
+            className="space-y-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-3 text-xs"
           >
             <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               {vendorName}
@@ -203,7 +203,7 @@ export function CartPage() {
         );
       })}
 
-      <section className="flex flex-col justify-between gap-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-bg p-3 text-xs md:flex-row md:items-center">
+      <section className="flex flex-col justify-between gap-3 rounded-md border border-slate-200 dark:border-dark-border bg-slate-50 dark:bg-dark-base p-3 text-xs md:flex-row md:items-center">
         <div>
           <p className="font-semibold text-slate-900 dark:text-dark-text">Order summary</p>
           <p className="text-xs text-slate-600 dark:text-dark-textMuted">
@@ -233,7 +233,7 @@ export function CartPage() {
       {/* Clear Cart Confirmation Modal */}
       {showClearModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="w-full max-w-sm rounded-sm bg-white dark:bg-dark-bgLight p-4 shadow-lg">
+          <div className="w-full max-w-sm rounded-sm bg-white dark:bg-dark-surface p-4 shadow-lg">
             <h3 className="text-sm font-semibold text-slate-900 dark:text-dark-text">Clear Cart</h3>
             <p className="mt-2 text-xs text-slate-600 dark:text-dark-textMuted">
               Are you sure you want to remove all items from your cart? This
