@@ -29,7 +29,7 @@ import type { ProductCondition } from "../../types/product";
 import { Alert } from "../../components/ui/Alert";
 import type { NotificationType } from "../../stores/notificationStore";
 import InnerImageZoom from 'react-inner-image-zoom';
-import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import 'react-inner-image-zoom/lib/styles.min.css';
 import { getDisplayImageUrl, getZoomImageUrl, getThumbnailImageUrl, isCloudinaryPublicId } from "../../utils/cloudinary";
 
 // Default placeholder images for products without images
