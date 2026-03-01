@@ -2,8 +2,10 @@ import { useState } from "react";
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
 import { Alert } from "../../components/ui/Alert";
 import type { NotificationType } from "../../stores/notificationStore";
+import { useAuthStore } from "../../stores/authStore";
 
 export function VendorSettingsPage() {
+  const { user } = useAuthStore();
   const vendorNavItems = [
     { label: "Dashboard", to: "/vendor" },
     { label: "Orders", to: "/vendor/orders" },
@@ -224,6 +226,42 @@ export function VendorSettingsPage() {
                 <span className="text-xs font-medium text-slate-900 dark:text-dark-text">
                   Today, 10:30 AM
                 </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Referrals */}
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
+            <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
+              Vendor Referral Program
+            </h2>
+            <div className="space-y-4">
+              <p className="text-xs leading-relaxed text-slate-600 dark:text-dark-textMuted">
+                Invite other vendors to the platform and earn a percentage commission on their successful sales. Share your unique referral code below.
+              </p>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                  Your Referral Code
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    readOnly
+                    value={(user as any)?.referralCode || "Generating..."}
+                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-slate-50 dark:bg-dark-bg px-3 py-1.5 text-xs font-mono text-slate-700 dark:text-dark-text focus:outline-none"
+                  />
+                  <button
+                    onClick={() => {
+                      if ((user as any)?.referralCode) {
+                        navigator.clipboard.writeText((user as any).referralCode);
+                        setAlert({ type: "success", title: "Referral code copied!" });
+                      }
+                    }}
+                    className="shrink-0 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
+                  >
+                    Copy
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ export interface Earning {
   netEarning: number;
   paymentMethod: "mpesa" | "stripe";
   status: "PENDING_DELIVERY" | "PENDING_CONFIRMATION" | "CONFIRMED" | "PAID_OUT" | "HELD";
+  type?: "SALE" | "REFERRAL";
   deliveredAt?: string;
   confirmedAt?: string;
   paidOutAt?: string;

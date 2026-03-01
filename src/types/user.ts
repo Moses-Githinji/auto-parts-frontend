@@ -11,6 +11,7 @@ export interface User {
   status: UserStatus;
   emailVerified: boolean;
   avatarUrl?: string;
+  referralCode?: string;
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
@@ -27,6 +28,7 @@ export interface UserRegistrationRequest {
   firstName: string;
   lastName: string;
   phone?: string;
+  referredByCode?: string;
 }
 
 export interface UserLoginRequest {
@@ -48,6 +50,7 @@ export interface Address {
   city: string;
   state: string;
   zipCode: string;
+  phone: string;
   country?: string;
   isDefault: boolean;
   createdAt: string;
@@ -60,6 +63,7 @@ export interface CreateAddressRequest {
   city: string;
   state: string;
   zipCode: string;
+  phone: string;
   country?: string;
   isDefault?: boolean;
 }

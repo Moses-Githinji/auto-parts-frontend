@@ -31,6 +31,7 @@ interface Transaction {
 
 interface VendorPayout {
   id: string;
+  vendorId?: string;
   vendorName: string;
   amount: number;
   commission: number;
@@ -74,6 +75,7 @@ export function AdminFinancesPage() {
       const formattedPayouts: VendorPayout[] = [
         ...payoutsRes.pendingPayouts.map((p) => ({
           id: `pending-${p.vendorId}`,
+          vendorId: p.vendorId,
           vendorName: p.vendorName,
           amount: p.amount,
           commission: 0, // Backend pending agg doesn't explicitly send commission, defaulting
@@ -99,6 +101,19 @@ export function AdminFinancesPage() {
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to load financial data");
     } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePayVendor = async (vendorId: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await apiClient.post(`/api/admin/finances/payouts/${vendorId}`);
+      // Refresh the data to move them from pending to completed
+      await fetchFinancialData();
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Failed to process payout");
       setIsLoading(false);
     }
   };
@@ -398,6 +413,7 @@ export function AdminFinancesPage() {
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Orders</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Status</th>
                   <th className="px-4 py-3 text-left font-medium text-slate-700 dark:text-dark-text">Date</th>
+                  <th className="px-4 py-3 text-right font-medium text-slate-700 dark:text-dark-text">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-dark-border">
@@ -441,6 +457,17 @@ export function AdminFinancesPage() {
                         {payout.paidAt
                           ? new Date(payout.paidAt).toLocaleDateString()
                           : new Date(payout.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-3 text-right">
+                        {payout.status === "PENDING" && payout.vendorId && (
+                          <Button 
+                            size="sm" 
+                            onClick={async () => await handlePayVendor(payout.vendorId!)}
+                            disabled={isLoading}
+                          >
+                            {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Pay Vendor"}
+                          </Button>
+                        )}
                       </td>
                     </tr>
                   ))

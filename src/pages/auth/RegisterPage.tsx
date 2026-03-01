@@ -16,6 +16,7 @@ export function RegisterPage() {
     firstName: "",
     lastName: "",
     phone: "",
+    referredByCode: "",
   });
   const { register, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ export function RegisterPage() {
         firstName: formData.firstName,
         lastName: formData.lastName,
         phone: formData.phone || undefined,
+        referredByCode: formData.referredByCode || undefined,
       });
       navigate("/email-verification", {
         state: { email: formData.email },
@@ -201,9 +203,23 @@ export function RegisterPage() {
                 type="password"
                 autoComplete="new-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-dark-textMuted text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 dark:focus:ring-dark-primary focus:border-indigo-500 dark:focus:border-dark-primary focus:z-10 sm:text-sm"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-dark-textMuted text-gray-900 focus:outline-none focus:ring-indigo-500 dark:focus:ring-dark-primary focus:border-indigo-500 dark:focus:border-dark-primary focus:z-10 sm:text-sm"
                 placeholder="Confirm Password"
                 value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+            </div>
+            <div>
+              <label htmlFor="referredByCode" className="sr-only">
+                Referral Code (Optional)
+              </label>
+              <Input
+                id="referredByCode"
+                name="referredByCode"
+                type="text"
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-dark-border placeholder-gray-500 dark:placeholder-dark-textMuted text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 dark:focus:ring-dark-primary focus:border-indigo-500 dark:focus:border-dark-primary focus:z-10 sm:text-sm font-mono"
+                placeholder="Referral Code (Optional)"
+                value={formData.referredByCode}
                 onChange={handleChange}
               />
             </div>

@@ -29,6 +29,7 @@ export interface ProductFilters {
   minPrice?: number;
   maxPrice?: number;
   inStock?: boolean;
+  vendorId?: string;
   page?: number;
   limit?: number;
 }

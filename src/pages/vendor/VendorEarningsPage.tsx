@@ -55,6 +55,8 @@ export function VendorEarningsPage() {
 
   const filteredEarnings = statusFilter === "all" 
     ? earnings 
+    : statusFilter === "REFERRAL"
+    ? earnings.filter(e => e.type === "REFERRAL")
     : earnings.filter(e => e.status === statusFilter);
 
   if (isLoading && earnings.length === 0) {
@@ -220,6 +222,13 @@ export function VendorEarningsPage() {
             >
               Paid Out
             </Button>
+            <Button
+              size="sm"
+              variant={statusFilter === "REFERRAL" ? "default" : "outline"}
+              onClick={() => setStatusFilter("REFERRAL")}
+            >
+              Referrals
+            </Button>
           </div>
 
           {/* Earnings Table */}
@@ -248,11 +257,16 @@ export function VendorEarningsPage() {
                   ) : (
                     filteredEarnings.map((earning) => (
                       <tr key={earning.id} className="hover:bg-slate-50 dark:hover:bg-dark-base">
-                        <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
+                        <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text flex flex-col gap-1 items-start">
                           {earning.orderNumber}
+                          {earning.type === "REFERRAL" && (
+                            <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200 text-[9px] px-1 py-0 h-auto">
+                              REFERRAL BONUS
+                            </Badge>
+                          )}
                         </td>
                         <td className="px-4 py-3 text-slate-900 dark:text-dark-text">
-                          {earning.customerName}
+                          {earning.type === "REFERRAL" ? <span className="text-slate-500 italic">Referred Vendor</span> : earning.customerName}
                         </td>
                         <td className="px-4 py-3 font-semibold text-slate-900 dark:text-dark-text">
                           KES {earning.amount.toLocaleString()}

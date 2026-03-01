@@ -24,12 +24,12 @@ export function AccountAddresses() {
   const [error, setError] = useState<string | null>(null);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
-  const [formData, setFormData] = useState<CreateAddressRequest>({
     type: "home",
     street: "",
     city: "",
     state: "",
     zipCode: "",
+    phone: "",
     country: "Kenya",
     isDefault: false,
   });
@@ -62,12 +62,16 @@ export function AccountAddresses() {
     }
   };
 
+  const isValidPhone = (phone: string) => /^\+[1-9]\d{9,14}$/.test(phone);
+
   const handleAddAddress = async () => {
     if (
       formData.street &&
       formData.city &&
       formData.state &&
-      formData.zipCode
+      formData.zipCode &&
+      formData.phone &&
+      isValidPhone(formData.phone)
     ) {
       try {
         await apiClient.post("/api/users/addresses", formData);
@@ -87,7 +91,9 @@ export function AccountAddresses() {
       formData.street &&
       formData.city &&
       formData.state &&
-      formData.zipCode
+      formData.zipCode &&
+      formData.phone &&
+      isValidPhone(formData.phone)
     ) {
       try {
         await apiClient.put(
@@ -134,6 +140,7 @@ export function AccountAddresses() {
       city: "",
       state: "",
       zipCode: "",
+      phone: "",
       country: "Kenya",
       isDefault: false,
     });
@@ -149,6 +156,7 @@ export function AccountAddresses() {
       city: address.city,
       state: address.state,
       zipCode: address.zipCode,
+      phone: address.phone || "",
       country: address.country || "Kenya",
       isDefault: address.isDefault,
     });
@@ -265,6 +273,7 @@ export function AccountAddresses() {
                   <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                     {address.city}, {address.state} {address.zipCode}
                   </p>
+                  <p className="text-xs uppercase font-semibold text-[#FF9900]">{address.phone}</p>
                   <p className="text-xs text-slate-600 dark:text-dark-textMuted">{address.country}</p>
                 </div>
                 <div className="flex gap-1">
@@ -427,6 +436,20 @@ export function AccountAddresses() {
                 </div>
                 <div>
                   <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                    Phone Number <span className="text-red-500 dark:text-red-400">*</span>
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    placeholder="+254712345678"
+                    className={`w-full rounded-sm border ${formData.phone && !isValidPhone(formData.phone) ? 'border-red-500 focus:border-red-500' : 'border-[#c8c8c8] focus:border-[#FF9900]'} px-3 py-2 text-xs focus:outline-none`}
+                  />
+                </div>
+                <div className="col-span-2">
+                  <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
                     Country
                   </label>
                   <input
@@ -469,7 +492,9 @@ export function AccountAddresses() {
                     !formData.street ||
                     !formData.city ||
                     !formData.state ||
-                    !formData.zipCode
+                    !formData.zipCode ||
+                    !formData.phone ||
+                    !isValidPhone(formData.phone)
                   }
                 >
                   {editingAddress ? "Save Changes" : "Add Address"}

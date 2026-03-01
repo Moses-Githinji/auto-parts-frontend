@@ -15,6 +15,7 @@ interface Address {
   city: string;
   state: string;
   zipCode: string;
+  phone: string;
 }
 
 interface OrderGroup {
@@ -43,6 +44,7 @@ export function CheckoutPage() {
     city: "",
     state: "",
     zipCode: "",
+    phone: user?.phone || "",
   });
 
   const [billingAddress, setBillingAddress] = useState<Address>({
@@ -50,6 +52,7 @@ export function CheckoutPage() {
     city: "",
     state: "",
     zipCode: "",
+    phone: user?.phone || "",
   });
 
   const [useSameAddress, setUseSameAddress] = useState(true);
@@ -118,8 +121,11 @@ export function CheckoutPage() {
     setError(errorMessage);
   };
 
+  // E.164 Phone format validation standard (Starts with +, followed by 10-15 numbers)
+  const isValidPhone = (phone: string) => /^\+[1-9]\d{9,14}$/.test(phone);
+
   const isAddressValid = (address: Address): boolean => {
-    return !!(address.street && address.city && address.state && address.zipCode);
+    return !!(address.street && address.city && address.state && address.zipCode && isValidPhone(address.phone));
   };
 
   const getMissingFields = (address: Address): string[] => {
@@ -128,6 +134,8 @@ export function CheckoutPage() {
     if (!address.city) missing.push("City");
     if (!address.state) missing.push("County/State");
     if (!address.zipCode) missing.push("Postal Code");
+    if (!address.phone) missing.push("Phone Number");
+    else if (!isValidPhone(address.phone)) missing.push("Valid Phone (e.g. +254700000000)");
     return missing;
   };
 
@@ -206,7 +214,7 @@ export function CheckoutPage() {
                       placeholder="Nairobi"
                     />
                   </div>
-                  <div className="md:col-span-2">
+                  <div className="md:col-span-1">
                     <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                       Postal Code <span className="text-red-500">*</span>
                     </label>
@@ -214,6 +222,17 @@ export function CheckoutPage() {
                       value={shippingAddress.zipCode}
                       onChange={(e) => setShippingAddress({ ...shippingAddress, zipCode: e.target.value })}
                       placeholder="00100"
+                    />
+                  </div>
+                  <div className="md:col-span-1">
+                    <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
+                      Phone Number <span className="text-red-500">*</span>
+                    </label>
+                    <Input
+                      type="tel"
+                      value={shippingAddress.phone}
+                      onChange={(e) => setShippingAddress({ ...shippingAddress, phone: e.target.value })}
+                      placeholder="+254712345678"
                     />
                   </div>
                 </div>
@@ -270,7 +289,7 @@ export function CheckoutPage() {
                         placeholder="Nairobi"
                       />
                     </div>
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-1">
                       <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
                         Postal Code <span className="text-red-500">*</span>
                       </label>
@@ -278,6 +297,17 @@ export function CheckoutPage() {
                         value={billingAddress.zipCode}
                         onChange={(e) => setBillingAddress({ ...billingAddress, zipCode: e.target.value })}
                         placeholder="00100"
+                      />
+                    </div>
+                    <div className="md:col-span-1">
+                      <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-dark-text">
+                        Phone Number <span className="text-red-500">*</span>
+                      </label>
+                      <Input
+                        type="tel"
+                        value={billingAddress.phone}
+                        onChange={(e) => setBillingAddress({ ...billingAddress, phone: e.target.value })}
+                        placeholder="+254712345678"
                       />
                     </div>
                   </div>

@@ -3,8 +3,10 @@ import { BackofficeLayout } from "../../layout/BackofficeLayout";
 import { useAuthStore } from "../../stores/authStore";
 import { useOrderStore } from "../../stores/orderStore";
 import { format } from "date-fns";
-import { Tag, TrendingUp, Package, Loader2 } from "lucide-react";
+import { Tag, TrendingUp, Package, Loader2, AlertTriangle } from "lucide-react";
 import type { OrderAnalytics } from "../../types/order";
+import { useNavigate } from "react-router-dom";
+import { useProductStore } from "../../stores/productStore";
 
 function VendorPromotionBadge() {
   const { user } = useAuthStore();
@@ -29,8 +31,10 @@ function VendorPromotionBadge() {
 }
 
 export function VendorDashboardPage() {
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const { fetchOrderAnalytics, fetchOrders, orders, isLoading } = useOrderStore();
+  const { products, fetchProducts } = useProductStore();
   const [analyticsData, setAnalyticsData] = useState<OrderAnalytics | null>(null);
 
   const vendorNavItems = [
@@ -53,21 +57,61 @@ export function VendorDashboardPage() {
           
           // Fetch recent orders
           await fetchOrders({ vendorId: user.id, limit: 5 });
+          
+          // Fetch overall products to check for low stock
+          await fetchProducts({ vendorId: user.id, limit: 100 });
         } catch (err) {
           console.error("Failed to load dashboard data:", err);
         }
       };
       loadDashboardData();
     }
-  }, [user?.id, fetchOrderAnalytics, fetchOrders]);
+  }, [user?.id, fetchOrderAnalytics, fetchOrders, fetchProducts]);
 
   const recentOrders = orders.slice(0, 5);
   const a = analyticsData?.analytics;
+  const lowStockItems = products.filter(p => p.stock <= 5);
 
   return (
     <BackofficeLayout title="Vendor Portal" navItems={vendorNavItems}>
       <div className="p-6">
         <VendorPromotionBadge />
+
+        {lowStockItems.length > 0 && (
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5" />
+              <div className="flex-1">
+                <h3 className="text-sm font-semibold text-red-900 dark:text-red-200">
+                  Low Stock Alert ({lowStockItems.length} items)
+                </h3>
+                <p className="mt-1 text-xs text-red-700 dark:text-red-300">
+                  You have {lowStockItems.length} products with 5 or fewer items in stock.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {lowStockItems.slice(0, 3).map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => navigate(`/vendor/catalog?search=${encodeURIComponent(item.partNumber)}`)}
+                      className="inline-flex items-center rounded-md bg-white dark:bg-dark-base px-2.5 py-1.5 text-xs font-medium text-red-700 dark:text-red-400 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-slate-50 transition-colors"
+                    >
+                      Restock {item.name} ({item.stock} left)
+                    </button>
+                  ))}
+                  {lowStockItems.length > 3 && (
+                    <button
+                      onClick={() => navigate("/vendor/catalog")}
+                      className="inline-flex items-center rounded-md bg-transparent px-2.5 py-1.5 text-xs font-medium text-red-700 hover:text-red-800 underline underline-offset-2"
+                    >
+                      View all
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mb-6">
           <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">
             Vendor Dashboard
