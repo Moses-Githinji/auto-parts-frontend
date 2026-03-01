@@ -28,6 +28,9 @@ import {
 import type { ProductCondition } from "../../types/product";
 import { Alert } from "../../components/ui/Alert";
 import type { NotificationType } from "../../stores/notificationStore";
+import InnerImageZoom from 'react-inner-image-zoom';
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import { getDisplayImageUrl, getZoomImageUrl, getThumbnailImageUrl, isCloudinaryPublicId } from "../../utils/cloudinary";
 
 // Default placeholder images for products without images
 const PLACEHOLDER_IMAGES = [
@@ -275,16 +278,26 @@ export default function ProductDetailPage() {
         {/* Left Column: Product Images */}
         <div className="space-y-4">
           {/* Main Image */}
-          <div className="relative overflow-hidden rounded-lg border border-slate-200 dark:border-dark-border bg-white">
-            <div className="aspect-square w-full">
-              <img
-                src={images[selectedImage]}
-                alt={currentProduct.name}
-                className="h-full w-full max-w-full max-h-full object-contain object-center p-4"
-              />
+          <div className="relative overflow-hidden rounded-lg border border-slate-200 dark:border-dark-border bg-white flex items-center justify-center">
+            <div className="w-full flex items-center justify-center">
+              {isCloudinaryPublicId(images[selectedImage]) ? (
+                <InnerImageZoom
+                  src={getDisplayImageUrl(images[selectedImage])}
+                  zoomSrc={getZoomImageUrl(images[selectedImage])}
+                  zoomType="hover"
+                  zoomPreload={true}
+                  className="mx-auto"
+                />
+              ) : (
+                <img
+                  src={images[selectedImage]}
+                  alt={currentProduct.name}
+                  className="h-full w-full max-w-full max-h-full object-contain object-center p-4"
+                />
+              )}
             </div>
-            {/* Zoom button */}
-            <button className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow-sm hover:bg-white">
+            {/* Zoom button (decorative since InnerImageZoom handles interaction) */}
+            <button className="absolute right-3 top-3 rounded-full bg-white/90 p-2 shadow-sm hover:bg-white pointer-events-none">
               <ZoomIn className="h-4 w-4 text-slate-600 dark:text-dark-textMuted" />
             </button>
             {/* Condition badge */}
@@ -311,7 +324,7 @@ export default function ProductDetailPage() {
                   }`}
                 >
                   <img
-                    src={img}
+                    src={isCloudinaryPublicId(img) ? getThumbnailImageUrl(img) : img}
                     alt={`${currentProduct.name} - ${i + 1}`}
                     className="h-full w-full object-cover"
                   />
