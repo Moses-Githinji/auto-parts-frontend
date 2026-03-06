@@ -308,16 +308,16 @@ export function OrderDetailsDrawer({
           {/* Vendor Earnings Display */}
           {(() => {
             const commissionRate = 0.08;
-            const vatRate = 0.16;
             const commissionBase = Number(order.subtotal);
             const marketplaceFee = commissionBase * commissionRate;
-            const vatAmount = marketplaceFee * vatRate;
-            const vendorPayout = commissionBase - marketplaceFee - vatAmount;
+            // Add 1.5% GIT Risk Pool fee as requested in previous commission updates
+            const gitRiskFee = commissionBase * 0.015;
+            const vendorPayout = commissionBase - marketplaceFee - gitRiskFee;
+            
             return (
               <VendorEarningsDisplay
                 orderAmount={commissionBase}
-                marketplaceFee={marketplaceFee}
-                vatAmount={vatAmount}
+                marketplaceFee={marketplaceFee + gitRiskFee} // Added gitRiskFee here because VendorEarningsDisplay expects marketplaceFee to encompass total deductions
                 vendorPayout={vendorPayout}
                 isCollapsible={true}
               />
