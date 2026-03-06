@@ -90,138 +90,18 @@ export function AdminEarningsPage() {
           </div>
         </section>
 
-        {/* Commission Breakdown */}
-        <section className="mb-6 grid gap-4 md:grid-cols-2">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
-            <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
-              Commission by Category
-            </h3>
-            <div className="space-y-3">
-              <div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 dark:text-dark-textMuted">Brakes</span>
-                  <span className="font-medium text-slate-900 dark:text-dark-text">
-                    KSh 245,000
-                  </span>
-                </div>
-                <div className="mt-1 h-2 rounded-full bg-slate-100">
-                  <div
-                    className="h-2 rounded-full bg-[#2b579a]"
-                    style={{ width: "29%" }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 dark:text-dark-textMuted">Engine Parts</span>
-                  <span className="font-medium text-slate-900 dark:text-dark-text">
-                    KSh 198,500
-                  </span>
-                </div>
-                <div className="mt-1 h-2 rounded-full bg-slate-100">
-                  <div
-                    className="h-2 rounded-full bg-[#5c8a3d]"
-                    style={{ width: "24%" }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 dark:text-dark-textMuted">Suspension</span>
-                  <span className="font-medium text-slate-900 dark:text-dark-text">
-                    KSh 156,800
-                  </span>
-                </div>
-                <div className="mt-1 h-2 rounded-full bg-slate-100">
-                  <div
-                    className="h-2 rounded-full bg-[#c8c8c8]"
-                    style={{ width: "19%" }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 dark:text-dark-textMuted">Electrical</span>
-                  <span className="font-medium text-slate-900 dark:text-dark-text">
-                    KSh 142,200
-                  </span>
-                </div>
-                <div className="mt-1 h-2 rounded-full bg-slate-100">
-                  <div
-                    className="h-2 rounded-full bg-[#e8a849]"
-                    style={{ width: "17%" }}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-600 dark:text-dark-textMuted">Other Parts</span>
-                  <span className="font-medium text-slate-900 dark:text-dark-text">
-                    KSh 100,000
-                  </span>
-                </div>
-                <div className="mt-1 h-2 rounded-full bg-slate-100">
-                  <div
-                    className="h-2 rounded-full bg-[#7c7c7c]"
-                    style={{ width: "12%" }}
-                  />
-                </div>
-              </div>
+        {/* Status indicator for Admin */}
+        {!isLoading && totalCommissions === 0 && recentCommissions.length === 0 && (
+          <section className="mb-6 rounded-sm border border-slate-100 bg-slate-50/50 p-6 text-center dark:border-dark-border dark:bg-dark-base/50">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 dark:bg-dark-surface">
+              <AlertCircle className="h-6 w-6 text-slate-400" />
             </div>
-          </div>
-
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
-            <h3 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
-              Commission Rate Tiers
-            </h3>
-            <table className="w-full text-xs">
-              <thead className="bg-[#f3f3f3] dark:bg-dark-base">
-                <tr className="border-b border-[#c8c8c8] dark:border-dark-border">
-                  <th className="px-3 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
-                    Category
-                  </th>
-                  <th className="px-3 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
-                    Rate
-                  </th>
-                  <th className="px-3 py-2 text-left font-medium text-slate-700 dark:text-dark-text">
-                    Range
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-[#e8e8e8]">
-                  <td className="px-3 py-2 text-slate-900 dark:text-dark-text">Premium Parts</td>
-                  <td className="px-3 py-2 text-slate-700 dark:text-dark-text">10%</td>
-                  <td className="px-3 py-2 text-slate-500 dark:text-dark-textMuted">All items</td>
-                </tr>
-                <tr className="border-b border-[#e8e8e8]">
-                  <td className="px-3 py-2 text-slate-900 dark:text-dark-text">Brakes</td>
-                  <td className="px-3 py-2 text-slate-700 dark:text-dark-text">8%</td>
-                  <td className="px-3 py-2 text-slate-500 dark:text-dark-textMuted">All items</td>
-                </tr>
-                <tr className="border-b border-[#e8e8e8]">
-                  <td className="px-3 py-2 text-slate-900 dark:text-dark-text">Engine Parts</td>
-                  <td className="px-3 py-2 text-slate-700 dark:text-dark-text">9%</td>
-                  <td className="px-3 py-2 text-slate-500 dark:text-dark-textMuted">All items</td>
-                </tr>
-                <tr className="border-b border-[#e8e8e8]">
-                  <td className="px-3 py-2 text-slate-900 dark:text-dark-text">Regular Parts</td>
-                  <td className="px-3 py-2 text-slate-700 dark:text-dark-text">7%</td>
-                  <td className="px-3 py-2 text-slate-500 dark:text-dark-textMuted">
-                    Items under KSh 5,000
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-2 text-slate-900 dark:text-dark-text">Bulk Orders</td>
-                  <td className="px-3 py-2 text-slate-700 dark:text-dark-text">5%</td>
-                  <td className="px-3 py-2 text-slate-500 dark:text-dark-textMuted">
-                    Orders above KSh 50,000
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+            <h3 className="mt-4 text-sm font-semibold text-slate-900 dark:text-dark-text">No data to display</h3>
+            <p className="mx-auto mt-2 max-w-xs text-xs text-slate-500 dark:text-dark-textMuted leading-relaxed">
+              Platform revenue metrics will appear here once orders are processed through the gateway.
+            </p>
+          </section>
+        )}
 
         {/* Recent Commissions */}
         <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">

@@ -3,20 +3,25 @@ import { apiClient } from "../lib/apiClient";
 
 export interface Earning {
   id: string;
-  orderNumber: string;
-  customerName: string;
-  amount: number;
-  commission: number; // Platform commission (e.g. 8.5%)
-  gitFee: number;     // GIT Risk Pool fee (e.g. 1.5%)
-  netEarning: number;
-  paymentMethod: "mpesa";
-  status: "PENDING_DELIVERY" | "PENDING_CONFIRMATION" | "CONFIRMED" | "PAID_OUT" | "HELD";
+  netAmount: number;
+  status: "PENDING" | "PROCESSED" | "PAID" | "DISPUTED" | "HELD";
   type?: "SALE" | "REFERRAL";
+  createdAt: string;
+  order: {
+    orderNumber: string;
+    customerName?: string;
+    amount?: number;
+  };
+  // Previous fields kept as optional for backward compatibility if needed in UI
+  amount?: number;
+  commission?: number;
+  gitFee?: number;
+  netEarning?: number;
+  paymentMethod?: string;
   deliveredAt?: string;
   confirmedAt?: string;
   paidOutAt?: string;
   daysUntilAutoConfirm?: number;
-  createdAt: string;
 }
 
 export interface PayoutHistory {
@@ -34,15 +39,21 @@ export interface PayoutHistory {
 interface EarningsStore {
   totalEarnings: number;
   pendingEarnings: number;
-  confirmedEarnings: number;
+  processedEarnings: number;
   paidEarnings: number;
   heldEarnings: number;
   earnings: Earning[];
   payoutHistory: PayoutHistory[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
   isLoading: boolean;
   error: string | null;
 
-  fetchEarnings: () => Promise<void>;
+  fetchEarnings: (page?: number) => Promise<void>;
   fetchPayoutHistory: () => Promise<void>;
   clearError: () => void;
 }
@@ -50,34 +61,48 @@ interface EarningsStore {
 export const useEarningsStore = create<EarningsStore>((set) => ({
   totalEarnings: 0,
   pendingEarnings: 0,
-  confirmedEarnings: 0,
+  processedEarnings: 0,
   paidEarnings: 0,
   heldEarnings: 0,
   earnings: [],
   payoutHistory: [],
+  pagination: {
+    page: 1,
+    limit: 20,
+    total: 0,
+    pages: 0,
+  },
   isLoading: false,
   error: null,
 
-  fetchEarnings: async () => {
+  fetchEarnings: async (page = 1) => {
     try {
       set({ isLoading: true, error: null });
 
       const response = await apiClient.get<{
-        totalEarnings: number;
-        pendingEarnings: number;
-        confirmedEarnings: number;
-        paidEarnings: number;
-        heldEarnings: number;
         earnings: Earning[];
-      }>("/api/vendors/earnings");
+        totals: {
+          PENDING: number;
+          PROCESSED: number;
+          PAID: number;
+          HELD?: number;
+        };
+        pagination: {
+          page: number;
+          limit: number;
+          total: number;
+          pages: number;
+        };
+      }>(`/api/vendors/earnings?page=${page}`);
 
       set({
-        totalEarnings: response?.totalEarnings ?? 0,
-        pendingEarnings: response?.pendingEarnings ?? 0,
-        confirmedEarnings: response?.confirmedEarnings ?? 0,
-        paidEarnings: response?.paidEarnings ?? 0,
-        heldEarnings: response?.heldEarnings ?? 0,
-        earnings: Array.isArray(response?.earnings) ? response.earnings : [],
+        totalEarnings: (response.totals.PENDING + response.totals.PROCESSED + response.totals.PAID) || 0,
+        pendingEarnings: response.totals.PENDING || 0,
+        processedEarnings: response.totals.PROCESSED || 0,
+        paidEarnings: response.totals.PAID || 0,
+        heldEarnings: response.totals.HELD || 0,
+        earnings: Array.isArray(response.earnings) ? response.earnings : [],
+        pagination: response.pagination || { page: 1, limit: 20, total: 0, pages: 0 },
         isLoading: false,
       });
     } catch (err: any) {

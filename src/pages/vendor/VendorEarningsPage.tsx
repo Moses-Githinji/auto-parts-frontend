@@ -31,7 +31,7 @@ export function VendorEarningsPage() {
   const {
     totalEarnings,
     pendingEarnings,
-    confirmedEarnings,
+    processedEarnings,
     paidEarnings,
     heldEarnings,
     earnings,
@@ -55,14 +55,11 @@ export function VendorEarningsPage() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "PENDING":
-        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">Processing (14d Hold)</Badge>;
-      case "WITHDRAWABLE":
+        return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200">14-Day Hold</Badge>;
+      case "PROCESSED":
         return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Withdrawable</Badge>;
-      case "PROCESSING_PAYMENT":
-        return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">Processing Payment</Badge>;
       case "PAID":
-      case "PAID_OUT":
-        return <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">Paid to Bank</Badge>;
+        return <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">Paid out</Badge>;
       case "DISPUTED":
         return <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">Disputed</Badge>;
       case "HELD":
@@ -139,7 +136,7 @@ export function VendorEarningsPage() {
               </span>
             </div>
           <p className="text-2xl font-bold text-blue-600">
-            KES {(confirmedEarnings ?? 0).toLocaleString()}
+            KES {(processedEarnings ?? 0).toLocaleString()}
           </p>
           <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
             Available for instant payout
@@ -280,8 +277,8 @@ export function VendorEarningsPage() {
             </Button>
             <Button
               size="sm"
-              variant={statusFilter === "WITHDRAWABLE" ? "default" : "outline"}
-              onClick={() => setStatusFilter("WITHDRAWABLE")}
+              variant={statusFilter === "PROCESSED" ? "default" : "outline"}
+              onClick={() => setStatusFilter("PROCESSED")}
             >
               Withdrawable
             </Button>
@@ -350,7 +347,7 @@ export function VendorEarningsPage() {
                         <td className="px-4 py-3 font-mono text-xs text-slate-900 dark:text-dark-text">
                           <div className="flex flex-col gap-1 items-start">
                             <span className="flex items-center gap-2">
-                              <span className="text-slate-900 dark:text-dark-text font-bold">#{earning.orderNumber || earning.id.slice(0, 8)}</span>
+                              <span className="text-slate-900 dark:text-dark-text font-bold">#{earning.order?.orderNumber || earning.id.slice(0, 8)}</span>
                               <button 
                                 onClick={() => {
                                   setSelectedEarning(earning);
@@ -370,7 +367,7 @@ export function VendorEarningsPage() {
                           </div>
                         </td>
                         <td className="px-4 py-3 text-slate-900 dark:text-dark-text">
-                          {earning.type === "REFERRAL" ? <span className="text-slate-500 italic">Referred Vendor</span> : earning.customerName}
+                          {earning.order?.customerName || "Customer"}
                         </td>
                         <td className="px-4 py-3 font-semibold text-slate-900 dark:text-dark-text">
                           KES {(earning.amount ?? 0).toLocaleString()}
@@ -379,7 +376,7 @@ export function VendorEarningsPage() {
                           -KES {(earning.commission ?? 0).toLocaleString()}
                         </td>
                         <td className="px-4 py-3 font-semibold text-green-600">
-                          KES {(earning.netEarning ?? 0).toLocaleString()}
+                          KES {(earning.netAmount ?? 0).toLocaleString()}
                         </td>
                         <td className="px-4 py-3">
                           <Badge variant="outline" className="capitalize">
@@ -388,7 +385,7 @@ export function VendorEarningsPage() {
                         </td>
                         <td className="px-4 py-3">
                           {getStatusBadge(earning.status)}
-                          {earning.status === "PENDING_CONFIRMATION" && earning.daysUntilAutoConfirm && (
+                          {earning.status === "PENDING" && earning.daysUntilAutoConfirm && (
                             <p className="text-xs text-slate-500 dark:text-dark-textMuted mt-1">
                               Auto-confirm in {earning.daysUntilAutoConfirm} days
                             </p>
@@ -472,7 +469,7 @@ export function VendorEarningsPage() {
         <DialogHeader>
           <DialogTitle>Earning Details</DialogTitle>
           <DialogDescription>
-            Detailed breakdown for Order #{selectedEarning?.orderNumber}
+            Detailed breakdown for Order #{selectedEarning?.order?.orderNumber}
           </DialogDescription>
         </DialogHeader>
 
@@ -485,7 +482,7 @@ export function VendorEarningsPage() {
               </div>
               <div className="space-y-1">
                 <p className="text-slate-500 font-medium">Customer</p>
-                <p>{selectedEarning.type === "REFERRAL" ? "N/A (Referral)" : selectedEarning.customerName}</p>
+                <p>{selectedEarning.order?.customerName || "Customer"}</p>
               </div>
               <div className="space-y-1">
                 <p className="text-slate-500 font-medium">Subtotal</p>
@@ -502,7 +499,7 @@ export function VendorEarningsPage() {
               <div className="space-y-1 col-span-2 border-t pt-2 mt-2">
                 <p className="text-slate-500 font-medium text-center text-xs uppercase tracking-wider">Final Payout</p>
                 <p className="text-2xl font-bold text-green-600 text-center">
-                  KES {(selectedEarning.netEarning ?? 0).toLocaleString()}
+                  KES {(selectedEarning.netAmount ?? 0).toLocaleString()}
                 </p>
               </div>
             </div>

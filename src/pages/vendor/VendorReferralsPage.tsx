@@ -29,7 +29,7 @@ export function VendorReferralsPage() {
 
   const referralCode = (user as any)?.referralCode || "VENDOR-" + (user?.id?.substring(0, 6) || "ABCDEF");
   const referralEarnings = earnings.filter(e => e.type === "REFERRAL");
-  const totalReferralAmount = referralEarnings.reduce((sum, e) => sum + e.netEarning, 0);
+  const totalReferralAmount = referralEarnings.reduce((sum, e) => sum + e.netAmount, 0);
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(referralCode);
@@ -156,7 +156,7 @@ export function VendorReferralsPage() {
                               </span>
                             </td>
                             <td className="px-4 py-3 text-right font-bold text-green-600">
-                              +KES {e.netEarning.toLocaleString()}
+                              +KES {e.netAmount.toLocaleString()}
                             </td>
                           </tr>
                         ))}
