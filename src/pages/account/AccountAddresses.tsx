@@ -192,8 +192,8 @@ export function AccountAddresses() {
 
   if (error) {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 p-4">
+        <div className="flex items-center justify-between p-4">
           <div>
             <h1 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
               My Addresses

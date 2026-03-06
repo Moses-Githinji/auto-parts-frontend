@@ -172,7 +172,7 @@ function AccountOverview({
   stats,
   statsError,
 }: {
-  user: unknown;
+  user: any;
   isLoading: boolean;
   stats: UserStats;
   statsError: string | null;
@@ -199,10 +199,14 @@ function AccountOverview({
       {user ? (
         <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#FF9900] text-lg font-bold text-white">
-              {(user as { firstName?: string }).firstName?.charAt(0) ||
+            <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-slate-100 dark:border-dark-border bg-[#FF9900] text-lg font-bold text-white overflow-hidden">
+              {user.avatarUrl ? (
+                <img src={user.avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                (user as { firstName?: string }).firstName?.charAt(0) ||
                 (user as { email?: string }).email?.charAt(0) ||
-                "U"}
+                "U"
+              )}
             </div>
             <div className="flex-1">
               <p className="font-semibold text-slate-900 dark:text-dark-text">
@@ -227,6 +231,7 @@ function AccountOverview({
               Edit Profile
             </Button>
           </div>
+          
           <EditProfileModal 
             isOpen={isEditModalOpen} 
             onClose={() => setIsEditModalOpen(false)} 
@@ -235,24 +240,46 @@ function AccountOverview({
 
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
-              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Active Orders</p>
-              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted font-medium mb-1">Active Orders</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-dark-text">
                 {stats.activeOrders}
               </p>
             </div>
             <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
-              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Vehicles</p>
-              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted font-medium mb-1">Saved Vehicles</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-dark-text">
                 {stats.savedVehicles}
               </p>
             </div>
             <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
-              <p className="text-xs text-slate-600 dark:text-dark-textMuted">Saved Addresses</p>
-              <p className="text-lg font-semibold text-slate-900 dark:text-dark-text">
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted font-medium mb-1">Saved Addresses</p>
+              <p className="text-lg font-bold text-slate-900 dark:text-dark-text">
                 {stats.savedAddresses}
               </p>
             </div>
           </div>
+
+          {(user.vehicleType || user.vehiclePlateNumber) && (
+            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-dark-border">
+              <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Primary Vehicle</p>
+              <div className="flex items-center gap-3 bg-slate-50 dark:bg-dark-base p-3 rounded-md">
+                <div className="p-2 bg-white dark:bg-dark-surface rounded-md border border-slate-200 dark:border-dark-border">
+                  <svg className="w-5 h-5 text-[#FF9900]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-dark-text">
+                    {user.vehicleType || "Unnamed Vehicle"}
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">
+                    {user.vehiclePlateNumber || "No plate number"}
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {statsError && (
             <p className="mt-2 text-xs text-amber-600 dark:text-amber-500">{statsError}</p>

@@ -11,6 +11,8 @@ export interface User {
   status: UserStatus;
   emailVerified: boolean;
   avatarUrl?: string;
+  vehicleType?: string;
+  vehiclePlateNumber?: string;
   referralCode?: string;
   createdAt: string;
   updatedAt: string;
