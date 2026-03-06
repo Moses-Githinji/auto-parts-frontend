@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
 import { ADMIN_MENU_ITEMS } from "../../layout/adminMenuConfig";
+import { useCommissionStore } from "../../stores/commissionStore";
+import { Loader2, AlertCircle } from "lucide-react";
 
 export function AdminEarningsPage() {
+  const { 
+    totalCommissions, 
+    recentCommissions, 
+    fetchCommissions, 
+    isLoadingConfigs: isLoading, 
+    configError: error 
+  } = useCommissionStore();
+  
+  const [dateRange, setDateRange] = useState("month");
+
+  useEffect(() => {
+    fetchCommissions(dateRange);
+  }, [fetchCommissions, dateRange]);
+
   return (
     <BackofficeLayout title="Admin Console" menuItems={ADMIN_MENU_ITEMS}>
       <div className="p-6">
@@ -13,27 +30,39 @@ export function AdminEarningsPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            <select className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none">
-              <option>Last 7 days</option>
-              <option>Last 30 days</option>
-              <option>Last 90 days</option>
-              <option>This year</option>
+            <select 
+              value={dateRange}
+              onChange={(e) => setDateRange(e.target.value)}
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none bg-white dark:bg-dark-surface"
+            >
+              <option value="7days">Last 7 days</option>
+              <option value="month">Last 30 days</option>
+              <option value="90days">Last 90 days</option>
+              <option value="year">This year</option>
             </select>
-            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base">
+            <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:hover:bg-dark-base dark:text-dark-text">
               Export
             </button>
           </div>
         </div>
 
+        {error && (
+          <div className="mb-6 flex items-center gap-2 rounded-sm border border-red-200 bg-red-50 p-4 text-sm text-red-600 dark:border-red-900/50 dark:bg-red-900/20 dark:text-red-400">
+            <AlertCircle className="h-4 w-4" />
+            {error}
+          </div>
+        )}
+
         {/* Key Metrics */}
         <section className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm relative overflow-hidden">
+            {isLoading && <div className="absolute inset-x-0 top-0 h-0.5 bg-blue-100 dark:bg-dark-border animate-pulse" />}
             <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Commission Earned</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
-              KSh 842,500
+              KES {totalCommissions.toLocaleString()}
             </p>
-            <p className="mt-1 text-[10px] text-green-600">
-              ↑ 15% vs last period
+            <p className="mt-1 text-[10px] text-slate-500">
+              Across all categories
             </p>
           </div>
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
@@ -44,19 +73,19 @@ export function AdminEarningsPage() {
             </p>
           </div>
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Total Orders (Commissions)</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">9,912</p>
-            <p className="mt-1 text-[10px] text-green-600">
-              ↑ 12% vs last period
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Status</p>
+            <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">Live</p>
+            <p className="mt-1 text-[10px] text-slate-600 dark:text-dark-textMuted">
+              Connected to backend
             </p>
           </div>
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Pending Payouts</p>
+            <p className="text-xs text-slate-600 dark:text-dark-textMuted">Recent Activity</p>
             <p className="mt-1 text-2xl font-semibold text-slate-900 dark:text-dark-text">
-              KSh 125,300
+              {recentCommissions.length}
             </p>
-            <p className="mt-1 text-[10px] text-amber-600">
-              45 vendors pending
+            <p className="mt-1 text-[10px] text-slate-600 dark:text-dark-textMuted">
+              Transactions in period
             </p>
           </div>
         </section>
@@ -223,54 +252,39 @@ export function AdminEarningsPage() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-[#e8e8e8]">
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
-                  #ORD-12345
-                </td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">MotorParts KE</td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 45,000</td>
-                <td className="px-4 py-3 font-medium text-green-600">
-                  KSh 4,050
-                </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">9%</td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">2024-01-15</td>
-              </tr>
-              <tr className="border-b border-[#e8e8e8]">
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
-                  #ORD-12344
-                </td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">AutoCare Plus</td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 12,500</td>
-                <td className="px-4 py-3 font-medium text-green-600">
-                  KSh 1,000
-                </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">8%</td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">2024-01-15</td>
-              </tr>
-              <tr className="border-b border-[#e8e8e8]">
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
-                  #ORD-12343
-                </td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">SparePro Ltd</td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 28,000</td>
-                <td className="px-4 py-3 font-medium text-green-600">
-                  KSh 2,240
-                </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">8%</td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">2024-01-14</td>
-              </tr>
-              <tr>
-                <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
-                  #ORD-12342
-                </td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">MotorParts KE</td>
-                <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh 8,500</td>
-                <td className="px-4 py-3 font-medium text-green-600">
-                  KSh 595
-                </td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">7%</td>
-                <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">2024-01-14</td>
-              </tr>
+              {isLoading && recentCommissions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                    <div className="flex flex-col items-center gap-2">
+                      <Loader2 className="h-5 w-5 animate-spin text-[#FF9900]" />
+                      <span>Fetching commission data...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : recentCommissions.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-slate-500 italic">
+                    No commission transactions found for this period.
+                  </td>
+                </tr>
+              ) : (
+                recentCommissions.map((comm) => (
+                  <tr key={comm.id} className="border-b border-[#e8e8e8] dark:border-dark-border hover:bg-slate-50 dark:hover:bg-dark-base transition-colors">
+                    <td className="px-4 py-3 font-medium text-slate-900 dark:text-dark-text">
+                      #{comm.orderNumber}
+                    </td>
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">{comm.vendorName}</td>
+                    <td className="px-4 py-3 text-slate-700 dark:text-dark-text">KSh {comm.orderAmount.toLocaleString()}</td>
+                    <td className="px-4 py-3 font-medium text-green-600 dark:text-green-500">
+                      KSh {comm.commissionAmount.toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">{comm.commissionRate}%</td>
+                    <td className="px-4 py-3 text-slate-500 dark:text-dark-textMuted">
+                      {new Date(comm.createdAt).toLocaleDateString()}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
