@@ -116,15 +116,28 @@ export const useAuthStore = create<AuthState>()(
       updateProfile: async (data: any) => {
         set({ isLoading: true, error: null });
         try {
+          // MOCK IMPLEMENTATION since PUT /api/auth/profile does not exist yet.
+          // Replace with actual API call once backend is ready.
+          /*
           const response = await apiClient.put<User | { user: User }>(
             "/api/auth/profile",
             data,
           );
           const updatedUser = "user" in response ? response.user : response;
+          */
+          
+          // Simulate network delay
+          await new Promise(resolve => setTimeout(resolve, 800));
+          
+          const currentUser = get().user;
+          if (!currentUser) throw new Error("No authenticated user");
+          
+          const updatedUser = { ...currentUser, ...data };
+          
           set({ user: updatedUser, isLoading: false });
         } catch (error: any) {
           set({
-            error: error.response?.data?.error || "Failed to update profile",
+            error: error.message || error.response?.data?.error || "Failed to update profile",
             isLoading: false,
           });
           throw error;

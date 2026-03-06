@@ -6,6 +6,7 @@ import { apiClient } from "../../lib/apiClient";
 import { AccountOrders } from "./AccountOrders";
 import { AccountGarage } from "./AccountGarage";
 import { AccountAddresses } from "./AccountAddresses";
+import { EditProfileModal } from "../../components/account/EditProfileModal";
 
 interface UserStats {
   activeOrders: number;
@@ -176,6 +177,8 @@ function AccountOverview({
   stats: UserStats;
   statsError: string | null;
 }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -201,7 +204,7 @@ function AccountOverview({
                 (user as { email?: string }).email?.charAt(0) ||
                 "U"}
             </div>
-            <div>
+            <div className="flex-1">
               <p className="font-semibold text-slate-900 dark:text-dark-text">
                 {(user as { firstName?: string }).firstName}{" "}
                 {(user as { lastName?: string }).lastName}
@@ -209,8 +212,26 @@ function AccountOverview({
               <p className="text-xs text-slate-600 dark:text-dark-textMuted">
                 {(user as { email?: string }).email}
               </p>
+              {(user as { phone?: string }).phone && (
+                <p className="text-xs text-slate-600 dark:text-dark-textMuted mt-0.5">
+                  {(user as { phone?: string }).phone}
+                </p>
+              )}
             </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs"
+              onClick={() => setIsEditModalOpen(true)}
+            >
+              Edit Profile
+            </Button>
           </div>
+          <EditProfileModal 
+            isOpen={isEditModalOpen} 
+            onClose={() => setIsEditModalOpen(false)} 
+            user={user as any} 
+          />
 
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             <div className="rounded-md bg-slate-50 dark:bg-dark-base p-3">
