@@ -63,7 +63,7 @@ interface CommissionState {
   clearError: () => void;
 }
 
-const VAT_RATE = 0.16; // 16% VAT
+// VAT has been removed in V1.1
 
 export const useCommissionStore = create<CommissionState>((set) => ({
   feePreview: null,
@@ -108,9 +108,11 @@ export const useCommissionStore = create<CommissionState>((set) => ({
     } catch (error) {
       console.warn("Fee calculation API failed, using fallback:", error);
       // If API fails, calculate locally as fallback
-      const baseCommission = price * 0.08; // Default 8% rate
-      const vatAmount = baseCommission * VAT_RATE;
-      const totalDeductions = baseCommission + vatAmount;
+      // GIT Risk Pool fee is 1.5%
+      // Base Commission is 8.5% (matches Avg Commission Rate in Admin dashboard)
+      const baseCommission = price * 0.085; 
+      const gitFee = price * 0.015;
+      const totalDeductions = baseCommission + gitFee;
       const vendorPayout = price - totalDeductions;
 
       const fallbackPreview: FeeCalculationResponse = {
@@ -118,17 +120,16 @@ export const useCommissionStore = create<CommissionState>((set) => ({
         categorySlug,
         categoryName: categorySlug,
         baseCommission,
-        commissionRate: 8,
+        commissionRate: 8.5,
         minFee: 50,
         maxFee: 2000,
         ruleType: "STANDARD",
         appliedFee: baseCommission,
-        vatAmount,
         totalDeductions,
         vendorPayout,
         breakdown: {
           baseCommission,
-          vatAmount,
+          gitFee,
         },
       };
 

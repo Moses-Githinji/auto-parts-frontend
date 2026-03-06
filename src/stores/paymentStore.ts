@@ -3,15 +3,13 @@ import { apiClient } from "../lib/apiClient";
 
 export interface PaymentResponse {
   success: boolean;
-  provider: "mpesa" | "stripe" | "paystack";
+  provider: "mpesa" | "paystack";
   transactionId: string;
   reference?: string;
   email?: string;
   amount?: number;
   message?: string;
   checkoutRequestId?: string;
-  clientSecret?: string;
-  publishableKey?: string;
   publicKey?: string;
   pollUrl: string;
 }
@@ -19,7 +17,7 @@ export interface PaymentResponse {
 export interface PaymentStatus {
   transactionId: string;
   status: "PENDING" | "PAID" | "FAILED";
-  provider: "mpesa" | "stripe";
+  provider: "mpesa";
   amount: number;
   mpesaReceiptNumber?: string;
   paidAt?: string;
@@ -41,7 +39,7 @@ interface PaymentStore {
   
   initiatePayment: (
     orderGroupId: string,
-    paymentMethod: "mpesa" | "stripe" | "paystack",
+    paymentMethod: "mpesa" | "paystack",
     phoneNumber?: string,
     mock?: boolean
   ) => Promise<PaymentResponse>;

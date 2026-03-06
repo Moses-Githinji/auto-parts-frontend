@@ -6,9 +6,10 @@ export interface Earning {
   orderNumber: string;
   customerName: string;
   amount: number;
-  commission: number;
+  commission: number; // Platform commission (e.g. 8.5%)
+  gitFee: number;     // GIT Risk Pool fee (e.g. 1.5%)
   netEarning: number;
-  paymentMethod: "mpesa" | "stripe";
+  paymentMethod: "mpesa";
   status: "PENDING_DELIVERY" | "PENDING_CONFIRMATION" | "CONFIRMED" | "PAID_OUT" | "HELD";
   type?: "SALE" | "REFERRAL";
   deliveredAt?: string;
@@ -22,6 +23,7 @@ export interface PayoutHistory {
   id: string;
   amount: number;
   commission: number;
+  gitFee: number;
   netAmount: number;
   orderCount: number;
   paidAt: string;
@@ -70,12 +72,12 @@ export const useEarningsStore = create<EarningsStore>((set) => ({
       }>("/api/vendors/earnings");
 
       set({
-        totalEarnings: response.totalEarnings,
-        pendingEarnings: response.pendingEarnings,
-        confirmedEarnings: response.confirmedEarnings,
-        paidEarnings: response.paidEarnings,
-        heldEarnings: response.heldEarnings,
-        earnings: response.earnings,
+        totalEarnings: response?.totalEarnings ?? 0,
+        pendingEarnings: response?.pendingEarnings ?? 0,
+        confirmedEarnings: response?.confirmedEarnings ?? 0,
+        paidEarnings: response?.paidEarnings ?? 0,
+        heldEarnings: response?.heldEarnings ?? 0,
+        earnings: Array.isArray(response?.earnings) ? response.earnings : [],
         isLoading: false,
       });
     } catch (err: any) {
@@ -93,7 +95,7 @@ export const useEarningsStore = create<EarningsStore>((set) => ({
       );
 
       set({
-        payoutHistory: response.payouts,
+        payoutHistory: Array.isArray(response?.payouts) ? response.payouts : [],
         isLoading: false,
       });
     } catch (err: any) {

@@ -1,4 +1,4 @@
-export type UserRole = "USER" | "VENDOR" | "SYSTEM_ADMIN" | "RIDER";
+export type UserRole = "USER" | "VENDOR" | "SYSTEM_ADMIN" | "RIDER" | "STAFF";
 export type UserStatus = "ACTIVE" | "INACTIVE" | "SUSPENDED" | "DELETED";
 
 export interface User {
@@ -15,6 +15,12 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string;
+  permissions?: string[];
+}
+
+export interface StaffUser extends User {
+  role: "STAFF";
+  permissions: string[];
 }
 
 export interface UserProfile {

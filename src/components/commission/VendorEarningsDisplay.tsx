@@ -5,7 +5,6 @@ interface VendorEarningsDisplayProps {
   orderAmount: number;
   commissionRate?: number;
   marketplaceFee: number;
-  vatAmount: number;
   vendorPayout: number;
   isCollapsible?: boolean;
   className?: string;
@@ -15,7 +14,6 @@ export function VendorEarningsDisplay({
   orderAmount,
   commissionRate,
   marketplaceFee,
-  vatAmount,
   vendorPayout,
   isCollapsible = true,
   className,
@@ -67,16 +65,16 @@ export function VendorEarningsDisplay({
                 <div className="flex justify-between">
                   <span className="text-slate-600">
                     Marketplace Fee
-                    {commissionRate !== undefined && ` (${commissionRate}%)`}
+                    {commissionRate !== undefined ? ` (${(commissionRate - 1.5).toFixed(1)}%)` : ' (8.5%)'}
                   </span>
                   <span className="font-medium text-slate-900">
-                    {formatCurrency(marketplaceFee)}
+                    {formatCurrency(marketplaceFee - (orderAmount * 0.015))}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-600">VAT (16% on fee)</span>
+                  <span className="text-slate-600">GIT Risk Fee (1.5%)</span>
                   <span className="font-medium text-slate-900">
-                    {formatCurrency(vatAmount)}
+                    {formatCurrency(orderAmount * 0.015)}
                   </span>
                 </div>
               </div>
@@ -86,7 +84,7 @@ export function VendorEarningsDisplay({
                     Total Deductions
                   </span>
                   <span className="font-semibold text-slate-900">
-                    {formatCurrency(marketplaceFee + vatAmount)}
+                    {formatCurrency(marketplaceFee)}
                   </span>
                 </div>
               </div>
@@ -129,16 +127,16 @@ export function VendorEarningsDisplay({
           <div className="flex justify-between">
             <span className="text-slate-600">
               Marketplace Fee
-              {commissionRate !== undefined && ` (${commissionRate}%)`}
+              {commissionRate !== undefined ? ` (${(commissionRate - 1.5).toFixed(1)}%)` : ' (8.5%)'}
             </span>
             <span className="font-medium text-slate-900">
-              {formatCurrency(marketplaceFee)}
+              {formatCurrency(marketplaceFee - (orderAmount * 0.015))}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-600">VAT (16% on fee)</span>
+            <span className="text-slate-600">GIT Risk Fee (1.5%)</span>
             <span className="font-medium text-slate-900">
-              {formatCurrency(vatAmount)}
+              {formatCurrency(orderAmount * 0.015)}
             </span>
           </div>
         </div>
@@ -148,7 +146,7 @@ export function VendorEarningsDisplay({
               Total Deductions
             </span>
             <span className="font-semibold text-slate-900">
-              {formatCurrency(marketplaceFee + vatAmount)}
+              {formatCurrency(marketplaceFee)}
             </span>
           </div>
         </div>

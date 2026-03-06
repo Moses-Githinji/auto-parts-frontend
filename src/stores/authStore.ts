@@ -20,6 +20,7 @@ interface AuthState {
   register: (data: UserRegistrationRequest) => Promise<void>;
   logout: () => Promise<void>;
   fetchProfile: () => Promise<void>;
+  updateProfile: (data: any) => Promise<void>;
   clearError: () => void;
   initializeAuth: () => void;
 }
@@ -109,6 +110,24 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: false,
             isLoading: false,
           });
+        }
+      },
+
+      updateProfile: async (data: any) => {
+        set({ isLoading: true, error: null });
+        try {
+          const response = await apiClient.put<User | { user: User }>(
+            "/api/auth/profile",
+            data,
+          );
+          const updatedUser = "user" in response ? response.user : response;
+          set({ user: updatedUser, isLoading: false });
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.error || "Failed to update profile",
+            isLoading: false,
+          });
+          throw error;
         }
       },
 

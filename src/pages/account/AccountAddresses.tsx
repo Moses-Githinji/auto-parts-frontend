@@ -24,6 +24,7 @@ export function AccountAddresses() {
   const [error, setError] = useState<string | null>(null);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+  const [formData, setFormData] = useState<CreateAddressRequest>({
     type: "home",
     street: "",
     city: "",

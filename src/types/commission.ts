@@ -32,21 +32,14 @@ export interface FeeCalculationResponse {
   maxFee: number;
   ruleType: CommissionRuleType;
   appliedFee: number;
-  vatAmount: number;
   totalDeductions: number;
   vendorPayout: number;
   breakdown: {
     baseCommission: number;
     floorAdjustment?: number;
     capAdjustment?: number;
-    vatAmount: number;
+    gitFee: number;
   };
-}
-
-// VAT Configuration
-export interface VatConfig {
-  rate: number; // 16 for 16%
-  name: string;
 }
 
 // Commission Config List Response
@@ -60,6 +53,17 @@ export interface CommissionConfigListResponse {
   };
 }
 
+// Create Commission Config Request
+export interface CreateCommissionConfigRequest {
+  name: string;
+  categorySlug: string;
+  commissionRate: number;
+  minFee: number;
+  maxFee: number;
+  ruleType: CommissionRuleType;
+  isActive: boolean;
+}
+
 // Update Commission Config Request
 export interface UpdateCommissionConfigRequest {
   commissionRate?: number;
@@ -69,46 +73,12 @@ export interface UpdateCommissionConfigRequest {
   isActive?: boolean;
 }
 
-// Create Commission Config Request
-export interface CreateCommissionConfigRequest {
-  name: string;
-  slug: string;
-  commissionRate?: number;
-  minFee?: number;
-  maxFee?: number;
-  ruleType?: CommissionRuleType;
-  parentId?: string;
-}
-
 // Commission Summary for Order
 export interface OrderCommissionSummary {
   orderId: string;
   orderAmount: number;
   commissionRate: number;
   marketplaceFee: number;
-  vatAmount: number;
+  gitFee: number;
   vendorPayout: number;
-}
-
-// Commission Stats Response
-export interface CommissionStatsResponse {
-  totalCommissionEarned: number;
-  avgCommissionRate: number;
-  totalOrders: number;
-  pendingPayouts: number;
-  commissionByCategory: Array<{
-    category: string;
-    amount: number;
-    percentage: number;
-  }>;
-}
-
-// Fee Preview State for Component
-export interface FeePreviewState {
-  price: number;
-  categorySlug: string;
-  categoryName: string;
-  isCalculating: boolean;
-  fee: FeeCalculationResponse | null;
-  error: string | null;
 }

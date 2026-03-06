@@ -100,24 +100,35 @@ export function FeePreview({
           {/* Fee Breakdown */}
           <div className="space-y-2 text-xs">
             <div className="flex justify-between">
-              <span className="text-slate-600">Order Amount</span>
+              <span className="text-slate-600">Selling Price</span>
               <span className="font-medium text-slate-900">
                 KSh {(feePreview?.price || 0).toLocaleString()}
               </span>
             </div>
+            <div className="flex justify-between">
+              <span className="text-slate-600">Category</span>
+              <span className="font-medium text-slate-900 capitalize">
+                {feePreview?.categoryName || feePreview?.categorySlug || "N/A"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-600">Rate Applied</span>
+              <span className="font-medium text-slate-900">
+                {feePreview?.commissionRate || 0}%
+              </span>
+            </div>
+            
             <div className="border-t border-[#c8c8c8] pt-2">
               <div className="flex justify-between">
-                <span className="text-slate-600">
-                  Marketplace Fee ({feePreview?.commissionRate || 0}%)
-                </span>
+                <span className="text-slate-600">Marketplace Fee</span>
                 <span className="font-medium text-slate-900">
                   KSh {(feePreview?.breakdown?.baseCommission || 0).toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-600">VAT (16% on fee)</span>
+                <span className="text-slate-600">GIT Risk Fee (1.5%)</span>
                 <span className="font-medium text-slate-900">
-                  KSh {(feePreview?.breakdown?.vatAmount || 0).toLocaleString()}
+                  KSh {(feePreview?.breakdown?.gitFee || 0).toLocaleString()}
                 </span>
               </div>
               {feePreview?.breakdown?.floorAdjustment !== undefined &&

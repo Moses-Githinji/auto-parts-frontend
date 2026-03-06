@@ -4,7 +4,25 @@ import { ADMIN_MENU_ITEMS } from "../../layout/adminMenuConfig";
 import { apiClient } from "../../lib/apiClient";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
-import { Loader2, DollarSign, TrendingUp, TrendingDown, Download } from "lucide-react";
+import { useFinanceStore } from "../../stores/financeStore";
+import { 
+  Loader2, 
+  DollarSign,
+  TrendingUp,
+  Download, 
+  ShieldCheck, 
+  PlusCircle, 
+  AlertTriangle
+} from "lucide-react";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription 
+} from "../../components/ui/dialog";
+import { Input } from "../../components/ui/input";
 
 interface FinancialSummary {
   totalRevenue: number;
@@ -14,7 +32,6 @@ interface FinancialSummary {
   netPlatformEarnings: number;
   breakdown: {
     mpesa: { count: number; amount: number };
-    stripe: { count: number; amount: number };
   };
 }
 
@@ -43,16 +60,29 @@ interface VendorPayout {
 }
 
 export function AdminFinancesPage() {
+  const { 
+    poolHealth, 
+    fetchPoolHealth, 
+    investPoolFunds 
+  } = useFinanceStore();
+
   const [summary, setSummary] = useState<FinancialSummary | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [vendorPayouts, setVendorPayouts] = useState<VendorPayout[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"transactions" | "payouts">("transactions");
+  
+  // Invest Modal State
+  const [isInvestModalOpen, setIsInvestModalOpen] = useState(false);
+  const [investAmount, setInvestAmount] = useState("");
+  const [investSource, setInvestSource] = useState("EXTERNAL");
+  const [isInvesting, setIsInvesting] = useState(false);
 
   useEffect(() => {
     fetchFinancialData();
-  }, []);
+    fetchPoolHealth();
+  }, [fetchPoolHealth]);
 
   const fetchFinancialData = async () => {
     try {
@@ -71,26 +101,25 @@ export function AdminFinancesPage() {
       setSummary(summaryRes);
       setTransactions(transactionsRes.transactions);
 
-      // Merge pending and completed payouts for the table
       const formattedPayouts: VendorPayout[] = [
         ...payoutsRes.pendingPayouts.map((p) => ({
           id: `pending-${p.vendorId}`,
           vendorId: p.vendorId,
           vendorName: p.vendorName,
           amount: p.amount,
-          commission: 0, // Backend pending agg doesn't explicitly send commission, defaulting
+          commission: 0,
           netAmount: p.amount,
           orderCount: p.orderCount,
           status: "PENDING" as const,
-          createdAt: new Date().toISOString(), // No created date for agg
+          createdAt: new Date().toISOString(),
         })),
         ...payoutsRes.completedPayouts.map((p) => ({
           id: p.id,
           vendorName: p.vendorName,
-          amount: p.amount, // This is net amount in backend
+          amount: p.amount,
           commission: 0,
           netAmount: p.amount,
-          orderCount: 0, // Not in completed payout list from backend
+          orderCount: 0,
           status: "COMPLETED" as const,
           createdAt: p.date,
           paidAt: p.date,
@@ -105,12 +134,31 @@ export function AdminFinancesPage() {
     }
   };
 
+  const handleInvest = async () => {
+    const amount = parseFloat(investAmount);
+    if (isNaN(amount) || amount <= 0) return;
+
+    setIsInvesting(true);
+    try {
+      await investPoolFunds({
+        amount,
+        source: investSource as any,
+        note: `Manual investment via Admin Dashboard from ${investSource}`
+      });
+      setIsInvestModalOpen(false);
+      setInvestAmount("");
+    } catch (err) {
+      // Error handled by store
+    } finally {
+      setIsInvesting(false);
+    }
+  };
+
   const handlePayVendor = async (vendorId: string) => {
     try {
       setIsLoading(true);
       setError(null);
       await apiClient.post(`/api/admin/finances/payouts/${vendorId}`);
-      // Refresh the data to move them from pending to completed
       await fetchFinancialData();
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to process payout");
@@ -157,20 +205,68 @@ export function AdminFinancesPage() {
           <div>
             <h1 className="text-2xl font-bold text-slate-900 dark:text-dark-text">Financial Overview</h1>
             <p className="text-sm text-slate-600 dark:text-dark-textMuted">
-              Complete financial tracking and vendor payouts
+              Complete financial tracking and pool management
             </p>
           </div>
-          <Button onClick={handleExport} variant="outline" className="gap-2">
-            <Download className="h-4 w-4" />
-            Export CSV
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={() => setIsInvestModalOpen(true)} className="gap-2 bg-green-600 hover:bg-green-700">
+              <PlusCircle className="h-4 w-4" />
+              Invest Funds
+            </Button>
+            <Button onClick={handleExport} variant="outline" className="gap-2">
+              <Download className="h-4 w-4" />
+              Export CSV
+            </Button>
+          </div>
         </div>
 
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4">
+        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 p-4 font-normal">
           <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
         </div>
       )}
+
+      {/* GIT Protection Pool Health */}
+      <section className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-green-600" />
+            GIT Protection Pool Health
+          </h2>
+          {poolHealth && (
+            <Badge variant="outline" className={poolHealth.healthStatus === 'GOOD' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}>
+              Status: {poolHealth.healthStatus}
+            </Badge>
+          )}
+        </div>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
+            <p className="text-xs text-slate-500 font-medium whitespace-nowrap overflow-hidden text-ellipsis">Collected Funds (Risk Pooling)</p>
+            <p className="mt-2 text-xl font-bold text-slate-900 dark:text-dark-text">
+              KES {(poolHealth?.totalPoolFunds ?? 0).toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
+             <p className="text-xs text-slate-500 font-medium">Claims Paid</p>
+            <p className="mt-2 text-xl font-bold text-red-600">
+              KES {(poolHealth?.claimsPaid ?? 0).toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
+            <p className="text-xs text-slate-500 font-medium">External Investment</p>
+            <p className="mt-2 text-xl font-bold text-blue-600">
+              KES {(poolHealth?.investments ?? 0).toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-4 shadow-sm">
+            <p className="text-xs text-slate-500 font-medium">Current Liquidity</p>
+            <p className="mt-2 text-xl font-bold text-green-600">
+              KES {(poolHealth?.liquidity ?? 0).toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* Summary Cards */}
       {summary && (
@@ -183,10 +279,10 @@ export function AdminFinancesPage() {
               </span>
             </div>
             <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">
-              KES {summary.totalRevenue.toLocaleString()}
+              KES {(summary.totalRevenue ?? 0).toLocaleString()}
             </p>
             <p className="text-xs text-blue-700 dark:text-blue-300 mt-1">
-              Before commissions & payouts
+              Gross marketplace flow
             </p>
           </div>
 
@@ -198,10 +294,10 @@ export function AdminFinancesPage() {
               </span>
             </div>
             <p className="text-3xl font-bold text-slate-900 dark:text-dark-text">
-              KES {summary.platformCommissions.toLocaleString()}
+              KES {(summary.platformCommissions ?? 0).toLocaleString()}
             </p>
             <p className="text-xs text-slate-600 dark:text-dark-textMuted mt-1">
-              Earned from all sales
+              Base marketplace fee earned
             </p>
           </div>
 
@@ -213,107 +309,14 @@ export function AdminFinancesPage() {
               </span>
             </div>
             <p className="text-3xl font-bold text-green-900 dark:text-green-100">
-              KES {summary.netPlatformEarnings.toLocaleString()}
+              KES {(summary.netPlatformEarnings ?? 0).toLocaleString()}
             </p>
             <p className="text-xs text-green-700 dark:text-green-300 mt-1">
-              Revenue - Vendor Payouts
+              (Gross - Vendor Share)
             </p>
-          </div>
-
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingDown className="h-5 w-5 text-yellow-600" />
-              <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
-                Vendor Payouts Pending
-              </span>
-            </div>
-            <p className="text-3xl font-bold text-yellow-600">
-              KES {summary.vendorPayoutsPending.toLocaleString()}
-            </p>
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted mt-1">
-              Awaiting delivery confirmation
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
-            <div className="flex items-center gap-2 mb-2">
-              <DollarSign className="h-5 w-5 text-slate-600" />
-              <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
-                Vendor Payouts Completed
-              </span>
-            </div>
-            <p className="text-3xl font-bold text-slate-900 dark:text-dark-text">
-              KES {summary.vendorPayoutsCompleted.toLocaleString()}
-            </p>
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted mt-1">
-              Already paid to vendors
-            </p>
-          </div>
-
-          <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm font-medium text-slate-700 dark:text-dark-text">
-                Payment Method Breakdown
-              </span>
-            </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-600 dark:text-dark-textMuted">M-Pesa</span>
-                <div className="text-right">
-                  <p className="font-semibold text-slate-900 dark:text-dark-text">
-                    KES {summary.breakdown.mpesa.amount.toLocaleString()}
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">
-                    {summary.breakdown.mpesa.count} transactions
-                  </p>
-                </div>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-slate-600 dark:text-dark-textMuted">Stripe</span>
-                <div className="text-right">
-                  <p className="font-semibold text-slate-900 dark:text-dark-text">
-                    KES {summary.breakdown.stripe.amount.toLocaleString()}
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-dark-textMuted">
-                    {summary.breakdown.stripe.count} transactions
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       )}
-
-      {/* Financial Flow Diagram */}
-      <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface p-6">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-dark-text mb-4">
-          Financial Flow
-        </h2>
-        <div className="flex items-center justify-between text-sm">
-          <div className="text-center">
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted mb-1">Total Revenue</p>
-            <p className="text-lg font-bold text-blue-600">
-              {summary ? `KES ${summary.totalRevenue.toLocaleString()}` : "-"}
-            </p>
-          </div>
-          <div className="text-2xl text-slate-400">→</div>
-          <div className="text-center">
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted mb-1">Vendor Earnings</p>
-            <p className="text-lg font-bold text-slate-900 dark:text-dark-text">
-              {summary
-                ? `KES ${(summary.vendorPayoutsPending + summary.vendorPayoutsCompleted).toLocaleString()}`
-                : "-"}
-            </p>
-          </div>
-          <div className="text-2xl text-slate-400">+</div>
-          <div className="text-center">
-            <p className="text-xs text-slate-600 dark:text-dark-textMuted mb-1">Platform Commission</p>
-            <p className="text-lg font-bold text-[#FF9900]">
-              {summary ? `KES ${summary.platformCommissions.toLocaleString()}` : "-"}
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Tabs */}
       <div className="border-b border-slate-200 dark:border-dark-border">
@@ -341,7 +344,6 @@ export function AdminFinancesPage() {
         </div>
       </div>
 
-      {/* Transactions Tab */}
       {activeTab === "transactions" && (
         <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
@@ -374,10 +376,10 @@ export function AdminFinancesPage() {
                         {transaction.vendorName}
                       </td>
                       <td className="px-4 py-3 font-semibold text-slate-900 dark:text-dark-text">
-                        KES {transaction.amount.toLocaleString()}
+                        KES {(transaction.amount ?? 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 font-semibold text-[#FF9900]">
-                        KES {transaction.commission.toLocaleString()}
+                        KES {(transaction.commission ?? 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3">
                         <Badge variant="outline" className="capitalize">
@@ -399,7 +401,6 @@ export function AdminFinancesPage() {
         </div>
       )}
 
-      {/* Payouts Tab */}
       {activeTab === "payouts" && (
         <div className="rounded-lg border border-slate-200 dark:border-dark-border bg-white dark:bg-dark-surface overflow-hidden">
           <div className="overflow-x-auto">
@@ -419,7 +420,7 @@ export function AdminFinancesPage() {
               <tbody className="divide-y divide-slate-200 dark:divide-dark-border">
                 {vendorPayouts.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-slate-500 dark:text-dark-textMuted">
+                    <td colSpan={8} className="px-4 py-8 text-center text-slate-500 dark:text-dark-textMuted">
                       No vendor payouts yet
                     </td>
                   </tr>
@@ -430,13 +431,13 @@ export function AdminFinancesPage() {
                         {payout.vendorName}
                       </td>
                       <td className="px-4 py-3 text-slate-900 dark:text-dark-text">
-                        KES {payout.amount.toLocaleString()}
+                        KES {(payout.amount ?? 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-red-600">
-                        -KES {payout.commission.toLocaleString()}
+                        -KES {(payout.commission ?? 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 font-semibold text-green-600">
-                        KES {payout.netAmount.toLocaleString()}
+                        KES {(payout.netAmount ?? 0).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-slate-900 dark:text-dark-text">
                         {payout.orderCount} orders
@@ -477,6 +478,60 @@ export function AdminFinancesPage() {
           </div>
         </div>
       )}
+
+      {/* Invest Modal */}
+      <Dialog open={isInvestModalOpen} onOpenChange={setIsInvestModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Invest Funds into GIT Protection Pool</DialogTitle>
+            <DialogDescription>
+              Add external liquidity to the risk pool to maintain health and ensure payout safety.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Investment Amount (KES)</label>
+              <Input 
+                type="number" 
+                placeholder="0.00" 
+                value={investAmount}
+                onChange={(e) => setInvestAmount(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Funding Source</label>
+              <select 
+                className="w-full flex h-10 border border-slate-200 px-3 py-2 text-sm rounded-md"
+                value={investSource}
+                onChange={(e) => setInvestSource(e.target.value)}
+              >
+                <option value="EXTERNAL">External Capital</option>
+                <option value="PLATFORM_PROFITS">Platform Profits</option>
+                <option value="RESERVE_FUND">Reserve Fund</option>
+              </select>
+            </div>
+
+            <div className="flex gap-2 p-3 bg-amber-50 rounded-lg text-xs text-amber-800">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <p>This action will immediately reflect in the pool's liquidity and is recorded in audit logs.</p>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsInvestModalOpen(false)}>Cancel</Button>
+            <Button 
+              onClick={handleInvest} 
+              disabled={isInvesting || !investAmount}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              {isInvesting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Complete Investment
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
     </BackofficeLayout>
   );

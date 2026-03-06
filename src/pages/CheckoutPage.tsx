@@ -5,7 +5,6 @@ import { useAuthStore } from "../stores/authStore";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { MpesaPayment } from "../components/payment/MpesaPayment";
-import { StripePayment } from "../components/payment/StripePayment";
 import { PaystackPayment } from "../components/payment/PaystackPayment";
 import { apiClient } from "../lib/apiClient";
 import { Loader2, ShoppingCart, MapPin, CreditCard } from "lucide-react";
@@ -33,7 +32,7 @@ export function CheckoutPage() {
   const { user } = useAuthStore();
 
   const [step, setStep] = useState<"address" | "payment">("address");
-  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "stripe" | "paystack" | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<"mpesa" | "paystack" | null>(null);
   const [orderGroup, setOrderGroup] = useState<OrderGroup | null>(null);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +77,7 @@ export function CheckoutPage() {
     }
   };
 
-  const handlePlaceOrder = async (selectedPaymentMethod: "mpesa" | "stripe" | "paystack") => {
+  const handlePlaceOrder = async (selectedPaymentMethod: "mpesa" | "paystack") => {
     try {
       setIsCreatingOrder(true);
       setError(null);
@@ -97,7 +96,6 @@ export function CheckoutPage() {
       setOrderGroup(response.orderGroup);
       
       // Redirect to payment status page immediately only for M-Pesa (C2B flow)
-      // For Stripe, we stay on the page to show the Card Element
       if (selectedPaymentMethod === "mpesa") {
         // Clear cart immediately for M-Pesa
         clearCart();
@@ -386,21 +384,6 @@ export function CheckoutPage() {
                       </button>
 
                       <button
-                        onClick={() => setPaymentMethod("stripe")}
-                        className={`rounded-lg border-2 p-4 text-left transition-all ${
-                          paymentMethod === "stripe"
-                            ? "border-blue-600 bg-blue-50 dark:bg-blue-900/20"
-                            : "border-slate-200 dark:border-dark-border hover:border-slate-300"
-                        }`}
-                      >
-                        <div className="mb-2 text-2xl">💳</div>
-                        <h3 className="font-semibold text-slate-900 dark:text-dark-text">Card Payment</h3>
-                        <p className="text-xs text-slate-600 dark:text-dark-textMuted">
-                          Visa, Mastercard, Amex
-                        </p>
-                      </button>
-
-                      <button
                         onClick={() => setPaymentMethod("paystack")}
                         className={`rounded-lg border-2 p-4 text-left transition-all ${
                           paymentMethod === "paystack"
@@ -460,17 +443,6 @@ export function CheckoutPage() {
                   </>
                 )}
 
-                {/* Stripe Payment Element (Shown after order creation) */}
-                {orderGroup && paymentMethod === "stripe" && (
-                  <div className="mt-8 pt-8 border-t border-slate-200 dark:border-dark-border">
-                    <StripePayment
-                      orderGroupId={orderGroup.id}
-                      amount={orderGroup.totalAmount}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                    />
-                  </div>
-                )}
 
                 {/* Mpesa Payment Element (Shown after order creation) */}
                 {orderGroup && paymentMethod === "mpesa" && (

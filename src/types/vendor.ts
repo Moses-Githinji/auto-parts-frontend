@@ -5,6 +5,32 @@ export type VendorStatus =
   | "SUSPENDED"
   | "DELETED";
 
+export type VendorBadge = "PLATINUM" | "GOLD" | "SILVER" | "CRITICAL";
+
+export interface UIConfig {
+  icon: string;
+  color: string;
+  bg: string;
+  label: string;
+  description: string;
+}
+
+export interface VendorHealth {
+  riskScore: number;
+  badge: VendorBadge;
+  payoutDays: number;
+  uiConfig: UIConfig;
+  progression?: {
+    percentComplete: number;
+    ordersNeeded: number;
+    nextBadge: VendorBadge;
+  };
+  riskAlert?: {
+    type: "WARNING" | "CRITICAL";
+    message: string;
+  } | null;
+}
+
 export interface Vendor {
   id: string;
   email: string;
@@ -24,6 +50,19 @@ export interface Vendor {
   updatedAt: string;
   deletedAt?: string;
   promotions?: VendorPromotion[];
+  accountNumber?: string;
+  bankCode?: string;
+  accountName?: string;
+  paystackRecipientCode?: string;
+  debtBalance?: number;
+  stats?: {
+    riskScore: number;
+    payoutDays: number;
+    badge: VendorBadge;
+    totalOrders90Days: number;
+    totalDisputes90Days: number;
+  };
+  uiConfig?: UIConfig;
 }
 
 export interface CommissionPromotion {
@@ -87,6 +126,7 @@ export interface VendorDashboardStats {
     pendingOrders: number;
     totalRevenue: number;
     unreadNotifications: number;
+    health?: VendorHealth;
   };
 }
 
@@ -108,6 +148,7 @@ export interface VendorEarnings {
   amount: number;
   commission: number;
   netAmount: number;
-  status: "PENDING" | "PAID";
+  status: "PENDING" | "PAID" | "WITHDRAWABLE" | "PROCESSING_PAYMENT" | "DISPUTED";
+  withdrawableAt?: string;
   createdAt: string;
 }

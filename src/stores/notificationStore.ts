@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { apiClient } from "../lib/apiClient";
+import type { VendorNotification } from "../types/vendor";
 
 export type NotificationType = "success" | "error" | "warning" | "info";
 
@@ -21,6 +23,9 @@ interface NotificationState {
   removeNotification: (id: string) => void;
   addToast: (toast: Omit<Notification, "id">) => string;
   removeToast: (id: string) => void;
+  vendorNotifications: VendorNotification[];
+  fetchVendorNotifications: () => Promise<void>;
+  markAsRead: (id: string) => Promise<void>;
   clearAll: () => void;
 }
 
@@ -67,6 +72,33 @@ export const useNotificationStore = create<NotificationState>((set) => ({
     set((state) => ({
       toasts: state.toasts.filter((t) => t.id !== id),
     }));
+  },
+
+  vendorNotifications: [],
+
+  fetchVendorNotifications: async () => {
+    try {
+      const response = await apiClient.get<VendorNotification[]>("/api/vendors/notifications");
+      set({ vendorNotifications: Array.isArray(response) ? response : [] });
+    } catch (error) {
+      console.error("Failed to fetch vendor notifications:", error);
+      set({ vendorNotifications: [] });
+    }
+  },
+
+  markAsRead: async (id) => {
+    try {
+      await apiClient.post(`/api/vendors/notifications/${id}/read`);
+      set((state) => ({
+        vendorNotifications: Array.isArray(state.vendorNotifications) 
+          ? state.vendorNotifications.map((n) =>
+              n.id === id ? { ...n, read: true } : n
+            )
+          : [],
+      }));
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
   },
 
   clearAll: () => {

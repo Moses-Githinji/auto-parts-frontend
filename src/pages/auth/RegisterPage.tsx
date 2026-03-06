@@ -7,6 +7,7 @@ import { usePromotionStore } from "../../stores/promotionStore";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, Tag } from "lucide-react";
+import { isValidInternationalPhone, formatToInternational } from "../../utils/validation";
 
 export function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ export function RegisterPage() {
     phone: "",
     referredByCode: "",
   });
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const { register, isLoading, error, clearError } = useAuthStore();
   const navigate = useNavigate();
 
@@ -38,6 +40,15 @@ export function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
+    setPhoneError(null);
+
+    // Validate phone if provided
+    if (formData.phone) {
+      if (!isValidInternationalPhone(formData.phone)) {
+        setPhoneError("Please enter a valid phone number (e.g., +254 712 345 678 or 07...)");
+        return;
+      }
+    }
 
     if (formData.password !== formData.confirmPassword) {
       // You might want to add this to the store or handle locally
@@ -50,7 +61,7 @@ export function RegisterPage() {
         password: formData.password,
         firstName: formData.firstName,
         lastName: formData.lastName,
-        phone: formData.phone || undefined,
+        phone: formData.phone ? formatToInternational(formData.phone) : undefined,
         referredByCode: formData.referredByCode || undefined,
       });
       navigate("/email-verification", {
@@ -234,6 +245,12 @@ export function RegisterPage() {
 
           {error && (
             <div className="text-red-600 text-sm text-center">{error}</div>
+          )}
+
+          {phoneError && (
+            <div className="text-red-600 text-sm text-center font-medium animate-pulse">
+              {phoneError}
+            </div>
           )}
 
           <div>

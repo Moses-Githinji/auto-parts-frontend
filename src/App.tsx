@@ -15,6 +15,7 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { AccountPage } from "./pages/account/AccountPage";
 import { VendorDashboardPage } from "./pages/vendor/VendorDashboardPage";
 import { VendorOrdersPage } from "./pages/vendor/VendorOrdersPage";
+import { VendorReferralsPage } from "./pages/vendor/VendorReferralsPage";
 import { VendorCatalogPage } from "./pages/vendor/VendorCatalogPage";
 import { VendorAnalyticsPage } from "./pages/vendor/VendorAnalyticsPage";
 import { VendorSettingsPage } from "./pages/vendor/VendorSettingsPage";
@@ -49,6 +50,8 @@ import { AdminPromotionsPage } from "./pages/admin/AdminPromotionsPage";
 import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
 import { VendorSuggestionsPage } from "./pages/vendor/VendorSuggestionsPage";
 import { AdminSuggestionsPage } from "./pages/admin/AdminSuggestionsPage";
+import { AdminAuditLogsPage } from "./pages/admin/AdminAuditLogsPage";
+import { AdminStaffPage } from "./pages/admin/AdminStaffPage";
 
 const queryClient = new QueryClient();
 
@@ -85,6 +88,7 @@ const router = createBrowserRouter([
       { path: "vendor/catalog", element: <VendorCatalogPage /> },
       { path: "vendor/analytics", element: <VendorAnalyticsPage /> },
       { path: "vendor/earnings", element: <VendorEarningsPage /> },
+      { path: "vendor/referrals", element: <VendorReferralsPage /> },
       { path: "vendor/settings", element: <VendorSettingsPage /> },
       { path: "vendor/suggestions", element: <VendorSuggestionsPage /> },
       // Admin routes
@@ -96,10 +100,12 @@ const router = createBrowserRouter([
       { path: "admin/earnings", element: <AdminEarningsPage /> },
       { path: "admin/commissions", element: <AdminCommissionsPage /> },
       { path: "admin/finances", element: <AdminFinancesPage /> },
+      { path: "admin/finances/audit", element: <AdminAuditLogsPage /> },
       { path: "admin/promotions", element: <AdminPromotionsPage /> },
       { path: "admin/delivery-reports", element: <AdminDeliveryReportsPage /> },
       { path: "admin/blogs", element: <AdminBlogsPage /> },
       { path: "admin/suggestions", element: <AdminSuggestionsPage /> },
+      { path: "admin/staff", element: <AdminStaffPage /> },
       // Commission Settings route
       {
         path: "admin/commission-config",

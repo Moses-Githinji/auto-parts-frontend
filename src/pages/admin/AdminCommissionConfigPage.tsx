@@ -96,11 +96,12 @@ export function AdminCommissionConfigPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [addForm, setAddForm] = useState<CreateCommissionConfigRequest>({
     name: "",
-    slug: "",
+    categorySlug: "",
     commissionRate: 10,
     minFee: 50,
     maxFee: 15000,
     ruleType: "STANDARD",
+    isActive: true,
   });
   const [addFormErrors, setAddFormErrors] = useState<Record<string, string>>(
     {}
@@ -117,11 +118,11 @@ export function AdminCommissionConfigPage() {
     if (!addForm.name.trim()) {
       errors.name = "Name is required";
     }
-    if (!addForm.slug.trim()) {
-      errors.slug = "Slug is required";
-    } else if (!/^[a-z0-9-]+$/.test(addForm.slug)) {
-      errors.slug =
-        "Slug must contain only lowercase letters, numbers, and hyphens";
+    if (!addForm.categorySlug.trim()) {
+      errors.categorySlug = "Category slug is required";
+    } else if (!/^[a-z0-9-]+$/.test(addForm.categorySlug)) {
+      errors.categorySlug =
+        "Category slug must contain only lowercase letters, numbers, and hyphens";
     }
     if (
       addForm.commissionRate !== undefined &&
@@ -158,11 +159,12 @@ export function AdminCommissionConfigPage() {
       setShowAddModal(false);
       setAddForm({
         name: "",
-        slug: "",
+        categorySlug: "",
         commissionRate: 10,
         minFee: 50,
         maxFee: 15000,
         ruleType: "STANDARD",
+        isActive: true,
       });
       setSuccessMessage("Commission config created successfully!");
       setTimeout(() => setSuccessMessage(null), 3000);
@@ -228,7 +230,7 @@ export function AdminCommissionConfigPage() {
     setAddForm((prev) => ({
       ...prev,
       name: value,
-      slug: value
+      categorySlug: value
         .toLowerCase()
         .replace(/[^a-z0-9\s-]/g, "")
         .replace(/\s+/g, "-")
@@ -266,7 +268,7 @@ export function AdminCommissionConfigPage() {
           <div className="flex gap-2">
             <button
               onClick={() => setShowLegend(!showLegend)}
-              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-3 py-1.5 text-xs text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
+              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-3 py-1.5 text-xs text-slate-700 hover:bg-[#f3f3f3]"
             >
               {showLegend ? "Hide Rules" : "Show Rules"}
             </button>
@@ -500,7 +502,7 @@ export function AdminCommissionConfigPage() {
                             </button>
                             <button
                               onClick={handleCancel}
-                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-2 py-0.5 text-[10px] text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
+                              className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-2 py-0.5 text-[10px] text-slate-700 hover:bg-[#f3f3f3]"
                             >
                               Cancel
                             </button>
@@ -571,16 +573,16 @@ export function AdminCommissionConfigPage() {
                   </label>
                   <input
                     type="text"
-                    value={addForm.slug}
+                    value={addForm.categorySlug}
                     onChange={(e) =>
-                      setAddForm((prev) => ({ ...prev, slug: e.target.value }))
+                      setAddForm((prev) => ({ ...prev, categorySlug: e.target.value }))
                     }
                     className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-2 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                     placeholder="e.g., oil-filters"
                   />
-                  {addFormErrors.slug && (
+                  {addFormErrors.categorySlug && (
                     <p className="mt-1 text-xs text-red-600">
-                      {addFormErrors.slug}
+                      {addFormErrors.categorySlug}
                     </p>
                   )}
                 </div>
@@ -686,7 +688,7 @@ export function AdminCommissionConfigPage() {
                   <button
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3] dark:bg-dark-base"
+                    className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-base px-4 py-2 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
                   >
                     Cancel
                   </button>

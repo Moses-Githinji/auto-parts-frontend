@@ -1,11 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BackofficeLayout } from "../../layout/BackofficeLayout";
 import { Alert } from "../../components/ui/Alert";
 import type { NotificationType } from "../../stores/notificationStore";
 import { useAuthStore } from "../../stores/authStore";
+import { isValidInternationalPhone, formatToInternational } from "../../utils/validation";
+import { Loader2, ShieldCheck, Activity, Award, Calendar, AlertCircle } from "lucide-react";
+import { useVendorStore } from "../../stores/vendorStore";
+import { VendorHealthBadge } from "../../components/vendor/VendorHealthBadge";
+
+const COMMON_BANKS = [
+  { code: "011", name: "First Bank of Nigeria" },
+  { code: "058", name: "Guaranty Trust Bank" },
+  { code: "044", name: "Access Bank" },
+  { code: "033", name: "United Bank For Africa" },
+  { code: "057", name: "Zenith Bank" },
+  { code: "mpesa", name: "M-Pesa (Kenya)" },
+  { code: "equity", name: "Equity Bank (Kenya)" },
+  { code: "kcb", name: "KCB Bank (Kenya)" },
+];
 
 export function VendorSettingsPage() {
-  const { user } = useAuthStore();
+  const { user, updateProfile, isLoading: authLoading } = useAuthStore();
+  const { profile: vendorProfile, fetchVendorProfile, isLoading: vendorLoading } = useVendorStore();
+  
   const vendorNavItems = [
     { label: "Dashboard", to: "/vendor" },
     { label: "Orders", to: "/vendor/orders" },
@@ -14,10 +31,17 @@ export function VendorSettingsPage() {
     { label: "Settings", to: "/vendor/settings" },
   ];
 
-  const [shopName, setShopName] = useState("AutoCare Plus");
-  const [email, setEmail] = useState("contact@autocareplus.com");
-  const [phone, setPhone] = useState("+254 712 345 678");
-  const [address, setAddress] = useState("Nairobi, Kenya");
+  // Form states
+  const [shopName, setShopName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  
+  // Bank states
+  const [accountNumber, setAccountNumber] = useState("");
+  const [bankCode, setBankCode] = useState("");
+  const [accountName, setAccountName] = useState("");
+
   const [notifications, setNotifications] = useState({
     emailOrders: true,
     emailDisputes: true,
@@ -30,21 +54,185 @@ export function VendorSettingsPage() {
     title: string;
   } | null>(null);
 
-  const handleSave = () => {
-    setAlert({ type: "success", title: "Settings saved successfully!" });
+  // Initialize from user
+  useEffect(() => {
+    if (user) {
+      const v = user as any;
+      setShopName(v.companyName || "");
+      setEmail(v.email || "");
+      setPhone(v.phone || "");
+      setAddress(v.address || "");
+      
+      setAccountNumber(v.accountNumber || "");
+      setBankCode(v.bankCode || "");
+      setAccountName(v.accountName || "");
+      
+      // Fetch latest vendor profile with health stats
+      fetchVendorProfile();
+    }
+  }, [user, fetchVendorProfile]);
+
+  const handleSave = async () => {
+    setAlert(null);
+
+    if (phone && !isValidInternationalPhone(phone)) {
+      setAlert({ 
+        type: "error", 
+        title: "Invalid phone number. Please use international format (e.g., +254 7...)" 
+      });
+      return;
+    }
+
+    try {
+      const formattedPhone = phone ? formatToInternational(phone) : phone;
+      if (formattedPhone) setPhone(formattedPhone);
+
+      await updateProfile({
+        companyName: shopName,
+        phone: formattedPhone,
+        address,
+        accountNumber,
+        bankCode,
+        accountName,
+      });
+
+      setAlert({ type: "success", title: "Settings saved successfully!" });
+    } catch (err: any) {
+      setAlert({ 
+        type: "error", 
+        title: err.message || "Failed to save settings" 
+      });
+    }
   };
 
   return (
     <BackofficeLayout title="Vendor Portal" navItems={vendorNavItems}>
       <div className="p-6">
-        <div className="mb-6">
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Settings</h1>
-          <p className="text-sm text-slate-600 dark:text-dark-textMuted">
-            Manage your store settings and preferences.
-          </p>
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-dark-text">Settings</h1>
+            <p className="text-sm text-slate-600 dark:text-dark-textMuted">
+              Manage your store settings and banking preferences.
+            </p>
+          </div>
+          <button
+            onClick={handleSave}
+            disabled={authLoading}
+            className="flex items-center gap-2 rounded-sm bg-[#2b579a] px-6 py-2 text-xs font-medium text-white hover:bg-[#1e3f7a] disabled:opacity-50"
+          >
+            {authLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+            Save All Changes
+          </button>
         </div>
 
+        {/* Health Summary Banner */}
+        {vendorProfile?.uiConfig && (
+          <div 
+            style={{ backgroundColor: vendorProfile.uiConfig.bg + '30', borderColor: vendorProfile.uiConfig.color + '20' }}
+            className="mb-6 flex items-center justify-between rounded-xl border p-4 shadow-sm"
+          >
+            <div className="flex items-center gap-4">
+              <div 
+                style={{ backgroundColor: vendorProfile.uiConfig.bg, color: vendorProfile.uiConfig.color }}
+                className="flex h-12 w-12 items-center justify-center rounded-full text-2xl shadow-sm"
+              >
+                {vendorProfile.uiConfig.icon}
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-dark-text">
+                    {vendorProfile.uiConfig.label}
+                  </h2>
+                  <VendorHealthBadge uiConfig={vendorProfile.uiConfig} showIcon={false} />
+                </div>
+                <p className="text-sm text-slate-600 dark:text-dark-textMuted">
+                  {vendorProfile.uiConfig.description}
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">Risk Score (90d)</p>
+              <p className="text-xl font-bold text-slate-900 dark:text-dark-text">
+                {((vendorProfile.stats?.riskScore || 0) * 100).toFixed(2)}%
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Success/Error Alert */}
+        {alert && (
+          <Alert
+            type={alert.type}
+            title={alert.title}
+            onDismiss={() => setAlert(null)}
+            className="mb-6"
+          />
+        )}
+
         <div className="grid gap-6 md:grid-cols-2">
+          {/* Vendor Health & Performance */}
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm col-span-full">
+            <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text flex items-center gap-2">
+              <Activity className="h-4 w-4 text-blue-600" />
+              Vendor Health & Performance Details
+            </h2>
+            
+            {vendorLoading ? (
+              <div className="flex py-8 items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
+              </div>
+            ) : (
+              <div className="grid gap-6 md:grid-cols-4">
+                <div className="space-y-1">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                    <Award className="h-3 w-3" /> Current Badge
+                  </p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-dark-text">
+                    {vendorProfile?.stats?.badge || "N/A"}
+                  </p>
+                  <p className="text-[10px] text-slate-500">Tiered based on reliability</p>
+                </div>
+                
+                <div className="space-y-1">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> Payout Hold
+                  </p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-dark-text">
+                    {vendorProfile?.stats?.payoutDays === 0 ? "Instant" : `${vendorProfile?.stats?.payoutDays} Days`}
+                  </p>
+                  <p className="text-[10px] text-slate-500">Security hold period</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                    <Activity className="h-3 w-3" /> 90-Day Orders
+                  </p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-dark-text">
+                    {vendorProfile?.stats?.totalOrders90Days || 0}
+                  </p>
+                  <p className="text-[10px] text-slate-500">Successful deliveries</p>
+                </div>
+
+                <div className="space-y-1">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                    <AlertCircle className="h-3 w-3 text-red-500" /> 90-Day Disputes
+                  </p>
+                  <p className="text-sm font-bold text-red-600">
+                    {vendorProfile?.stats?.totalDisputes90Days || 0}
+                  </p>
+                  <p className="text-[10px] text-slate-500">Claims raised by customers</p>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-6 border-t border-slate-100 dark:border-dark-border pt-4">
+              <h3 className="text-xs font-semibold text-slate-800 dark:text-dark-text mb-2">How it works</h3>
+              <p className="text-[11px] text-slate-600 dark:text-dark-textMuted leading-relaxed">
+                Your **Risk Score** is the ratio of disputes to delivered orders. Lowering your score unlocks higher tiers like **Platinum Pro**, which provides instant payouts. Ratings are updated every midnight.
+              </p>
+            </div>
+          </div>
+
           {/* Shop Information */}
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
@@ -64,13 +252,13 @@ export function VendorSettingsPage() {
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
-                  Email
+                  Email (Contact)
                 </label>
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                  readOnly
+                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-slate-50 dark:bg-dark-base px-3 py-1.5 text-xs text-slate-500 outline-none"
                 />
               </div>
               <div>
@@ -92,6 +280,65 @@ export function VendorSettingsPage() {
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Bank Account Settings */}
+          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-dark-text">
+                Bank Account Settings
+              </h2>
+              {(user as any)?.paystackRecipientCode && (
+                <div className="flex items-center gap-1 text-[10px] font-medium text-green-600">
+                  <ShieldCheck className="h-3 w-3" />
+                  Verified Recipient
+                </div>
+              )}
+            </div>
+            <p className="mb-4 text-[11px] text-slate-500 dark:text-dark-textMuted leading-relaxed">
+              Required for automated payouts. Funds are settled daily after the 14-day mandatory cooling-off period.
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                  Bank Name
+                </label>
+                <select
+                  value={bankCode}
+                  onChange={(e) => setBankCode(e.target.value)}
+                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none bg-white dark:bg-dark-surface"
+                >
+                  <option value="">Select a bank</option>
+                  {COMMON_BANKS.map(bank => (
+                    <option key={bank.code} value={bank.code}>{bank.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                  Account Number
+                </label>
+                <input
+                  type="text"
+                  value={accountNumber}
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                  placeholder="Enter 10-digit account number"
+                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
+                  Account Name
+                </label>
+                <input
+                  type="text"
+                  value={accountName}
+                  onChange={(e) => setAccountName(e.target.value)}
+                  placeholder="Enter name as it appears on bank statement"
                   className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
                 />
               </div>
@@ -155,48 +402,6 @@ export function VendorSettingsPage() {
             </div>
           </div>
 
-          {/* Security */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
-              Security
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter current password"
-                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Enter new password"
-                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
-                  Confirm New Password
-                </label>
-                <input
-                  type="password"
-                  placeholder="Confirm new password"
-                  className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border px-3 py-1.5 text-xs focus:border-[#2b579a] dark:focus:border-dark-primary focus:outline-none"
-                />
-              </div>
-              <button className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]">
-                Change Password
-              </button>
-            </div>
-          </div>
-
           {/* Account Status */}
           <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
             <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
@@ -218,74 +423,18 @@ export function VendorSettingsPage() {
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-600 dark:text-dark-textMuted">Member Since</span>
                 <span className="text-xs font-medium text-slate-900 dark:text-dark-text">
-                  Dec 10, 2023
+                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-600 dark:text-dark-textMuted">Last Active</span>
-                <span className="text-xs font-medium text-slate-900 dark:text-dark-text">
-                  Today, 10:30 AM
+                <span className="text-xs text-slate-600 dark:text-dark-textMuted">Debt Balance</span>
+                <span className={`text-xs font-semibold ${((user as any)?.debtBalance > 0) ? "text-red-600" : "text-green-600"}`}>
+                  KES {((user as any)?.debtBalance || 0).toLocaleString()}
                 </span>
               </div>
             </div>
           </div>
-
-          {/* Referrals */}
-          <div className="rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface p-6 shadow-sm">
-            <h2 className="mb-4 text-sm font-semibold text-slate-900 dark:text-dark-text">
-              Vendor Referral Program
-            </h2>
-            <div className="space-y-4">
-              <p className="text-xs leading-relaxed text-slate-600 dark:text-dark-textMuted">
-                Invite other vendors to the platform and earn a percentage commission on their successful sales. Share your unique referral code below.
-              </p>
-              <div>
-                <label className="mb-1 block text-xs font-medium text-slate-700 dark:text-dark-text">
-                  Your Referral Code
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    readOnly
-                    value={(user as any)?.referralCode || "Generating..."}
-                    className="w-full rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-slate-50 dark:bg-dark-bg px-3 py-1.5 text-xs font-mono text-slate-700 dark:text-dark-text focus:outline-none"
-                  />
-                  <button
-                    onClick={() => {
-                      if ((user as any)?.referralCode) {
-                        navigator.clipboard.writeText((user as any).referralCode);
-                        setAlert({ type: "success", title: "Referral code copied!" });
-                      }
-                    }}
-                    className="shrink-0 rounded-sm border border-[#c8c8c8] dark:border-dark-border bg-white dark:bg-dark-surface px-4 py-1.5 text-xs font-medium text-slate-700 hover:bg-[#f3f3f3]"
-                  >
-                    Copy
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-        {/* Save Button */}
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={handleSave}
-            className="rounded-sm bg-[#2b579a] px-6 py-2 text-xs font-medium text-white hover:bg-[#1e3f7a]"
-          >
-            Save Changes
-          </button>
-        </div>
-
-        {/* Success Alert */}
-        {alert && (
-          <Alert
-            type={alert.type}
-            title={alert.title}
-            onDismiss={() => setAlert(null)}
-            className="mt-4"
-          />
-        )}
       </div>
     </BackofficeLayout>
   );

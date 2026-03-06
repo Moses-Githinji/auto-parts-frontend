@@ -84,6 +84,12 @@ export function AppShell({ children }: AppShellProps) {
   const isAdminContext = pathname.startsWith("/admin");
   const isDeliveryContext = pathname.startsWith("/delivery");
 
+  const { initializeAuth } = useAuthStore();
+
+  useEffect(() => {
+    initializeAuth();
+  }, [initializeAuth]);
+
   if (isVendorContext || isAdminContext || isDeliveryContext) {
     return <BackofficeShell>{children}</BackofficeShell>;
   }
@@ -95,17 +101,13 @@ function StorefrontShell({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const itemCount = useCartStore((s) => s.itemCount());
-  const { isAuthenticated, user, fetchProfile, initializeAuth } =
-    useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const [showDepartments, setShowDepartments] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    initializeAuth();
-    fetchProfile();
-  }, [initializeAuth, fetchProfile]);
+  // initializeAuth and fetchProfile are handled in the parent AppShell
 
   // Mock user location (would come from geolocation in real app)
   const userLocation = "Westlands, Nairobi";

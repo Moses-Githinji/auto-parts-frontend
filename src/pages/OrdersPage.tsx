@@ -1,13 +1,23 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
 import { useOrderStore } from "../stores/orderStore";
-import type { OrderItem, OrderStatus } from "../types/order";
+import type { Order, OrderItem, OrderStatus } from "../types/order";
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogFooter,
+  DialogDescription 
+} from "../components/ui/dialog";
+import { Textarea } from "../components/ui/textarea";
+import { AlertCircle, Loader2, ShieldAlert } from "lucide-react";
 
 function groupItemsByVendor(items: OrderItem[]) {
   const map = new Map<string, OrderItem[]>();
   for (const item of items) {
-    // FIX: Access vendorId from the nested product object if available
     const vid =
       (item as any).product?.vendorId ||
       (item as any).product?.vendor?.id ||
@@ -28,7 +38,6 @@ function getStatusVariant(
       return "warning";
     case "CONFIRMED":
     case "PROCESSING":
-      return "default";
     case "SHIPPED":
       return "default";
     case "DELIVERED":
@@ -41,31 +50,54 @@ function getStatusVariant(
 }
 
 export function OrdersPage() {
-  const { orders, isLoading, error, fetchOrders, clearError } = useOrderStore();
+  const { orders, isLoading, error, fetchOrders, raiseDispute, clearError } = useOrderStore();
+  
+  // Dispute Modal State
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [disputeReason, setDisputeReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [disputeSuccess, setDisputeSuccess] = useState(false);
 
   useEffect(() => {
     clearError();
     fetchOrders();
   }, [fetchOrders, clearError]);
 
-  if (isLoading) {
+  const handleRaiseDispute = async () => {
+    if (!selectedOrder || !disputeReason) return;
+    
+    setIsSubmitting(true);
+    try {
+      await raiseDispute(selectedOrder.id, disputeReason, selectedOrder.total);
+      setDisputeSuccess(true);
+      setTimeout(() => {
+        setSelectedOrder(null);
+        setDisputeReason("");
+        setDisputeSuccess(false);
+        fetchOrders();
+      }, 2000);
+    } catch (err) {
+      // Error handled by store
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (isLoading && orders.length === 0) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FF9900] border-t-transparent"></div>
+        <Loader2 className="h-8 w-8 animate-spin text-[#FF9900]" />
       </div>
     );
   }
 
-  if (error) {
+  if (error && orders.length === 0) {
     return (
       <div className="space-y-4 text-center py-16">
         <p className="text-red-600">Error: {error}</p>
-        <button
-          onClick={() => fetchOrders()}
-          className="text-blue-600 hover:underline"
-        >
+        <Button onClick={() => fetchOrders()} variant="outline">
           Try again
-        </button>
+        </Button>
       </div>
     );
   }
@@ -90,10 +122,6 @@ export function OrdersPage() {
 
       {orders.map((order, index) => {
         if (!order) return null;
-        // Debug logging for troubleshooting data issues
-        if (index === 0) {
-          console.log("Debug Order Data:", JSON.stringify(order, null, 2));
-        }
 
         const vendorEntries = Array.from(
           groupItemsByVendor(order.items || []).entries()
@@ -114,37 +142,44 @@ export function OrdersPage() {
                   {order.paymentMethod || "N/A"}
                 </p>
               </div>
-              <Badge variant={getStatusVariant(order.status)}>
-                {order.status}
-              </Badge>
+              <div className="flex items-center gap-2">
+                {order.status === "DELIVERED" && (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-7 text-[10px] text-red-600 hover:text-red-700 hover:bg-red-50 gap-1 border border-red-100"
+                    onClick={() => setSelectedOrder(order)}
+                  >
+                    <ShieldAlert className="h-3 w-3" />
+                    Raise Dispute
+                  </Button>
+                )}
+                <Badge variant={getStatusVariant(order.status)}>
+                  {order.status}
+                </Badge>
+              </div>
             </header>
 
             <div className="space-y-2">
               <h3 className="text-xs font-semibold text-slate-900 dark:text-dark-text">
                 Shipping Address
               </h3>
-              <p className="text-xs text-slate-600 dark:text-dark-textMuted">
-                {order.shippingAddress.firstName}{" "}
-                {order.shippingAddress.lastName}
-                <br />
-                {order.shippingAddress.phone}
-                <br />
-                {order.shippingAddress.email}
-                <br />
-                {order.shippingAddress.city}, {order.shippingAddress.state}
+              <p className="text-xs text-slate-600 dark:text-dark-textMuted whitespace-pre-line">
+                {order.shippingAddress.firstName} {order.shippingAddress.lastName}
+                {"\n"}{order.shippingAddress.phone}
+                {"\n"}{order.shippingAddress.email}
+                {"\n"}{order.shippingAddress.city}, {order.shippingAddress.state}
               </p>
             </div>
 
             {vendorEntries.length > 0 ? (
               vendorEntries.map(([vendorId, vendorItems]) => {
-                // FIX: Access Vendor Name from the product relation
                 const firstItem = vendorItems[0] as any;
                 const vendorName =
                   firstItem.product?.vendor?.companyName ??
                   firstItem.vendorName ??
                   "Vendor";
 
-                // FIX: Use 'price' instead of 'unitPrice' if available
                 const vendorSubtotal = vendorItems.reduce(
                   (sum, i: any) =>
                     sum +
@@ -169,7 +204,6 @@ export function OrdersPage() {
                           className="flex items-center justify-between py-2"
                         >
                           <div>
-                            {/* FIX: Access name and partNumber from 'product' */}
                             <p className="font-semibold text-slate-900 dark:text-dark-text">
                               {item.product?.name || "Unknown Product"} –{" "}
                               {item.product?.partNumber || "N/A"}
@@ -256,6 +290,70 @@ export function OrdersPage() {
           Continue shopping
         </Link>
       </div>
+
+      {/* Raise Dispute Dialog */}
+      <Dialog open={!!selectedOrder} onOpenChange={() => !isSubmitting && setSelectedOrder(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Raise a Dispute</DialogTitle>
+            <DialogDescription>
+              Are you unhappy with your order #{selectedOrder?.orderNumber}? 
+              Please describe the issue in detail.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            {disputeSuccess ? (
+              <div className="flex flex-col items-center justify-center py-6 text-center space-y-2">
+                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-2">
+                  <ShieldAlert className="h-6 w-6" />
+                </div>
+                <h3 className="font-bold text-slate-900">Dispute Submitted</h3>
+                <p className="text-sm text-slate-600">Our team will review your claim and get back to you within 24-48 hours.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-start gap-3 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <p>
+                    <strong>GIT Protection:</strong> Your funds are currently held in escrow. 
+                    Raising a dispute will freeze the payout to the vendor until resolved.
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="reason" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Reason for Dispute
+                  </label>
+                  <Textarea
+                    id="reason"
+                    placeholder="e.g. Received wrong part/damaged item..."
+                    className="min-h-[120px] text-sm"
+                    value={disputeReason}
+                    onChange={(e) => setDisputeReason(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+
+          {!disputeSuccess && (
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setSelectedOrder(null)} disabled={isSubmitting}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleRaiseDispute} 
+                disabled={!disputeReason || isSubmitting}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Submit Claim
+              </Button>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

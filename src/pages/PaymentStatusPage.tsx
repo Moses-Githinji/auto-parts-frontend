@@ -107,7 +107,7 @@ export function PaymentStatusPage() {
               <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/10 border border-amber-100 dark:border-amber-900/20 rounded-lg text-left">
                 <p className="font-semibold text-amber-900 dark:text-amber-200 mb-1">Order received!</p>
                 <p className="text-sm text-amber-800 dark:text-amber-300/90 leading-relaxed font-medium">
-                  We've sent an 'Awaiting Payment' email with your order details. Please complete the {paymentStatus.provider === "mpesa" ? "M-Pesa" : "Stripe"} payment below to finalize your purchase.
+                  We've sent an 'Awaiting Payment' email with your order details. Please complete the M-Pesa payment below to finalize your purchase.
                 </p>
               </div>
 
@@ -167,7 +167,7 @@ export function PaymentStatusPage() {
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-dark-textMuted">Payment Method</span>
                 <span className="font-medium text-slate-900 dark:text-dark-text capitalize">
-                  {paymentStatus.provider === "mpesa" ? "M-Pesa" : "Card"}
+                  {paymentStatus.provider === "mpesa" ? "M-Pesa" : "Other"}
                 </span>
               </div>
             </div>

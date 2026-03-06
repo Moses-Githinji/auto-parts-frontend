@@ -52,6 +52,11 @@ interface OrderState {
       endDate?: string;
     }
   ) => Promise<OrderAnalytics>;
+  raiseDispute: (
+    orderId: string,
+    reason: string,
+    amount?: number
+  ) => Promise<void>;
   clearError: () => void;
 }
 
@@ -298,6 +303,23 @@ export const useOrderStore = create<OrderState>()(
           set({
             error:
               error instanceof Error ? error.message : "Failed to delete order",
+            isLoading: false,
+          });
+          throw error;
+        }
+      },
+
+      raiseDispute: async (orderId, reason, amount) => {
+        set({ isLoading: true, error: null });
+        try {
+          await apiClient.post(`/api/orders/${orderId}/dispute`, {
+            reason,
+            amount,
+          });
+          set({ isLoading: false });
+        } catch (error: any) {
+          set({
+            error: error.response?.data?.error || "Failed to raise dispute",
             isLoading: false,
           });
           throw error;

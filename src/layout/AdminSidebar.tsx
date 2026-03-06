@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "../lib/cn";
 import { useAuthStore } from "../stores/authStore";
+import { usePermissions, type PermissionKey } from "../hooks/usePermissions";
 
 export interface MenuItem {
   title: string;
   path?: string;
   icon?: React.ReactNode;
   children?: MenuItem[];
+  permission?: PermissionKey;
 }
 
 interface AdminSidebarProps {
@@ -127,11 +129,23 @@ const SidebarItem = ({
 export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const { hasPermission } = usePermissions();
 
   const handleLogout = async () => {
     await logout();
     navigate("/login");
   };
+
+  const filterItems = (items: MenuItem[]): MenuItem[] => {
+    return items
+      .filter((item) => !item.permission || hasPermission(item.permission))
+      .map((item) => ({
+        ...item,
+        children: item.children ? filterItems(item.children) : undefined,
+      }));
+  };
+
+  const filteredMenuItems = filterItems(menuItems || []);
 
   return (
     <div className="flex h-full flex-col bg-[#f3f3f3] dark:bg-dark-base">
@@ -173,7 +187,7 @@ export function AdminSidebar({ title, menuItems }: AdminSidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-2">
         <div className="flex flex-col gap-0.5">
-          {(menuItems || []).map((item) => (
+          {filteredMenuItems.map((item) => (
             <SidebarItem key={item.path || item.title} item={item} />
           ))}
         </div>
