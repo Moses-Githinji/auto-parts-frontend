@@ -420,6 +420,10 @@ export function AccountOrders() {
                         <span className="text-slate-400">Shipping</span>
                         <span>KSh {selectedOrder.shipping.toLocaleString()}</span>
                       </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-400">VAT (16%)</span>
+                        <span>KSh {selectedOrder.tax.toLocaleString()}</span>
+                      </div>
                       <div className="flex justify-between text-base font-bold text-[#FF9900] pt-2 border-t border-slate-700">
                         <span>Total (KES)</span>
                         <span>KSh {selectedOrder.total.toLocaleString()}</span>

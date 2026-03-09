@@ -283,7 +283,7 @@ export function OrderDetailsDrawer({
                       colSpan={3}
                       className="px-4 py-2 text-right text-sm text-slate-600 dark:text-dark-textMuted"
                     >
-                      Tax
+                      VAT (16%)
                     </td>
                     <td className="px-4 py-2 text-right text-sm font-medium text-slate-900 dark:text-dark-text">
                       KSh {Number(order.tax).toLocaleString()}

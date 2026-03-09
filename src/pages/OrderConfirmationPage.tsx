@@ -189,8 +189,26 @@ export function OrderConfirmationPage() {
           ))}
         </div>
 
-        <div className="border-t border-slate-200 dark:border-dark-border pt-3">
-          <div className="flex justify-between">
+        <div className="border-t border-slate-200 dark:border-dark-border pt-3 space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-600 dark:text-dark-textMuted">Subtotal</span>
+            <span className="font-medium text-slate-900 dark:text-dark-text">
+              KES {(order as any).subtotal?.toLocaleString() || "0"}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-600 dark:text-dark-textMuted">Shipping</span>
+            <span className="font-medium text-slate-900 dark:text-dark-text">
+              KES {(order as any).shipping?.toLocaleString() || "0"}
+            </span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-slate-600 dark:text-dark-textMuted">VAT (16%)</span>
+            <span className="font-medium text-slate-900 dark:text-dark-text">
+              KES {(order as any).tax?.toLocaleString() || "0"}
+            </span>
+          </div>
+          <div className="flex justify-between pt-2 border-t border-slate-100">
             <span className="font-semibold text-slate-900 dark:text-dark-text">Total</span>
             <span className="font-bold text-[#FF9900]">
               KES {order.totalAmount.toLocaleString()}

@@ -37,6 +37,8 @@ export function CheckoutPage() {
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [outOfStockItems, setOutOfStockItems] = useState<{ name: string; available: number; requested: number }[]>([]);
+  const [shippingQuote, setShippingQuote] = useState<{ fee: number; estimatedMinutes: number } | null>(null);
+  const [isCalculatingShipping, setIsCalculatingShipping] = useState(false);
 
   const [shippingAddress, setShippingAddress] = useState<Address>({
     street: "",
@@ -70,6 +72,44 @@ export function CheckoutPage() {
       navigate("/login?redirect=/checkout");
     }
   }, [user, navigate]);
+
+  useEffect(() => {
+    if (isAddressValid(shippingAddress) && items.length > 0) {
+      fetchShippingQuote();
+    }
+  }, [shippingAddress, items.length]);
+
+  const fetchShippingQuote = async () => {
+    try {
+      setIsCalculatingShipping(true);
+      setError(null);
+      const response = await apiClient.post<{ fee: number; estimatedMinutes: number }>("/api/shipping/calculate", {
+        items: items.map(item => ({
+          productId: item.productId,
+          quantity: item.quantity
+        })),
+        address: shippingAddress
+      });
+      setShippingQuote(response);
+    } catch (err: any) {
+      console.error("Failed to calculate shipping:", err);
+      // Fallback to 0 if calculation fails, but keep error visible
+      setShippingQuote({ fee: 0, estimatedMinutes: 0 });
+      setError("Unable to calculate shipping for this address. Please try again or contact support.");
+    } finally {
+      setIsCalculatingShipping(false);
+    }
+  };
+
+  const calculateTotals = () => {
+    const subtotal = total;
+    const shipping = shippingQuote?.fee || 0;
+    const vat = Math.ceil((subtotal + shipping) * 0.16);
+    const grandTotal = subtotal + shipping + vat;
+    return { subtotal, shipping, vat, grandTotal };
+  };
+
+  const { subtotal, shipping, vat, grandTotal } = calculateTotals();
 
   const handleContinueToPayment = () => {
     if (isAddressValid(shippingAddress)) {
@@ -411,9 +451,21 @@ export function CheckoutPage() {
                             <span>Payment Method:</span>
                             <span className="font-medium capitalize text-[#FF9900]">{paymentMethod}</span>
                           </div>
+                          <div className="flex justify-between border-t border-slate-200 dark:border-dark-border mt-2 pt-2">
+                             <span>Subtotal:</span>
+                             <span className="font-medium">KES {subtotal.toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between">
+                             <span>Shipping:</span>
+                             <span className="font-medium">KES {shipping.toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between">
+                             <span>VAT (16%):</span>
+                             <span className="font-medium">KES {vat.toLocaleString()}</span>
+                          </div>
                           <div className="flex justify-between border-t border-slate-200 dark:border-dark-border mt-2 pt-2 text-slate-900 dark:text-dark-text font-bold">
                             <span>Total to Pay:</span>
-                            <span>KES {total.toLocaleString()}</span>
+                            <span>KES {grandTotal.toLocaleString()}</span>
                           </div>
                         </div>
                         {paymentMethod === "mpesa" && (
@@ -436,7 +488,7 @@ export function CheckoutPage() {
                             Placing Order...
                           </>
                         ) : (
-                          `Place Order & Pay KES ${total.toLocaleString()}`
+                          `Place Order & Pay KES ${grandTotal.toLocaleString()}`
                         )}
                       </Button>
                     </div>
@@ -526,13 +578,33 @@ export function CheckoutPage() {
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-dark-textMuted">Subtotal</span>
                 <span className="font-medium text-slate-900 dark:text-dark-text">
-                  KES {total.toLocaleString()}
+                  KES {subtotal.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-slate-600 dark:text-dark-textMuted">Shipping</span>
                 <span className="font-medium text-slate-900 dark:text-dark-text">
-                  Calculated at delivery
+                  {isCalculatingShipping ? (
+                    <Loader2 className="h-3 w-3 animate-spin inline mr-1" />
+                  ) : shippingQuote ? (
+                    `KES ${shipping.toLocaleString()}`
+                  ) : (
+                    "Calculated at delivery"
+                  )}
+                </span>
+              </div>
+              {shippingQuote && (
+                <div className="flex justify-between text-[10px] text-green-600 font-medium">
+                  <span>Estimated Delivery</span>
+                  <span>{shippingQuote.estimatedMinutes > 60 
+                    ? `~${Math.round(shippingQuote.estimatedMinutes / 60)} hours` 
+                    : `~${shippingQuote.estimatedMinutes} mins`}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm">
+                <span className="text-slate-600 dark:text-dark-textMuted">VAT (16%)</span>
+                <span className="font-medium text-slate-900 dark:text-dark-text">
+                  KES {vat.toLocaleString()}
                 </span>
               </div>
             </div>
@@ -542,7 +614,7 @@ export function CheckoutPage() {
             <div className="flex justify-between">
               <span className="text-lg font-semibold text-slate-900 dark:text-dark-text">Total</span>
               <span className="text-lg font-bold text-[#FF9900]">
-                KES {total.toLocaleString()}
+                KES {grandTotal.toLocaleString()}
               </span>
             </div>
           </div>

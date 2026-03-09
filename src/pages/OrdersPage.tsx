@@ -258,7 +258,7 @@ export function OrdersPage() {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Tax</span>
+                    <span>VAT (16%)</span>
                     <span>
                       KES{" "}
                       {Number(
