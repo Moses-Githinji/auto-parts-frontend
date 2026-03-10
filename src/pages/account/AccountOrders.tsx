@@ -14,8 +14,19 @@ import {
   CreditCard,
   Truck,
   Clock,
-  Info
+  Info,
+  ShieldAlert,
+  Loader2
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from "../../components/ui/dialog";
+import { Textarea } from "../../components/ui/textarea";
 import type {
   Order,
   OrderStatus,
@@ -49,6 +60,13 @@ export function AccountOrders() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Dispute State
+  const [disputeOrder, setDisputeOrder] = useState<Order | null>(null);
+  const [disputeReason, setDisputeReason] = useState("");
+  const [isSubmittingDispute, setIsSubmittingDispute] = useState(false);
+  const [disputeSuccess, setDisputeSuccess] = useState(false);
+  const { raiseDispute } = useOrderStore();
 
   useEffect(() => {
     fetchOrders();
@@ -99,7 +117,25 @@ export function AccountOrders() {
       alert(err.message || "Failed to delete order");
     }
   };
-
+  const handleRaiseDispute = async () => {
+    if (!disputeOrder || !disputeReason) return;
+    
+    setIsSubmittingDispute(true);
+    try {
+      await raiseDispute(disputeOrder.id, disputeReason, disputeOrder.total);
+      setDisputeSuccess(true);
+      setTimeout(() => {
+        setDisputeOrder(null);
+        setDisputeReason("");
+        setDisputeSuccess(false);
+        fetchOrders();
+      }, 2000);
+    } catch (err) {
+      // Error handled by store
+    } finally {
+      setIsSubmittingDispute(false);
+    }
+  };
   const filteredOrders = useMemo(() => {
     let result = orders;
 
@@ -272,7 +308,23 @@ export function AccountOrders() {
                       {order.paymentStatus}
                     </div>
                    )}
-                   <ChevronRight size={18} className="text-slate-300 group-hover:text-[#FF9900] transition-colors" />
+                   <div className="flex items-center gap-2">
+                     {order.status === "DELIVERED" && (
+                       <Button 
+                         variant="ghost" 
+                         size="sm" 
+                         className="h-8 text-[10px] text-red-600 hover:text-red-700 hover:bg-red-50 gap-1 border border-red-100"
+                         onClick={(e) => {
+                           e.stopPropagation();
+                           setDisputeOrder(order);
+                         }}
+                       >
+                         <ShieldAlert className="h-3 w-3" />
+                         Return/Dispute
+                       </Button>
+                     )}
+                     <ChevronRight size={18} className="text-slate-300 group-hover:text-[#FF9900] transition-colors" />
+                   </div>
                 </div>
               </div>
 
@@ -471,10 +523,16 @@ export function AccountOrders() {
                 </Button>
               )}
               {selectedOrder.status === "DELIVERED" && (
-                 <Button className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90">
-                   <ShoppingBag size={16} className="mr-2" />
-                   Buy These Items Again
-                 </Button>
+                <Button 
+                  className="w-full bg-[#FF9900] text-white hover:bg-[#FF9900]/90"
+                  onClick={() => {
+                    setSelectedOrder(null);
+                    setDisputeOrder(selectedOrder);
+                  }}
+                >
+                  <ShieldAlert size={16} className="mr-2" />
+                  Return Items (Raise Dispute)
+                </Button>
               )}
               {selectedOrder.trackingNumber && (
                 <Button 
@@ -496,6 +554,70 @@ export function AccountOrders() {
           </div>
         </div>
       )}
+
+      {/* Raise Dispute Dialog */}
+      <Dialog open={!!disputeOrder} onOpenChange={() => !isSubmittingDispute && setDisputeOrder(null)}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Raise a Dispute / Return</DialogTitle>
+            <DialogDescription>
+              Are you unhappy with your order #{disputeOrder?.orderNumber}? 
+              Please describe the issue in detail for our support team.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            {disputeSuccess ? (
+              <div className="flex flex-col items-center justify-center py-6 text-center space-y-2">
+                <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 mb-2">
+                  <ShieldAlert className="h-6 w-6" />
+                </div>
+                <h3 className="font-bold text-slate-900">Claim Submitted</h3>
+                <p className="text-sm text-slate-600">Our team will review your case and get back to you within 24-48 hours.</p>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-start gap-3 rounded-lg bg-amber-50 p-3 text-xs text-amber-800">
+                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+                  <p>
+                    <strong>GIT Protection Active:</strong> Your payment is held in escrow. 
+                    Raising a dispute will freeze vendor payout until a resolution is reached.
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="reason" className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    Reason for Return / Dispute
+                  </label>
+                  <Textarea
+                    id="reason"
+                    placeholder="Describe the issue (e.g. damaged part, wrong fitment, missing items)..."
+                    className="min-h-[120px] text-sm"
+                    value={disputeReason}
+                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setDisputeReason(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
+          </div>
+
+          {!disputeSuccess && (
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setDisputeOrder(null)} disabled={isSubmittingDispute}>
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleRaiseDispute} 
+                disabled={!disputeReason || isSubmittingDispute}
+                className="bg-red-600 hover:bg-red-700 text-white"
+              >
+                {isSubmittingDispute && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Submit Claim
+              </Button>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
