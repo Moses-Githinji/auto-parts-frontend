@@ -5,7 +5,8 @@ export type OrderStatus =
   | "SHIPPED"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "REFUNDED";
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 
 export interface OrderItem {

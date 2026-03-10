@@ -14,6 +14,7 @@ export interface Dispute {
   amount: number;
   resolution?: DisputeResolution;
   resolutionNote?: string;
+  paymentMethod?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -52,5 +53,6 @@ export interface AuditLog {
 
 export interface DisputeResolutionRequest {
   resolution: DisputeResolution;
-  note: string;
+  resolutionNote: string;
+  returnCost: number;
 }

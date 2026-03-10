@@ -39,7 +39,8 @@ export function AdminDisputesPage() {
     try {
       await resolveDispute(selectedDispute.id, {
         resolution: resolutionType,
-        note: resolutionNote
+        resolutionNote: resolutionNote,
+        returnCost: 0
       });
       setSelectedDispute(null);
       setResolutionNote("");
@@ -59,6 +60,8 @@ export function AdminDisputesPage() {
         return <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">Under Review</Badge>;
       case "RESOLVED":
         return <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Resolved</Badge>;
+      case "REFUNDED":
+        return <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">Refunded</Badge>;
       case "CLOSED":
         return <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">Closed</Badge>;
       default:
@@ -195,10 +198,21 @@ export function AdminDisputesPage() {
           <div className="space-y-4 py-4">
             <div className="rounded-lg bg-blue-50 p-3 flex gap-3 text-xs text-blue-800">
               <Info className="h-4 w-4 shrink-0" />
-              <p>
-                Resolving in favor of the customer will trigger an automatic refund. 
-                Resolving in favor of the vendor will release the funds to them.
-              </p>
+              <div className="space-y-1">
+                <p>
+                  Resolving in favor of the customer will trigger an automatic refund for Paystack payments. 
+                  Resolving in favor of the vendor will release the funds to them.
+                </p>
+                {resolutionType === "CUSTOMER" && (
+                  <div className="mt-2 font-semibold">
+                    {selectedDispute?.paymentMethod === "mpesa" ? (
+                      <p className="text-red-700">⚠️ Note: This order was paid via M-Pesa. Manual refund is required via the M-Pesa Portal.</p>
+                    ) : (
+                      <p className="text-green-700">✅ This will trigger an automated refund via Paystack.</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {selectedDispute?.status !== "RESOLVED" ? (

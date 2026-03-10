@@ -13,7 +13,8 @@ import {
   ShoppingBag,
   CreditCard,
   Truck,
-  Clock
+  Clock,
+  Info
 } from "lucide-react";
 import type {
   Order,
@@ -29,6 +30,7 @@ const statusColors: Record<OrderStatus, string> = {
   OUT_FOR_DELIVERY: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400",
   DELIVERED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   CANCELLED: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  REFUNDED: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
 };
 
 const paymentStatusColors: Record<PaymentStatus, string> = {
@@ -350,6 +352,18 @@ export function AccountOrders() {
                   </p>
                 </div>
               </div>
+
+              {selectedOrder.status === "REFUNDED" && (
+                <div className="rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 p-4 flex gap-3">
+                  <Info className="h-5 w-5 text-purple-600 shrink-0" />
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold text-purple-900 dark:text-purple-200">Refund Processed</p>
+                    <p className="text-[11px] text-purple-800 dark:text-purple-300">
+                      Your refund is being processed by your bank/provider. It may take 3-5 business days to appear in your account.
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {/* Items List */}
               <div className="space-y-4">

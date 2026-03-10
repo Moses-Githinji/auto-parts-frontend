@@ -43,6 +43,7 @@ function getStatusVariant(
     case "DELIVERED":
       return "success";
     case "CANCELLED":
+    case "REFUNDED":
       return "outline";
     default:
       return "outline";
